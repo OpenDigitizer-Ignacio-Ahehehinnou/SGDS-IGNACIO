@@ -18,7 +18,7 @@ class SignalementController extends Controller
         // dd($administrateurs);
         $signalement1 = HTTP::get('http://192.168.100.14:8080/api/v1/reporting-management/show/reporting');
         $signalements = $signalement1->json();
-        //dd($signalements);
+    //dd($signalements);
         return view('Signalement/index', compact("signalements"));
     }
 
@@ -67,5 +67,22 @@ class SignalementController extends Controller
         
         return view('Admin/edit', compact("administrateur"));
     }
+
+
+    public function detail($reportingId)
+    {
+
+       // dd($reportingId);
+        $signalement1 = HTTP::get('http://192.168.100.14:8080/api/v1/reporting-management/show/reportings/{id}' . $reportingId);
+        $signalements = $signalement1->json();
+       // $signalements = json_decode($signalement1->getBody(), true);
+
+               // dd($signalements);
+      
+        return view('Signalement/detail', compact("signalements"));
+    }
+
+   
+
 
 }

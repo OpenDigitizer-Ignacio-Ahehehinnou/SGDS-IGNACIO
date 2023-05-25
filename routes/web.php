@@ -89,7 +89,9 @@ Route::delete('/signalement/{signalement}', [SignalementController::class, 'dele
 Route::put('/signalement/{signalement}', [SignalementController::class, 'update'])->name('signalement.update');
 Route::get('/signalement/{signalement}', [SignalementController::class, 'edit'])->name('signalement.edit');
 Route::get('/signalement', [SignalementController::class, 'index'])->name('signalement');
-Route::get('/Detail', [SignalementController::class, 'detail'])->name('signalement.detail');
+Route::get('/Detail/{reportingId}', [SignalementController::class, 'detail'])->name('signalement.detail');
+
+
 
 
 

@@ -46,6 +46,7 @@
                            
                             <th scope="col">Status</th>
                            
+                           
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -58,11 +59,13 @@
                              <td>{{$signalement['longitude']}}</td> 
                             <td>{{$signalement['description']}}</td>
                             <td>{{$signalement['status']}}</td>
+                            {{-- <td> <img src="{{ $signalement['photo'] }}"width="300" height="200" 200px; alt="Ma photo"></td> --}}
+                          
                             <td>
-
+                                {{-- {{ route( 'admin.supprimer', ['administrateur'=>$administrateur['userId']])}} --}}
                                
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                    <a href="" type="button" class="btn btn-success voir5"><i class="bi bi-eye-fill"></i></a>
+                                    <a href="{{route( 'signalement.detail', ['reportingId'=>$signalement['reportingId']])}}" type="button" class="btn btn-success"><i class="bi bi-eye-fill"></i></a>
                                     <!-- <a href="{{route('signalement.edit', ['signalement'=>$signalement['reportingId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a> -->
                                     <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet Entreprise ???')){
                                         document.getElementById('form-{{$signalement['reportingId']}}').submit() }"><i class="bi bi-trash3-fill"></i></a>
@@ -83,12 +86,17 @@
                     </tbody>
                     
                 </table>
+                <p>Place Name: <span id="place-name"></span></p>
+
             </div>
         </div>
     </div>
     </div>
     </div>
     </div>
+
+    <div id="map"></div>
+
 
 
          <!-- Modal -->
@@ -125,7 +133,8 @@
                         </tr>
                         <tr>
                             <th>Photo</th>
-                            <td>{{$signalement['photo']}}</td>
+                        <td> <img src="{{ $signalement['photo'] }}"width="300" height="200" 200px; alt="Ma photo"></td>
+
                         </tr>
                         </tbody>
 
@@ -144,7 +153,13 @@
 
 
 
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+       <!-- Inclure jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Inclure la bibliothèque Mapbox GL JS -->
+        <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+        <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet" />
+
         <script>
 
         $(document).ready(function () {
@@ -159,9 +174,43 @@
                 
             });
         });
-
-
         </script>
+
+<script>
+    // Effectuer une requête AJAX vers ton contrôleur pour récupérer les informations de géocodage inversé
+    $.ajax({
+        url: {{ route('signalement')}},
+        method: 'GET',
+        success: function(response) {
+            var latitude = response.latitude;
+            var longitude = response.longitude;
+            var description = response.description;
+            // Récupère les autres informations nécessaires depuis la réponse
+
+            // Initialise la carte Mapbox
+            mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNzMzEiLCJhIjoiY2xpMW5hYjB6MGltYzNkbzRtYXBtbTJkdCJ9.QaO5C25ul0-5dzBxL6nf1w';
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [longitude, latitude],
+                zoom: 12
+            });
+
+            // Ajoute un marqueur pour la position spécifiée
+            new mapboxgl.Marker()
+                .setLngLat([longitude, latitude])
+                .addTo(map);
+
+            // Affiche les autres informations dans ta vue
+            $('#place-name').text(description);
+            // Affiche les autres informations où tu souhaites les afficher
+        },
+        error: function() {
+            // Gère les erreurs de la requête AJAX
+        }
+    });
+</script>
+
 
 
 
