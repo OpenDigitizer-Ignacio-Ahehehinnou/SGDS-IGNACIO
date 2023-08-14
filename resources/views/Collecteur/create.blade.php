@@ -1,43 +1,41 @@
-
-
 @extends("layouts.master")
 
 @section("contenu")
 
 <div class="mt-2">
 
-        @if(session()->has("success"))
-        <div class="alert alert-success" >
-            <h3>{{session()->get('success')}}</h3>
-        </div>
-        @endif
+    @if(session()->has("success"))
+    <div class="alert alert-success">
+        <h3>{{session()->get('success')}}</h3>
+    </div>
+    @endif
 
 
-        @if($errors->any())
-        <div class="alert alert-danger" >
-            <ul >
-                @foreach($errors->all() as $error)
-                    <li>{{$error}}</li>
+    @if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach($errors->all() as $error)
+            <li>{{$error}}</li>
 
-                @endforeach
-            </ul>
-        </div>
-        @endif
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
-        <br><br>
+    <br><br>
 
-<div class="panel panel-default">
-    <div class="panel-heading">Ajouter un collecteur</div>
-
-
-<div class="panel-body">
+    <div class="panel panel-default">
+        <div class="panel-heading">Ajouter un collecteur</div>
 
 
-    <form  method="post" action="{{ route('collecteur.ajouter')}}">
-    @csrf
-    <input type="text" class="form-control" id="nom" name="userId" value="31" hidden="hidden">
+        <div class="panel-body">
 
-    <div class="row">
+
+            <form method="post" action="{{ route('collecteur.ajouter')}}">
+                @csrf
+                <input type="text" class="form-control" id="nom" name="userId" value="31" hidden="hidden">
+
+                <div class="row">
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputEmail1" class="form-label">Nom</label>
@@ -46,15 +44,15 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Prénoms</label>
-                        <input type="text" class="form-control" id="prenom" name="lastName" >
+                        <input type="text" class="form-control" id="prenom" name="lastName">
                     </div>
 
                 </div>
-                
+
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Matricule</label>
-                        <input type="text" class="form-control" id="email" name="matricule" >
+                        <input type="text" class="form-control" id="email" name="matricule">
                     </div>
 
                     <div class="mb-3 col-md-6">
@@ -63,7 +61,7 @@
                     </div>
 
                 </div>
-                
+
                 <div class="row">
 
                     <div class="mb-3 col-md-6">
@@ -76,7 +74,7 @@
                         <input type="text" class="form-control" id="username" name="username">
                     </div>
 
-                    
+
                 </div>
 
                 <div class="row">
@@ -91,7 +89,7 @@
                         <input type="text" class="form-control" id="activationStatus" name="activationStatus">
                     </div>
 
-                    
+
                 </div>
 
                 <div class="row">
@@ -107,9 +105,9 @@
 
                     </div>
 
-                   
 
-                    
+
+
                 </div>
 
                 <div class="row">
@@ -124,16 +122,15 @@
                         <input type="text" class="form-control" id="creatorId" name="createdAt">
                     </div>
 
-                    
                 </div>
-                
+
                 <div class="row">
 
-                <div class="mb-3 col-md-6" >
+                    <div class="mb-3 col-md-6">
                         <label for="activationStatus" class="form-label">Creator Id</label>
-                        <input type="text" class="form-control" id="creatorId" name="creatorId" >
+                        <input type="text" class="form-control" id="creatorId" name="creatorId">
                     </div>
-                    
+
 
                     <div class="mb-3 col-md-6">
                         <label for="deletedFlag" class="form-label">deletedFlag</label>
@@ -141,25 +138,19 @@
                     </div>
 
                 </div>
-            
-                <br>
-                <div >
 
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-                <a href="{{route('admin')}}" class="btn btn-danger">Annuler</a>
+                <br>
+                <div>
+
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <a href="{{route('admin')}}" class="btn btn-danger">Annuler</a>
 
                 </div>
-
-               
-
-
-    </form>
-            
+            </form>
+        </div>
+    </div>
 </div>
-</div>
-</div>
-  
-        
+
 </div>
 
 @endsection

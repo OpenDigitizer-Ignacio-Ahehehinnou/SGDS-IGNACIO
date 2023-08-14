@@ -19,7 +19,7 @@ class AdministrateurController extends Controller
     {
         //créer un admin
 
-        $administrateur1 = HTTP::get('http://192.168.100.14:8080/api/v1/user-management/show/user');
+        $administrateur1 = HTTP::get('http://192.168.8.101:8080/api/v1/user-management/show/user');
         $administrateurs = $administrateur1->json();
              //dd($administrateurs);
         return view('Admin/index', compact("administrateurs"));
@@ -29,7 +29,7 @@ class AdministrateurController extends Controller
     public function show($id)
     {
         
-        $administrateur1 = HTTP::get('http://192.168.100.14:8080/api/v1/user-management/show/user/{userId}' . $id);
+        $administrateur1 = HTTP::get('http://192.168.8.101:8080/api/v1/user-management/show/user/{userId}' . $id);
         $administrateurs = $administrateur1->json();
             //dd($administrateurs);
         return view('Admin/voir', compact('administrateurs'));

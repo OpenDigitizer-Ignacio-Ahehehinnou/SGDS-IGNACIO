@@ -56,11 +56,7 @@ class CollecteurController extends Controller
 
     public function create()
     {
-        //ajouter un admin
-
-        
-        
-
+      
         return view('Collecteur/create');
     }
 

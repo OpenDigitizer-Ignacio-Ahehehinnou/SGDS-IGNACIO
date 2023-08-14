@@ -5,23 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ZoneController extends Controller
+class PointController extends Controller
 {
+    //
+
     public function index(){
 
-        return view('Zone.index');
+        return view('Point.index');
     }
 
     public function create()
     {
         //ajouter un admin
 
-        return view('Zone.create');
+        return view('Point.create');
     }
 
     public function store(){
 
-        return view('Zone.index');
+        return view('Point.index');
     }
-    //
 }

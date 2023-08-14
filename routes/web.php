@@ -7,8 +7,10 @@ use App\Http\Controllers\CollecteurController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\SignalementController;
 use App\Http\Controllers\AccueilController;
-
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PointController;
+use App\Http\Controllers\VilleController;
+use App\Http\Controllers\ZoneController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +24,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth/login');
-});
+// ATTENTION TU PEUX ENLEVER LE COMMENTAIRE A N'IMPORTE QUEL MOMENT
+
+// Route::get('/', function () {
+//     return view('auth/login');
+// });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -42,6 +46,15 @@ require __DIR__.'/auth.php';
 Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');
 Route::get('/profil', [AccueilController::class, 'profil'])->name('profil');
 
+
+
+// le retour 
+Route::get('/', [AuthController::class, 'login'])->name('login');
+Route::post('/', [AuthController::class, 'handlelogin'])->name('handlelogin');
+
+
+
+Route::get('/admin', [AdministrateurController::class, 'index'])->middleware(['auth', 'verified'])->name('admin');
 
 
 Route::get('/admin', [AdministrateurController::class, 'index'])->middleware(['auth', 'verified'])->name('admin');
@@ -73,6 +86,8 @@ Route::get('/collecteur/{collecteur}', [CollecteurController::class, 'edit'])->n
 Route::get('/collecteur', [CollecteurController::class, 'index'])->name('collecteur');
 Route::get('/Detail', [CollecteurController::class, 'detail'])->name('collecteur.detail');
 
+// ENTREPRISE
+
 Route::get('/entreprise', [EntrepriseController::class, 'index'])->middleware(['auth', 'verified'])->name('entreprise');
 Route::get('/entreprise/create', [EntrepriseController::class, 'create'])->name('entreprise.create');
 Route::post('/entreprise/create', [EntrepriseController::class, 'store'])->name('entreprise.ajouter');
@@ -81,6 +96,8 @@ Route::put('/entreprise/{entreprise}', [EntrepriseController::class, 'update'])-
 Route::get('/entreprise/{entreprise}', [EntrepriseController::class, 'edit'])->name('entreprise.edit');
 Route::get('/entreprise', [EntrepriseController::class, 'index'])->name('entreprise');
 Route::get('/Detail', [EntrepriseController::class, 'detail'])->name('entreprise.detail');
+
+// SIGNALEMENT
 
 Route::get('/signalement', [SignalementController::class, 'index'])->middleware(['auth', 'verified'])->name('signalement');
 Route::get('/signalement/create', [SignalementController::class, 'create'])->name('signalement.create');
@@ -91,7 +108,22 @@ Route::get('/signalement/{signalement}', [SignalementController::class, 'edit'])
 Route::get('/signalement', [SignalementController::class, 'index'])->name('signalement');
 Route::get('/Detail/{reportingId}', [SignalementController::class, 'detail'])->name('signalement.detail');
 
+//VILLE
+
+Route::get('/ville', [VilleController::class, 'index'])->name('ville');
+Route::get('/ville/create', [VilleController::class, 'create'])->name('ville.create');
+Route::post('/ville/create', [VilleController::class, 'store'])->name('ville.ajouter');
 
 
+//ZONE
+
+Route::get('/zone', [ZoneController::class, 'index'])->name('zone');
+Route::get('/zone/create', [ZoneController::class, 'create'])->name('zone.create');
+Route::post('/zone/create', [ZoneController::class, 'store'])->name('zone.ajouter');
 
 
+//POINT
+
+Route::get('/point', [PointController::class, 'index'])->name('point');
+Route::get('/point/create', [PointController::class, 'create'])->name('point.create');
+Route::post('/point/create', [PointController::class, 'store'])->name('point.ajouter');
