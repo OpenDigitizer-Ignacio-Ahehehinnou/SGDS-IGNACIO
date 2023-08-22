@@ -9,7 +9,7 @@
 
         @if(session()->has("success"))
         <div class="alert alert-success" >
-            <h3>{{session()->get('success')}}</h3>
+            <h5>{{session()->get('success')}}</h3>
         </div>
         @endif
 
@@ -41,12 +41,12 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="nom" class="form-label">Raison sociale</label>
-                                <input type="text" class="form-control" id="nom" name="nom" aria-describedby="nom">
+                                <input type="text" class="form-control" id="nom" name="name" aria-describedby="nom">
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="adresse" class="form-label">Adresse</label>
-                                <input type="text" class="form-control" id="adresse" name="adresse">
+                                <input type="text" class="form-control" id="adresse" name="adress">
                             </div>
 
                         </div>
@@ -88,6 +88,40 @@
                             </div>
 
                         </div>
+
+                         <div class="row" hidden>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
+            
+                        <input type="text" class="form-control" id="creatorUsername" value="Ignacio" name="creatorUsername">
+
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="activationStatus" class="form-label">createdAt</label>
+                        <input type="text" class="form-control" id="creatorId" value="2023-08-02T11:37:47.544+00:00" name="createdAt">
+                    </div>
+
+
+                </div>
+
+                <div class="row" hidden>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="activationStatus" class="form-label">Creator Id</label>
+                        <input type="text" class="form-control" id="creatorId" value="1" name="creatorId">
+                    </div>
+
+
+                    <div class="mb-3 col-md-6">
+                        <label for="deletedFlag" class="form-label">deletedFlag</label>
+                        <input type="text" class="form-control" value="S" id="deletedFlag" name="deletedFlag">
+                    </div>
+
+                </div>
+
+               
 
                         
                         

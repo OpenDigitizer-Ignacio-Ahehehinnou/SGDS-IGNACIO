@@ -65,7 +65,7 @@ Route::put('/admin/{administrateur}', [AdministrateurController::class, 'update'
 Route::get('/admin/{administrateur}', [AdministrateurController::class, 'edit'])->name('admin.edit');
 
 Route::get('/admin', [AdministrateurController::class, 'index'])->name('admin');
-Route::get('/admin/{administrateur}', [AdministrateurController::class,'show'])->name('admin.show');
+// Route::get('/admin/{administrateur}', [AdministrateurController::class,'show'])->name('admin.show');
 
 
 Route::get('/superviseur', [SuperviseurController::class, 'index'])->middleware(['auth', 'verified'])->name('superviseur');
@@ -113,6 +113,9 @@ Route::get('/Detail/{reportingId}', [SignalementController::class, 'detail'])->n
 Route::get('/ville', [VilleController::class, 'index'])->name('ville');
 Route::get('/ville/create', [VilleController::class, 'create'])->name('ville.create');
 Route::post('/ville/create', [VilleController::class, 'store'])->name('ville.ajouter');
+Route::delete('/ville/{ville}', [VilleController::class, 'delete'])->name('ville.supprimer');
+Route::put('/ville/{ville}', [VilleController::class, 'update'])->name('ville.update');
+Route::get('/ville/{ville}', [VilleController::class, 'edit'])->name('ville.edit');
 
 
 //ZONE
@@ -120,6 +123,9 @@ Route::post('/ville/create', [VilleController::class, 'store'])->name('ville.ajo
 Route::get('/zone', [ZoneController::class, 'index'])->name('zone');
 Route::get('/zone/create', [ZoneController::class, 'create'])->name('zone.create');
 Route::post('/zone/create', [ZoneController::class, 'store'])->name('zone.ajouter');
+Route::delete('/zone/{zone}', [ZoneController::class, 'delete'])->name('zone.supprimer');
+Route::put('/zone/{zone}', [ZoneController::class, 'update'])->name('zone.update');
+Route::get('/zone/{zone}', [ZoneController::class, 'edit'])->name('zone.edit');
 
 
 //POINT

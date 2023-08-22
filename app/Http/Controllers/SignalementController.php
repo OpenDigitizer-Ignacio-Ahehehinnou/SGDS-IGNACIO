@@ -12,13 +12,16 @@ class SignalementController extends Controller
     //
     public function index()
     {
-        //créer un admin
 
-        // $administrateurs= User::where('role', 'admin')->orderBy('name', 'asc')->paginate(5);
-        // dd($administrateurs);
-        $signalement1 = HTTP::get('http://192.168.100.14:8080/api/v1/reporting-management/show/reporting');
-        $signalements = $signalement1->json();
-    //dd($signalements);
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
+
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://192.168.8.106:8080/api/v1/reporting-management/show/reporting');
+
+        $signalements = $response->json();
+      
         return view('Signalement/index', compact("signalements"));
     }
 
@@ -53,7 +56,7 @@ class SignalementController extends Controller
         $test['deletedFlag'] = $request['deletedFlag'];
 
         
-        $response = HTTP::withBody(json_encode($test))->put('http://192.168.100.14:8080/api/v1/user-management/update/user/{$id}' . $id);
+        $response = HTTP::withBody(json_encode($test))->put('http://192.168.8.106:8080/api/v1/user-management/update/user/{$id}' . $id);
        
         return back()->with("success", "Administrateur mis à jour avec succès!");
 
@@ -62,7 +65,7 @@ class SignalementController extends Controller
     public function edit($id)
     {
         //ajouter un admin
-        $signalement1 = HTTP::get('http://192.168.100.14:8080/api/v1/user-management/show/user/{userId}' . $id);
+        $signalement1 = HTTP::get('http://192.168.8.106:8080/api/v1/user-management/show/user/{userId}' . $id);
         $signalement = $signalement1->json();
         
         return view('Admin/edit', compact("administrateur"));
@@ -72,12 +75,16 @@ class SignalementController extends Controller
     public function detail($reportingId)
     {
 
-       // dd($reportingId);
-        $signalement1 = HTTP::get('http://192.168.100.14:8080/api/v1/reporting-management/show/reportings/{id}' . $reportingId);
-        $signalements = $signalement1->json();
-       // $signalements = json_decode($signalement1->getBody(), true);
 
-               // dd($signalements);
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
+
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://192.168.8.106:8080/api/v1/reporting-management/show/reportings/{id}' . $reportingId);
+
+        $signalements = $response->json();
+        // dd($signalements);
       
         return view('Signalement/detail', compact("signalements"));
     }

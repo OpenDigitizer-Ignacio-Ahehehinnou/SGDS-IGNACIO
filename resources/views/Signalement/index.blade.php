@@ -20,7 +20,7 @@
                 <br>
                 @if(session()->has("successDelete"))
                     <div class="alert alert-success" >
-                        <h3>{{session()->get('successDelete')}}</h3>
+                        <h5>{{session()->get('successDelete')}}</h5>
                     </div>
                 @endif
 
@@ -37,7 +37,7 @@
                 <table id="example" class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            {{-- <th scope="col">#</th> --}}
                             <th scope="col">Altitude</th>
                             <th scope="col">Latitude</th>
 
@@ -53,7 +53,7 @@
                     <tbody>
                         @foreach($signalements as $signalement)
                         <tr>
-                            <td>{{$loop->index +1}}</td>
+                            {{-- <td>{{$loop->index +1}}</td> --}}
                             <td>{{$signalement['altitude']}}</td>
                             <td>{{$signalement['latitude']}}</td>
                              <td>{{$signalement['longitude']}}</td> 
@@ -64,7 +64,7 @@
                             <td>
                                 {{-- {{ route( 'admin.supprimer', ['administrateur'=>$administrateur['userId']])}} --}}
                                
-                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
                                     <a href="{{route( 'signalement.detail', ['reportingId'=>$signalement['reportingId']])}}" type="button" class="btn btn-success"><i class="bi bi-eye-fill"></i></a>
                                     <!-- <a href="{{route('signalement.edit', ['signalement'=>$signalement['reportingId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a> -->
                                     <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet Entreprise ???')){
@@ -74,7 +74,7 @@
                                             @csrf
                                                 <input type="hidden" name="_method" value="delete">
                                         </form>
-                                </div>
+                                {{-- </div> --}}
 
 
                             </td>

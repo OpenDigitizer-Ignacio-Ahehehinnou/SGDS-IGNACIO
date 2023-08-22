@@ -18,7 +18,7 @@
 
                 @if(session()->has("successDelete"))
                     <div class="alert alert-success" >
-                        <h3>{{session()->get('successDelete')}}</h3>
+                        <h5>{{session()->get('successDelete')}}</h5>
                     </div>
                 @endif
               
@@ -72,17 +72,21 @@
                                         <td>
 
 
-                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                        {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
+                                            
                                             <button type="button" class="btn btn-success voir2"><i class="bi bi-eye-fill"></i></button>
+                                           
                                             <a href="{{route('collecteur.edit', ['collecteur'=>$collecteur['userId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-                                            <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet Admin ???')){
+                                            
+                                            
+                                            <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet Collecteur ???')){
                                                 document.getElementById('form-{{$collecteur['userId']}}').submit() }"><i class="bi bi-trash3-fill"></i></a>
 
                                                 <form id="form-{{$collecteur['userId']}}" action="{{ route( 'collecteur.supprimer', ['collecteur'=>$collecteur['userId']])}}" method="post">
                                                     @csrf
                                                         <input type="hidden" name="_method" value="delete">
                                                 </form>
-                                        </div>
+                                        {{-- </div> --}}
 
 
                                             </td>

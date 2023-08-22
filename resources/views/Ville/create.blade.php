@@ -1,72 +1,106 @@
 @extends("layouts.master")
 
-
 @section("contenu")
 
 
-<div class="panel panel-default">
-    <div class="panel-heading">Ajouter une ville</div>
+<div class="mt-2">
+
+    @if(session()->has("success"))
+    <div class="alert alert-success">
+        <h5>{{session()->get('success')}}</h5>
+    </div>
+    @endif
 
 
-    <div class="panel-body">
+    @if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach($errors->all() as $error)
+            <li>{{$error}}</li>
+
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <br><br>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Ajouter une ville</div>
 
 
-        <form method="post" action="{{ route('ville.ajouter')}}">
-            @csrf
-            {{-- <input type="text" class="form-control" id="nom" name="userId" value="31" hidden="hidden"> --}}
+        <div class="panel-body">
 
-           
+
+            <form method="post" action="{{ route('ville.ajouter')}}">
+                @csrf
+
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputEmail1" class="form-label">Code</label>
-                        <input type="text" class="form-control" id="nom" name="firstName" style="border-radius: 10px;">
+                        <input type="text" class="form-control" id="nom" name="code">
                     </div>
-                
+
                     <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Libellé</label>
-                        <input type="text" class="form-control" id="prenom" name="lastName" style="border-radius: 10px;">
+                        <label for="exampleInputPassword1" class="form-label">Ville</label>
+                        <input type="text" class="form-control" id="prenom" name="nom">
                     </div>
+
                 </div>
+
             
-            {{-- <div class="row">
 
-                <div class="mb-3 col-md-6">
-                    <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
-                    <input type="text" class="form-control" id="creatorUsername" name="creatorUsername">
+                <div class="row" hidden>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
+            
+                        <input type="text" class="form-control" id="creatorUsername" value="Ignacio" name="creatorUsername">
+
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="activationStatus" class="form-label">createdAt</label>
+                        <input type="text" class="form-control" id="creatorId" value="2023-08-02T11:37:47.544+00:00" name="createdAt">
+                    </div>
+
+
                 </div>
 
-                <div class="mb-3 col-md-6">
-                    <label for="activationStatus" class="form-label">createdAt</label>
-                    <input type="text" class="form-control" id="creatorId" name="createdAt">
+                <div class="row" hidden>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="activationStatus" class="form-label">Creator Id</label>
+                        <input type="text" class="form-control" id="creatorId" value="1" name="creatorId">
+                    </div>
+
+
+                    <div class="mb-3 col-md-6">
+                        <label for="deletedFlag" class="form-label">deletedFlag</label>
+                        <input type="text" class="form-control" value="S" id="deletedFlag" name="deletedFlag">
+                    </div>
+
+                </div>
+
+                <br>
+                <div>
+
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <a href="{{route('ville')}}" class="btn btn-danger">Annuler</a>
+
                 </div>
 
 
-            </div>
-
-            <div class="row">
-
-                <div class="mb-3 col-md-6">
-                    <label for="activationStatus" class="form-label">Creator Id</label>
-                    <input type="text" class="form-control" id="creatorId" name="creatorId">
-                </div>
 
 
-                <div class="mb-3 col-md-6">
-                    <label for="deletedFlag" class="form-label">deletedFlag</label>
-                    <input type="text" class="form-control" id="deletedFlag" name="deletedFlag">
-                </div>
+            </form>
 
-            </div> --}}
-
-            <br>
-            <div>
-
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-                <a href="{{route('ville')}}" class="btn btn-danger">Annuler</a>
-
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
+
+</div>
+
 
 @endsection

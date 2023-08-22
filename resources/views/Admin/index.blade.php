@@ -20,7 +20,7 @@
 
                 @if(session()->has("successDelete"))
                     <div class="alert alert-success" >
-                        <h3>{{session()->get('successDelete')}}</h3>
+                        <h5>{{session()->get('successDelete')}}</h5>
                     </div>
                 @endif
             
@@ -80,7 +80,7 @@
                                         <td>
 
 
-                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                        {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
                                             <!-- <button type="button" class="btn btn-success voir" id="voir"><i class="bi bi-eye-fill"></i></button> -->
                                             <button type="button" class="btn btn-success voir"><i class="bi bi-eye-fill"></i></button>
 
@@ -95,7 +95,7 @@
                                                     @csrf
                                                         <input type="hidden" name="_method" value="delete">
                                                 </form>
-                                        </div>
+                                        {{-- </div> --}}
 
 
                                             </td>

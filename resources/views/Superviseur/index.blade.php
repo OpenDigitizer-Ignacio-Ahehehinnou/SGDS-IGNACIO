@@ -72,7 +72,7 @@
                                         <td>
 
 
-                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                        {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
                                             <button type="button" class="btn btn-success voir3"><i class="bi bi-eye-fill"></i></button>
                                             <a href="{{route('superviseur.edit', ['superviseur'=>$superviseur['userId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                                             <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet Admin ???')){
@@ -82,7 +82,7 @@
                                                     @csrf
                                                         <input type="hidden" name="_method" value="delete">
                                                 </form>
-                                        </div>
+                                        {{-- </div> --}}
 
 
                                             </td>

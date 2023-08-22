@@ -19,15 +19,12 @@
                     <br>
                 @if(session()->has("successDelete"))
                     <div class="alert alert-success" >
-                        <h3>{{session()->get('successDelete')}}</h3>
+                        <h5>{{session()->get('successDelete')}}</h5>
                     </div>
                 @endif
                 <div class="row ">
                     <div class="box">
-                        <!-- <div class="box-header">
-                            <h3 class="box-title">Data Table With Full Features</h3>
-                        </div> -->
-                            <!-- /.box-header -->
+                       
                         <div class="box-body">
                             <table id="example" class="table table-bordered table-striped">
                             <thead>
@@ -54,7 +51,7 @@
                             <td>
 
 
-                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
                                     <button type="button" class="btn btn-success voir4"><i class="bi bi-eye-fill"></i></button>
                                     <a href="{{route('entreprise.edit', ['entreprise'=>$entreprise['entrepriseId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                                     <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet entreprise ???')){
@@ -64,7 +61,7 @@
                                             @csrf
                                                 <input type="hidden" name="_method" value="delete">
                                         </form>
-                                </div>
+                                {{-- </div> --}}
 
 
                             </td>

@@ -20,14 +20,18 @@ class AuthController extends Controller
 
     public function handlelogin(AuthRequest $request){
 
-        
         $credentials = $request->only(['username', 'password']);
 
         $authentification = HTTP::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('http://192.168.8.101:8080/api/v1/users-management/authenticate', $credentials);
+        ])->post('http://192.168.8.106:8080/api/v1/users-management/authenticate', $credentials);
         
         $administrateurs = $authentification->json();
+
+            $token=$administrateurs['token'];
+           // dd($token);
+            // Stocker la variable dans une session
+            session(['variableEnvoyee' => $token]);
 
         $userResponseDto = $administrateurs['userResponseDto'];
         $roleModel = $userResponseDto['roleModel'];

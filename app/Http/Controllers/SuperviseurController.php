@@ -7,17 +7,22 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+
 
 class SuperviseurController extends Controller
 {
 
     public function index()
     {
-        //créer un superviseur
+         // Récupérer la variable de la session
+         $variableRecuperee = session('variableEnvoyee');
 
-        $superviseur1 = HTTP::get('http://192.168.100.14:8080/api/v1/user-management/show/user');
-        $superviseurs = $superviseur1->json();
-        
+         $response = HTTP::withHeaders([
+             'Authorization' => 'Bearer ' . $variableRecuperee,
+         ])->get('http://192.168.8.106:8080/api/v1/user-management/show/user');
+ 
+         $superviseurs = $response->json();
 
         return view('Superviseur/index',compact("superviseurs"));
     }
@@ -57,10 +62,6 @@ class SuperviseurController extends Controller
     public function create()
     {
         //ajouter un admin
-
-        
-        
-
         return view('Superviseur/create');
     }
 
@@ -89,23 +90,35 @@ class SuperviseurController extends Controller
         $test['deletedFlag'] = $request['deletedFlag'];
 
         //dd($test);
-        $response = HTTP::withBody(json_encode($test))->post('http://192.168.100.14:8080/api/v1/user-management/created/user');
+       // $response = HTTP::withBody(json_encode($test))->post('http://192.168.100.14:8080/api/v1/user-management/created/user');
+
+         // Récupérer la variable de la session
+         $variableRecuperee = session('variableEnvoyee');
+         $response = HTTP::withHeaders([
+             'Authorization' => 'Bearer ' . $variableRecuperee,
+         ])->post('http://192.168.8.106:8080/api/v1/user-management/created/user',$test);
+         
+         $superviseurs = $response->json();
+ 
 
 
-            return back()->with("success", "Superviseur ajouté avec succè!");
+            return back()->with("success", "Superviseur ajouté avec succè!")->with(compact("superviseurs"));
 
        // return view('Admin/create',compact("classes"));
     }
 
-    public function delete(User $superviseur)
+    public function delete(User $superviseur, $id)
     {
-        $nom_complet=$superviseur->name ." ". $superviseur->prenom;
 
-        $superviseur->delete();
+        $variableRecuperee = session('variableEnvoyee');
 
-            return back()->with("successDelete", "Le superviseur '$nom_complet' a été supprimé avec succè!");
+        $url = 'http://192.168.8.106:8080/api/v1/user-management/delete/user/{$id}' . $id;
 
-       // return view('Admin/create',compact("classes"));
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->delete($url);
+
+        return back()->with("successDelete", "Le superviseur a été supprimé avec succès");
     }
 
     public function update(Request $request,$id)
@@ -140,17 +153,38 @@ class SuperviseurController extends Controller
         $test['deletedFlag'] = $request['deletedFlag'];
 
         //dd($test);
-        $response = HTTP::withBody(json_encode($test))->put('http://192.168.100.14:8080/api/v1/user-management/update/user/{$id}' . $id);
+
+        $dataToUpdate = $test;
+
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
+
+        // Créez une instance du client GuzzleHttp
+        $client = new Client();
+
+
+        $response = $client->put("http://192.168.8.106:8080/api/v1/user-management/update/user/{$id}", [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $dataToUpdate,
+        ]);
+
            return back()->with("success", "Superviseur mis à jour avec succè!");
 
-       // return view('Admin/create',compact("classes"));
     }
     public function edit($id)
     {
-        //ajouter un admin
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://192.168.8.106:8080/api/v1/user-management/show/user/{userId}' . $id);
 
-        $superviseur1 = HTTP::get('http://192.168.100.14:8080/api/v1/user-management/show/user/{userId}' . $id);
-        $superviseur = $superviseur1->json();
+
+        $superviseur = $response->json();
 
         return view('Superviseur/edit',compact("superviseur"));
     }

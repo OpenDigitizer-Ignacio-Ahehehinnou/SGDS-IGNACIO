@@ -8,6 +8,7 @@ use App\Models\Administrateur;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use GuzzleHttp\Client;
 
 
 use function Pest\Laravel\json;
@@ -19,21 +20,25 @@ class AdministrateurController extends Controller
     {
         //créer un admin
 
-        $administrateur1 = HTTP::get('http://192.168.8.101:8080/api/v1/user-management/show/user');
-        $administrateurs = $administrateur1->json();
-             //dd($administrateurs);
+        // $administrateur1 = HTTP::get('http://192.168.8.106:8080/api/v1/user-management/show/user');
+        // $administrateurs = $administrateur1->json();
+        //      //dd($administrateurs);
+
+
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
+
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://192.168.8.106:8080/api/v1/user-management/show/user');
+
+        $administrateurs = $response->json();
+        //dd($administrateurs);
+
         return view('Admin/index', compact("administrateurs"));
     }
 
 
-    public function show($id)
-    {
-        
-        $administrateur1 = HTTP::get('http://192.168.8.101:8080/api/v1/user-management/show/user/{userId}' . $id);
-        $administrateurs = $administrateur1->json();
-            //dd($administrateurs);
-        return view('Admin/voir', compact('administrateurs'));
-    }
 
 
     public function create()
@@ -47,7 +52,7 @@ class AdministrateurController extends Controller
     public function store(Request $request)
     {
         //ajouter un admin
-       
+
 
         $test = array();
         //$test['id'] = $id;
@@ -67,10 +72,16 @@ class AdministrateurController extends Controller
         $test['roleId'] = $request['roleId'];
         $test['deletedFlag'] = $request['deletedFlag'];
 
-        //dd($test);
-        $response = HTTP::withBody(json_encode($test))->post('http://192.168.100.14:8080/api/v1/user-management/created/user');
 
-        return  back()->with("success", "Administrateur ajouté avec succè!");
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://192.168.8.106:8080/api/v1/user-management/created/user',$test);
+
+        $administrateurs = $response->json();
+
+        return  back()->with("success", "Administrateur ajouté avec succè!")->with(compact("administrateurs"));
         //return redirect('/admin');
 
     }
@@ -78,14 +89,17 @@ class AdministrateurController extends Controller
     public function delete($id)
     {
 
-        $administrateur1 = HTTP::get('http://192.168.100.14:8080/api/v1/user-management/show/user/{userId}' . $id);
-        $administrateurs = $administrateur1->json();
+        $variableRecuperee = session('variableEnvoyee');
 
-        $nom_complet = $administrateurs['firstName'] . " " . $administrateurs['lastName'];
+        $url = 'http://192.168.8.106:8080/api/v1/user-management/delete/user/' . $id;
 
-        return back()->with("successDelete", "L'administrateur '$nom_complet' a été supprimé avec succè!");
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->delete($url);
 
-        // return view('Admin/create',compact("classes"));
+
+        return back()->with("successDelete", "L'administrateur a été supprimé avec succès");
+
     }
 
     public function update(Request $request, $id)
@@ -118,18 +132,41 @@ class AdministrateurController extends Controller
         $test['roleId'] = $request['roleId'];
         $test['deletedFlag'] = $request['deletedFlag'];
 
-        
-        $response = HTTP::withBody(json_encode($test))->put('http://192.168.100.14:8080/api/v1/user-management/update/user/{$id}' . $id);
-       
-        return back()->with("success", "Administrateur mis à jour avec succès!");
 
-        
+        $dataToUpdate = $test;
+
+
+        $variableRecuperee = session('variableEnvoyee');
+
+        // Créez une instance du client GuzzleHttp
+        $client = new Client();
+
+        $response = $client->put("http://192.168.8.106:8080/api/v1/user-management/update/user/{$id}", [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $dataToUpdate,
+        ]);
+
+        return back()->with("success", "Administrateur mise à jour avec succès");
+
+
     }
     public function edit($id)
     {
         //ajouter un admin
-        $administrateur1 = HTTP::get('http://192.168.100.14:8080/api/v1/user-management/show/user/{userId}' . $id);
-        $administrateur = $administrateur1->json();
+
+           // Récupérer la variable de la session
+           $variableRecuperee = session('variableEnvoyee');
+           $response = HTTP::withHeaders([
+               'Authorization' => 'Bearer ' . $variableRecuperee,
+           ])->get('http://192.168.8.106:8080/api/v1/user-management/show/user/' . $id);
+
+
+        $administrateur = $response->json();
+        //dd($administrateur);
 
         return view('Admin/edit', compact("administrateur"));
     }
