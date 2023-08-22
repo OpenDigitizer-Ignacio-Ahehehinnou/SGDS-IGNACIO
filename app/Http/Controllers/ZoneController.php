@@ -42,16 +42,48 @@ class ZoneController extends Controller
     public function store(Request $request){
 
         dump($request);
-     // Récupérez les données envoyées via AJAX
+        // Récupérez les données envoyées via AJAX
         $donnees = $request->all();
+    
+        // Créez un tableau associatif avec la structure souhaitée
+        $response = [
+            'zoneDto' => [
+                'createdAt' => now(),
+                'creatorId' => 1,
+                'creatorUsername' => 'Me',
+                'deletedFlag' => 'sss',
+                'nom' => $donnees['nom'],
+                'cityId' => $donnees['ville']
+            ],
+            'pointsDtos' => []
+        ];
+    
+        // Ajoutez les données du tableau dans la structure souhaitée
+        foreach ($donnees['tableauDonnees'] as $item) {
+            $point = [
+                'altitude' => now(),
+                'createdAt' => now(),
+                'creatorId' => 2,
+                'creatorUsername' => now(),
+                'deletedFlag' => 'fff',
+                'latitude' => $item['latitude'],
+                'longitude' => $item['longitude'],
+                'ordre' => $item['ordre'],
+                'zoneId' => 1
+            ];
+    
+            $response['pointsDtos'][] = $point;
+        }
+    
+        // Convertissez le tableau en JSON
+        $jsonResponse = json_encode($response);
 
-        dd($donnees);
-
-
-       
-        return back()->with("success", "Zone ajoutée avec succès");
-
+        dd($jsonResponse);
+    
+        // Vous pouvez maintenant utiliser $jsonResponse comme réponse JSON
+        return response()->json($jsonResponse);
     }
+    
     
 
     

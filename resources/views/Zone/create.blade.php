@@ -47,7 +47,7 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="exampleInputPassword1" class="form-label">Ville</label>
-                    <select class="form-control" id="exampleSelect" name="ville" style="border-radius: 10px;">
+                    <select class="form-control" id="ville" name="ville" style="border-radius: 10px;">
 
                         @foreach ($villes as $ville )
 
