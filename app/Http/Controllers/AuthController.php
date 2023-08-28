@@ -24,7 +24,7 @@ class AuthController extends Controller
 
         $authentification = HTTP::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('http://192.168.8.106:8080/api/v1/users-management/authenticate', $credentials);
+        ])->post('http://192.168.8.103:8080/api/v1/users-management/authenticate', $credentials);
         
         $administrateurs = $authentification->json();
 

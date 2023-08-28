@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Illuminate\Http\Response;
+
 
 
 class ZoneController extends Controller
@@ -17,7 +19,7 @@ class ZoneController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.106:8080/api/v1/zones-management/show/zone');
+         ])->get('http://192.168.8.103:8080/api/v1/zones-management/show/zone');
  
          $zones = $response->json();
                 //dd($zones);
@@ -31,7 +33,7 @@ class ZoneController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.106:8080/api/v1/cities-management/show/city');
+        ])->get('http://192.168.8.103:8080/api/v1/cities-management/show/city');
 
         $villes = $response->json();
         //dd($villes);
@@ -46,9 +48,9 @@ class ZoneController extends Controller
         $donnees = $request->all();
     
         // Créez un tableau associatif avec la structure souhaitée
-        $response = [
+        $zonePoint = [
             'zoneDto' => [
-                'createdAt' => now(),
+                'createdAt' => "2023-08-02T11:37:47.544+00:00",
                 'creatorId' => 1,
                 'creatorUsername' => 'Me',
                 'deletedFlag' => 'sss',
@@ -61,27 +63,38 @@ class ZoneController extends Controller
         // Ajoutez les données du tableau dans la structure souhaitée
         foreach ($donnees['tableauDonnees'] as $item) {
             $point = [
-                'altitude' => now(),
-                'createdAt' => now(),
-                'creatorId' => 2,
-                'creatorUsername' => now(),
-                'deletedFlag' => 'fff',
+                'altitude' => "2023-08-02T11:37:47.544+00:00",
+                'createdAt' => "2023-08-02T11:37:47.544+00:00",
+                'creatorId' => 1,
+                'creatorUsername' => "2023-08-02T11:37:47.544+00:00",
+                'deletedFlag' => 's',
                 'latitude' => $item['latitude'],
                 'longitude' => $item['longitude'],
                 'ordre' => $item['ordre'],
                 'zoneId' => 1
             ];
     
-            $response['pointsDtos'][] = $point;
+            $zonePoint['pointsDtos'][] = $point;
         }
-    
-        // Convertissez le tableau en JSON
-        $jsonResponse = json_encode($response);
+             dd($zonePoint);
+        try {
 
-        dd($jsonResponse);
+            $variableRecuperee = session('variableEnvoyee');
+            $response = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->post('http://192.168.8.103:8080/api/v1/zones-management/create/zone_with_points',$zonePoint);
+            
+            $zones = $response->json();
+            //dd($zones);
+            return new Response(200);
+        } catch (Exception $e) {
+          // dd(0);
+            return new Response(500);
+        }
+ 
     
         // Vous pouvez maintenant utiliser $jsonResponse comme réponse JSON
-        return response()->json($jsonResponse);
+        //return back()->with("success", "zone ajoutée avec succès")->with(compact("zones"));
     }
     
     
@@ -114,7 +127,7 @@ class ZoneController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-        $response = $client->put("http://192.168.8.106:8080/api/v1/zones-management/update/zone/{$id}", [
+        $response = $client->put("http://192.168.8.103:8080/api/v1/zones-management/update/zone/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -136,14 +149,14 @@ class ZoneController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.106:8080/api/v1/zones-management/show/zone/{zoneId}' .$id);
+         ])->get('http://192.168.8.103:8080/api/v1/zones-management/show/zone/{zoneId}' .$id);
  
          $zone = $response->json();
          //dd($ville);
 
          $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.106:8080/api/v1/cities-management/show/city');
+        ])->get('http://192.168.8.103:8080/api/v1/cities-management/show/city');
 
         $villes = $response->json();
  
@@ -154,7 +167,7 @@ class ZoneController extends Controller
     {
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.8.106:8080/api/v1/zones-management/delete/zone/' . $id;
+        $url = 'http://192.168.8.103:8080/api/v1/zones-management/delete/zone/' . $id;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,

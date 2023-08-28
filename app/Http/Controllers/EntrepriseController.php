@@ -22,7 +22,7 @@ class EntrepriseController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.106:8080/api/v1/entreprise-management/show/entreprise');
+        ])->get('http://192.168.8.103:8080/api/v1/entreprise-management/show/entreprise');
 
          $entreprises = $response->json();
         //dd($entreprises);
@@ -98,7 +98,7 @@ class EntrepriseController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.8.106:8080/api/v1/entreprise-management/create/entreprises',$test);
+        ])->post('http://192.168.8.103:8080/api/v1/entreprise-management/create/entreprises',$test);
         
         $entreprises = $response->json();
        // dd($entreprises);
@@ -111,7 +111,7 @@ class EntrepriseController extends Controller
     {
         $variableRecuperee = session('variableEnvoyee');
     
-        $url = 'http://192.168.8.106:8080/api/v1/entreprise-management/delete/entreprises/' . $id;
+        $url = 'http://192.168.8.103:8080/api/v1/entreprise-management/delete/entreprises/' . $id;
     
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -162,7 +162,7 @@ class EntrepriseController extends Controller
         $client = new Client();
 
 
-        $response = $client->put("http://192.168.8.106:8080/api/v1/entreprise-management/update/entreprise/{$id}", [
+        $response = $client->put("http://192.168.8.103:8080/api/v1/entreprise-management/update/entreprise/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -186,7 +186,7 @@ class EntrepriseController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.106:8080/api/v1/entreprise-management/show/entreprise/{entrepriseId}' . $id);
+        ])->get('http://192.168.8.103:8080/api/v1/entreprise-management/show/entreprise/{entrepriseId}' . $id);
 
         $entreprise = $response->json();
 

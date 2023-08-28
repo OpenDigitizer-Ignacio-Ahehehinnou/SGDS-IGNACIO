@@ -26,7 +26,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">Ajouter une zone</div>
 
-
+        <div id="msg200"></div>
     <div class="panel-body">
 
 
@@ -47,7 +47,8 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="exampleInputPassword1" class="form-label">Ville</label>
-                    <select class="form-control" id="ville" name="ville" style="border-radius: 10px;">
+                    <select class="form-control" id="ville
+                    " name="ville" style="border-radius: 10px;">
 
                         @foreach ($villes as $ville )
 
@@ -289,16 +290,31 @@
                 url: "{{ route('zone.ajouter')}}",
                 data: donneesAEnvoyer,
                 success: function (response) {
-                    // Traitez la réponse du contrôleur ici
-                    // Par exemple, affichez un message de confirmation
-                    alert("Données envoyées avec succès !");
-                    // Redirigez l'utilisateur si nécessaire
+
+                    if(parseInt(response)==200 || parseInt(response)==500){
+                        
+                        parseInt(response)==500?($("#msg200").html(`<div class='alert alert-danger text-center' role='alert'>
+                            <strong>Une erreur s'est produite</strong> veuillez réessayez.
+                            
+                            </div>`)
+                        ):($('#msg200').html(`<div class='alert alert-success text-center' role='alert'>
+                            <strong>Candidature supprimée avec succès. </strong>
+                            
+                            </div>`)
+                        ); 
+                    }
+                    
+                    var url="{{route('zone')}}" 
+                    if(response==200){
+                        setTimeout(function(){
+                            window.location=url
+                        },1000) 
+                    }  else{
+                        $("#msg200").html(response);
+
+                        }
                 },
-                error: function (error) {
-                    // Traitez les erreurs ici
-                    alert(404)
-                    console.log(error);
-                }
+                
             });
         });
     });

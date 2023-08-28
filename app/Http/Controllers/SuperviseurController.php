@@ -20,7 +20,7 @@ class SuperviseurController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.106:8080/api/v1/user-management/show/user');
+         ])->get('http://192.168.8.103:8080/api/v1/user-management/show/user');
  
          $superviseurs = $response->json();
 
@@ -96,7 +96,7 @@ class SuperviseurController extends Controller
          $variableRecuperee = session('variableEnvoyee');
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->post('http://192.168.8.106:8080/api/v1/user-management/created/user',$test);
+         ])->post('http://192.168.8.103:8080/api/v1/user-management/created/user',$test);
          
          $superviseurs = $response->json();
  
@@ -112,7 +112,7 @@ class SuperviseurController extends Controller
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.8.106:8080/api/v1/user-management/delete/user/{$id}' . $id;
+        $url = 'http://192.168.8.103:8080/api/v1/user-management/delete/user/{$id}' . $id;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -163,7 +163,7 @@ class SuperviseurController extends Controller
         $client = new Client();
 
 
-        $response = $client->put("http://192.168.8.106:8080/api/v1/user-management/update/user/{$id}", [
+        $response = $client->put("http://192.168.8.103:8080/api/v1/user-management/update/user/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -181,7 +181,7 @@ class SuperviseurController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.106:8080/api/v1/user-management/show/user/{userId}' . $id);
+        ])->get('http://192.168.8.103:8080/api/v1/user-management/show/user/{userId}' . $id);
 
 
         $superviseur = $response->json();

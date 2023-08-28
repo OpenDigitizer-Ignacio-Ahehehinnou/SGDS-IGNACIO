@@ -18,7 +18,7 @@ class SignalementController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.106:8080/api/v1/reporting-management/show/reporting');
+        ])->get('http://192.168.8.103:8080/api/v1/reporting-management/show/reporting');
 
         $signalements = $response->json();
       
@@ -56,7 +56,7 @@ class SignalementController extends Controller
         $test['deletedFlag'] = $request['deletedFlag'];
 
         
-        $response = HTTP::withBody(json_encode($test))->put('http://192.168.8.106:8080/api/v1/user-management/update/user/{$id}' . $id);
+        $response = HTTP::withBody(json_encode($test))->put('http://192.168.8.103:8080/api/v1/user-management/update/user/{$id}' . $id);
        
         return back()->with("success", "Administrateur mis à jour avec succès!");
 
@@ -65,7 +65,7 @@ class SignalementController extends Controller
     public function edit($id)
     {
         //ajouter un admin
-        $signalement1 = HTTP::get('http://192.168.8.106:8080/api/v1/user-management/show/user/{userId}' . $id);
+        $signalement1 = HTTP::get('http://192.168.8.103:8080/api/v1/user-management/show/user/{userId}' . $id);
         $signalement = $signalement1->json();
         
         return view('Admin/edit', compact("administrateur"));
@@ -81,7 +81,7 @@ class SignalementController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.106:8080/api/v1/reporting-management/show/reportings/{id}' . $reportingId);
+        ])->get('http://192.168.8.103:8080/api/v1/reporting-management/show/reportings/{id}' . $reportingId);
 
         $signalements = $response->json();
         // dd($signalements);
