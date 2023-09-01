@@ -7,7 +7,7 @@
 
     <div class="container-fluid">
         <div class="my-3 p-3 mt-5 bg-body rounded shadow-sm">
-            <h3 class="border-bottom pb-2 mb-5">Liste des villes</h3>
+            <h5 class="border-bottom pb-2 mb-5">Liste des villes</h5>
         
             <div class="mt-2">
                 <div class="d-flex justify-content-between mb-2">
@@ -18,11 +18,41 @@
                 </div>
                 <br>
 
-                @if(session()->has("successDelete"))
-                    <div class="alert alert-success" >
-                        <h5>{{session()->get('successDelete')}}</h5>
-                    </div>
-                @endif
+                
+            @if(session()->has("success"))
+            <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+                  </button>
+                <h5>{{session()->get('success')}}</h5>
+
+                
+            </div>
+            @endif
+
+
+            @if($errors->any())
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <h5>{{$error}}</h5>
+        
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            @if(session()->has("successDelete"))
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+                  </button>
+                <h5>{{session()->get('successDelete')}}</h5> 
+            </div>
+            @endif
             
                 <div class="row ">
                     <div class="box">
@@ -56,15 +86,11 @@
                                                     <a href="{{route('ville.edit', ['ville'=>$ville['cityId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
 
                                                     
-                                                    <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cette ville ???')){
-                                                        document.getElementById('form-{{$ville['cityId']}}').submit() }"><i class="bi bi-trash3-fill"></i></a>
-        
-                                                        <form id="form-{{$ville['cityId']}}" action="{{ route( 'ville.supprimer', ['ville'=>$ville['cityId']])}}" method="post">
-                                                            @csrf
-                                                                <input type="hidden" name="_method" value="delete">
-                                                        </form>
-                                                {{-- </div> --}}
-        
+                                                    <button type="button" class="btn btn-danger"
+                                                    data-key="{{ $ville['cityId'] }}" data-toggle="modal"
+                                                    data-target="#confirmationModal">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
         
                                                     </td>
                                         </td>
@@ -81,6 +107,48 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('ville.supprimer') }}">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation de suppression</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body m-3">
+                        <p class="mb-0">Voulez vous vraiment supprimer cette ville ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="documentId" id="documentId" value="">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+
+                        <button type="submit" class="btn btn-danger">Oui</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+       $('#confirmationModal').on('show.bs.modal', function(e) {
+           var button = $(e.relatedTarget);
+           var deleteId = button.data('key');
+           var modal = $(this);
+           modal.find('#documentId').val(deleteId);
+       })
+
+
+   });
+   
+</script>
 
 
 @endsection

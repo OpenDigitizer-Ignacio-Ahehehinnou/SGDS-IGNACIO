@@ -21,7 +21,7 @@ class SignalementController extends Controller
         ])->get('http://192.168.8.103:8080/api/v1/reporting-management/show/reporting');
 
         $signalements = $response->json();
-      
+      //dd($signalements);
         return view('Signalement/index', compact("signalements"));
     }
 

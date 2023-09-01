@@ -36,6 +36,11 @@ class VilleController extends Controller
 
     public function store(Request $request){
 
+        $request->validate([
+            "code" => "required",
+            "nom" => "required|alpha"
+        ]);
+
         $test = array();
         $test['code'] = $request['code'];
         $test['nom'] = $request['nom'];
@@ -52,16 +57,22 @@ class VilleController extends Controller
         ])->post('http://192.168.8.103:8080/api/v1/cities-management/create/city',$test);
         
         $villes = $response->json();
+
         
-        return back()->with("success", "Ville ajoutée avec succès")->with(compact("villes"));
+        
+        // return back()->with("success", "Ville ajoutée avec succès")->with(compact("villes"));
+        return redirect()->route('ville')->with("success", "Ville ajoutée avec succès")->with(compact("villes"));
+
         
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
+        $donnees = $request->documentId;
+
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.8.103:8080/api/v1/cities-management/delete/city/' . $id;
+        $url = 'http://192.168.8.103:8080/api/v1/cities-management/delete/city/' . $donnees;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -75,7 +86,8 @@ class VilleController extends Controller
 
         $request->validate([
             "code" => "required",
-            "nom" => "required"
+            "nom" => "required|alpha",
+            
         ]);
 
         $test = array();
@@ -105,7 +117,7 @@ class VilleController extends Controller
             'json' => $dataToUpdate,
         ]);
 
-        return back()->with("success", "Ville mis à jour avec succès");
+        return redirect()->route('ville')->with("success", "Ville mis à jour avec succès");
 
         
     }

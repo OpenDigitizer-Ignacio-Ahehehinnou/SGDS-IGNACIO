@@ -18,6 +18,11 @@
         <div class="box-body">
 <table class="table table-bordered" >
     <tbody>
+        <tr>
+        
+            <th>Code</th>
+            <td>{{$signalements['uniqueCode']}}</td>
+        </tr>
     <tr>
         
         <th>Altitude</th>

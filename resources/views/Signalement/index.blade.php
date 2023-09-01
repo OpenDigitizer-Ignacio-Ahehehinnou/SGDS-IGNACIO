@@ -10,12 +10,12 @@
             <h3 class="border-bottom pb-2 mb-5">Liste des signalements</h3>
         
             <div class="mt-2">
-                <div class="d-flex justify-content-between mb-2">
+                {{-- <div class="d-flex justify-content-between mb-2">
                     <!-- la pagination sans oublier code bootstrap dans provider(AppServiceProvider) -->
             
                     <a href="{{ route ('signalement.create')}}" type="button" class=" btn btn-primary">Ajouter un signalement</a></div>
 
-                </div>
+                </div> --}}
 
                 <br>
                 @if(session()->has("successDelete"))
@@ -38,13 +38,15 @@
                     <thead>
                         <tr>
                             {{-- <th scope="col">#</th> --}}
+                            <th scope="col">Code</th>
+
                             <th scope="col">Altitude</th>
                             <th scope="col">Latitude</th>
 
                             <th scope="col">Longitude</th>
                             <th scope="col">Description</th>
                            
-                            <th scope="col">Status</th>
+                            {{-- <th scope="col">Status</th> --}}
                            
                            
                             <th>Actions</th>
@@ -54,11 +56,12 @@
                         @foreach($signalements as $signalement)
                         <tr>
                             {{-- <td>{{$loop->index +1}}</td> --}}
+                            <td>{{$signalement['uniqueCode']}}</td> 
+
                             <td>{{$signalement['altitude']}}</td>
                             <td>{{$signalement['latitude']}}</td>
                              <td>{{$signalement['longitude']}}</td> 
                             <td>{{$signalement['description']}}</td>
-                            <td>{{$signalement['status']}}</td>
                             {{-- <td> <img src="{{ $signalement['photo'] }}"width="300" height="200" 200px; alt="Ma photo"></td> --}}
                           
                             <td>
@@ -86,7 +89,7 @@
                     </tbody>
                     
                 </table>
-                <p>Place Name: <span id="place-name"></span></p>
+                {{-- <p>Place Name: <span id="place-name"></span></p> --}}
 
             </div>
         </div>

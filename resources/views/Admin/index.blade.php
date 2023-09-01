@@ -1,4 +1,3 @@
-
 @extends("layouts.master")
 
 
@@ -8,128 +7,213 @@
     <div class="container-fluid">
         <div class="my-3 p-3 mt-5 bg-body rounded shadow-sm">
             <h3 class="border-bottom pb-2 mb-5">Liste des administrateurs</h3>
-        
+
+            @if( $role == "SUPERADMIN" )
             <div class="mt-2">
                 <div class="d-flex justify-content-between mb-2">
-                    <!-- la pagination sans oublier code bootstrap dans provider(AppServiceProvider) -->
-
-                    <a href="{{ route ('admin.create')}}" type="button" class=" btn btn-primary">Ajouter un admin</a></div>
-
+                    <a href="{{ route ('admin.create')}}" type="button" style="margin-right: 200px;" class="btn btn-primary ml-auto">Ajouter un admin</a>
                 </div>
-                <br>
-
-                @if(session()->has("successDelete"))
-                    <div class="alert alert-success" >
-                        <h5>{{session()->get('successDelete')}}</h5>
-                    </div>
-                @endif
+            </div>
             
-                <div class="row ">
-                    <div class="box">
-                        <!-- <div class="box-header">
-                            <h3 class="box-title">Data Table With Full Features</h3>
-                        </div> -->
-                            <!-- /.box-header -->
-                        <div class="box-body">
-                            <table id="example" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Nom & prénoms</th>
-                                        <th>Matricule(s)</th>
-                                        <th> Téléphone</th>
-                                        <th>Rôle</th>
-                                        <th>Adresse</th>
-                                        <th>Deleted Flag</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
+            @endif
+            <br>
 
-                                <tbody>
+            @if(session()->has("success"))
+            <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+                  </button>
+                <h5>{{session()->get('success')}}</h5>
+
+                
+            </div>
+            @endif
+
+
+            @if($errors->any())
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <h5>{{$error}}</h5>
+        
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            @if(session()->has("successDelete"))
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+                  </button>
+                <h5>{{session()->get('successDelete')}}</h5>
+
+                
+            </div>
+            @endif
+            <div class="row ">
+                <div class="box">
+                    <!-- <div class="box-header">
+                                <h3 class="box-title">Data Table With Full Features</h3>
+                            </div> -->
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom & prénoms</th>
+                                    <th>Matricule(s)</th>
+                                    <th> Téléphone</th>
+                                    {{-- <th>Rôle</th> --}}
+                                    <th>Adresse</th>
+                                    <th>Entreprise</th>
+                                    @if( $role == "SUPERADMIN" )
+                                    <th>Actions</th>
+                                    @endif
+                                </tr>
+                            </thead>
+
+                            <tbody>
 
 
                                 @foreach($administrateurs as $administrateur)
-
-                                    @if ( $administrateur['roleModel']['libelle'] == "ADMIN")
-
-                                    <!-- <p>il ya  {{ count($administrateurs) }} admins</p> -->
+                                @if( $role == "ADMIN" )
+                                    @if($administrateur['entrepriseModel']['name'] == $entreprise && $administrateur['roleModel']['libelle'] == 'ADMIN')
 
                                     <tr>
                                         <td>{{$administrateur['firstName']}} {{$administrateur['lastName']}}</td>
                                         <td>{{$administrateur['matricule']}}</td>
-                                        <td>{{$administrateur['telephone']}}</td> 
-                                        <td>{{$administrateur['roleModel']['libelle']}}</td> 
+                                        <td>{{$administrateur['telephone']}}</td>
                                         <td>{{$administrateur['adress']}}</td>
-                                        <td>
-                                            @if( $administrateur['deletedFlag']=="A")  
+                                        <td>{{$administrateur['entrepriseModel']['name']}}</td>
+
                                         
-                                                <span class="label label-pill label-success">A</span>
+                                        {{-- <td>
+                                                <a href="{{ route( 'admin.edit', ['administrateur'=>$administrateur['userId']])}}"
+                                                    type="button" class="btn btn-warning"><i
+                                                        class="bi bi-pencil-square"></i></a>
 
-                                            @elseif($administrateur['deletedFlag']=="D")
 
-                                                <span class="label rounded-pill label-danger">D</span>
+                                                <button type="button" class="btn btn-danger" data-key="{{ $administrateur['userId'] }}" data-toggle="modal" data-target="#confirmationModal">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
 
-                                            @else
+                                        </td> --}}
 
-                                                <span class="label rounded-pill label-warning">{{$administrateur['deletedFlag']}}</span>
+                                    </tr>
+                                
+                                    @endif
+                                @else
 
-                                            @endif
+                                        @if( $administrateur['roleModel']['libelle'] == 'ADMIN')
+                                <tr>
+                                    <td>{{$administrateur['firstName']}} {{$administrateur['lastName']}}</td>
+                                    <td>{{$administrateur['matricule']}}</td>
+                                    <td>{{$administrateur['telephone']}}</td>
+                                    <td>{{$administrateur['adress']}}</td>
+                                    <td>{{$administrateur['entrepriseModel']['name']}}</td>
 
                                     
-                                        </td>
-                                        <!-- <td>Admin</td> -->
-                                        <td>
+                                    <td>
+                                            <a href="{{ route( 'admin.edit', ['administrateur'=>$administrateur['userId']])}}"
+                                                type="button" class="btn btn-warning"><i
+                                                    class="bi bi-pencil-square"></i></a>
 
 
-                                        {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
-                                            <!-- <button type="button" class="btn btn-success voir" id="voir"><i class="bi bi-eye-fill"></i></button> -->
-                                            <button type="button" class="btn btn-success voir"><i class="bi bi-eye-fill"></i></button>
+                                            <button type="button" class="btn btn-danger" data-key="{{ $administrateur['userId'] }}" data-toggle="modal" data-target="#confirmationModal">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
 
+                                    </td>
 
-                                            <a href="{{ route( 'admin.supprimer', ['administrateur'=>$administrateur['userId']])}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-                                            
-                                            
-                                            <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet Admin ???')){
-                                                document.getElementById('form-{{$administrateur['userId']}}').submit() }"><i class="bi bi-trash3-fill"></i></a>
+                                </tr>
+                                @endif
+                            
+                                @endif
 
-                                                <form id="form-{{$administrateur['userId']}}" action="{{ route( 'admin.supprimer', ['administrateur'=>$administrateur['userId']])}}" method="post">
-                                                    @csrf
-                                                        <input type="hidden" name="_method" value="delete">
-                                                </form>
-                                        {{-- </div> --}}
-
-
-                                            </td>
-
-                                        </tr>
-                                        @endif
-                                        @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- /.box -->
+                    <!-- /.box-body -->
                 </div>
+                <!-- /.box -->
             </div>
         </div>
     </div>
-    
+</div>
 
-         <!-- Modal -->
-         <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content ">
-                    <div class="modal-header " style="background-color:#69B42D; color:white;">
-                        <h2  class="modal-title" id="exampleModalLabel">Détail d'un administrateur</h2>
-                    </div>
-                    <div class="modal-body">
 
-                    
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('admin.supprimer') }}">
+                @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation de suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body m-3">
+                <p class="mb-0">Voulez vous vraiment supprimer ce administrateur ?</p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="documentId" id="documentId" value="">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button type="submit" class="btn btn-danger">Oui</button>
+            </div>
+            </form>
+        </div>
+    </div>
+        </div>
 
-                    <table class="table table-bordered">
+
+<!-- Modal de confirmation -->
+{{-- <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Confirmation de suppression</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet administrateur ?
+            </div>
+            <div class="modal-footer">
+                
+                <form id="form-{{$administrateur['userId']}}"
+                    action="{{ route( 'admin.supprimer', ['administrateur'=>$administrateur['userId']])}}" method="post">
+                    @csrf
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
+
+<!-- Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header " style="background-color:#69B42D; color:white;">
+                <h2 class="modal-title" id="exampleModalLabel">Détail d'un administrateur</h2>
+            </div>
+            <div class="modal-body">
+
+
+
+                <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            
+
                             <th>Nom & prénoms</th>
                             <td>{{$administrateur['firstName']}} {{$administrateur['lastName']}}</td>
                         </tr>
@@ -149,26 +233,26 @@
                             <th>Adresse</th>
                             <td>Cotonou/Akpakpa</td>
                         </tr>
-                        </tbody>
+                    </tbody>
 
-                    </table>
+                </table>
 
-                    
 
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fermer</button>
-                    </div>
-                </div>
+
             </div>
-        </div> 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-        <script>
-
-        $(document).ready(function () {
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
         
             
 
@@ -182,7 +266,21 @@
         });
 
 
-    </script>
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+       $('#confirmationModal').on('show.bs.modal', function(e) {
+           var button = $(e.relatedTarget);
+           var deleteId = button.data('key');
+           var modal = $(this);
+           modal.find('#documentId').val(deleteId);
+       })
+
+
+   });
+   </script>
 
 
 

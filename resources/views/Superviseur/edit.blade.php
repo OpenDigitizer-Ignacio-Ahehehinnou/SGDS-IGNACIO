@@ -3,8 +3,8 @@
 
 @section("contenu")
 
-<div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h3 class="border-bottom pb-2 mb-5">Edition d'un superviseur</h3>
+{{-- <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h3 class="border-bottom pb-2 mb-5">Edition d'un superviseur</h3> --}}
     
         <div class="mt-2">
 
@@ -16,29 +16,44 @@
 
 
         @if($errors->any())
-        <div class="alert alert-danger" >
-            <ul >
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
                 @foreach($errors->all() as $error)
-                    <li>{{$error}}</li>
-
+                <h5>{{$error}}</h5>
+    
                 @endforeach
             </ul>
-            </div>
+        </div>
         @endif
+        <div class="row">
 
-        <form  method="post" action="{{ route('superviseur.update', ['superviseur'=>$superviseur['userId']] )}}">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">Edition d'un superviseur</div>
+
+
+            <div class="panel-body">
+
+        <a href="{{ route('modifier_user', ['userId' => $superviseur['userId']]) }}" class="btn btn-warning">Modifier mot de passe</a>
+        <br><br>
+
+            <form  method="post" action="{{ route('superviseur.update', ['superviseur'=>$superviseur['userId']] )}}">
                 @csrf
                 <input type="hidden" name="_method" value="put">
 
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputEmail1" class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="nom" name="firstName" value="{{$superviseur['firstName'] }}">
+                        <input type="text" class="form-control" id="nom" required="true" style="border-radius: 10px;" name="firstName" value="{{$superviseur['firstName'] }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Prénoms</label>
-                        <input type="text" class="form-control" id="prenom" name="lastName" value="{{$superviseur['lastName'] }}">
+                        <input type="text" class="form-control" required="true" id="prenom" style="border-radius: 10px;" name="lastName" value="{{$superviseur['lastName'] }}">
                     </div>
 
                 </div>
@@ -46,12 +61,12 @@
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Matricule</label>
-                        <input type="text" class="form-control" id="email" name="matricule" value="{{$superviseur['matricule'] }}">
+                        <input type="text" class="form-control" required="true" id="email" style="border-radius: 10px;" name="matricule" value="{{$superviseur['matricule'] }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Téléphone</label>
-                        <input type="text" class="form-control" id="telephone" name="telephone"  value="{{$superviseur['telephone'] }}">
+                        <input type="text" class="form-control" required="true" id="telephone" style="border-radius: 10px;" name="telephone"  value="{{$superviseur['telephone'] }}">
                     </div>
 
                 </div>
@@ -60,18 +75,18 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Adresse</label>
-                        <input type="text" class="form-control" id="adresse" name="adress" value="{{$superviseur['adress'] }}">
+                        <input type="text" class="form-control" required="true" id="adresse" style="border-radius: 10px;" name="adress" value="{{$superviseur['adress'] }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" value="{{$superviseur['username'] }}">
+                        <label for="username" class="form-label">Nom utilisateur</label>
+                        <input type="text" class="form-control" required="true" id="username" style="border-radius: 10px;" name="username" value="{{$superviseur['username'] }}">
                     </div>
 
                     
                 </div>
 
-                <div class="row">
+                <div class="row" hidden>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -86,7 +101,7 @@
                     
                 </div>
 
-                <div class="row">
+                <div class="row" hidden>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Entreprise</label>
@@ -104,7 +119,7 @@
                     
                 </div>
 
-                <div class="row">
+                <div class="row" hidden>
 
                     <div class="mb-3 col-md-6"hidden="hidden">
                         <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
@@ -119,7 +134,7 @@
                     
                 </div>
                 
-                <div class="row">
+                <div class="row" hidden>
 
                 <div class="mb-3 col-md-6"hidden="hidden" >
                         <label for="activationStatus" class="form-label">Creator Id</label>
@@ -137,12 +152,13 @@
                 <br>
 
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
-                <a href="{{route('superviseur')}}" class="btn btn-danger">Annuler</a>
 
             </form>     
-        </div>
+        </div></div></div>
+    <div class="col-md-2"></div>
+    </div></div>
             
         
-</div>
+{{-- </div> --}}
 
 @endsection

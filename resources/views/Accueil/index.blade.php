@@ -29,7 +29,7 @@
             <!-- small box -->
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>5</h3>
+                <h3>{{ $countAdmin }}</h3>
 
                 <p>Administrateur</p>
               </div>
@@ -44,7 +44,7 @@
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
-                <h3>3<sup style="font-size: 20px"></sup></h3>
+                <h3>{{ $countSupervisor }}<sup style="font-size: 20px"></sup></h3>
 
                 <p>Superviseurs</p>
               </div>
@@ -59,7 +59,7 @@
             <!-- small box -->
             <div class="small-box bg-yellow">
               <div class="inner">
-                <h3>4</h3>
+                <h3>{{ $countCollector }}</h3>
 
                 <p>Collecteurs</p>
               </div>
@@ -74,7 +74,7 @@
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
-                <h3>10</h3>
+                <h3>{{ $countSignalement }}</h3>
 
                 <p>Signalement</p>
               </div>

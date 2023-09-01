@@ -17,7 +17,7 @@ class PointController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.103:8080/api/v1/points-management/show/point');
+         ])->get('http://192.168.8.112:8080/api/v1/points-management/show/point');
  
          $points = $response->json();
         //dd($points);

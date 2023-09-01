@@ -87,7 +87,7 @@ desired effect
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>SGDS</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>SGSD</b></span>
+        <span class="logo-lg"><b>SGDS</b></span>
 		</a>
 
 		<!-- Header Navbar -->
@@ -108,23 +108,24 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="../../AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 " class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Ignacio Rénix</span>
+              
+              <span class="hidden-xs">{{ $role }}</span>
             </a>
             <ul class="dropdown-menu oui">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="../../AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 " class="img-circle" alt="User Image">
 
                 <p>
-                  Ignacio Rénix 
-                  
+                  {{ $nom }} {{ $prenom }} <br>
+                                
                 </p>
               </li>
               
                 
-              </li> -->
+              </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-right">
@@ -151,17 +152,17 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="../../AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Ignacio Rénix</p>
+          <p>{{ $nom }} {{ $prenom }}</p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> En ligne</a>
         </div>
       </div>
 
       <!-- search form (Optional) -->
-      <form action="#" method="get" class="sidebar-form">
+      {{-- <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
           <input type="text" name="q" class="form-control" placeholder="recherche...">
           <span class="input-group-btn">
@@ -169,19 +170,29 @@ desired effect
               </button>
             </span>
         </div>
-      </form>
+      </form> --}}
       <!-- /.search form -->
-
+<br><br>
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
         
         <li class="active"><a href="{{route ('accueil') }}"><i class="fa fa-dashboard"></i> <span>Accueil</span></a></li>
+        {{-- <li><a href="{{ route('superAdmin')}} "><i class="fa  fa-users"></i> <span>Super admin</span></a></li> --}}
+
         <li><a href="{{ route('admin')}} "><i class="fa  fa-users"></i> <span>Administrateurs</span></a></li>
         <li><a href="{{ route('superviseur')}}"><i class="fa  fa-users"></i> <span>Superviseurs</span></a></li>
         <li><a href="{{ route('collecteur')}}"><i class="fa  fa-users"></i> <span>Collecteurs</span></a></li>
-        <li><a href="{{ route('entreprise')}}"><i class="fa fa-university"></i> <span>Entreprises</span></a></li>
         <li><a href="{{ route('signalement')}}"><i class="fa fa-link"></i> <span>Signalements</span></a></li>
 
+        @if ($role == "SUPERADMIN")
+          <li><a href="{{ route('entreprise')}}"><i class="fa fa-university"></i> <span>Entreprises</span></a></li>
+          <li><a href="{{ route('ville')}}"><i class="fa fa-university"></i> <span>Villes</span></a></li>
+          <li><a href="{{ route('zone')}}"><i class="fa fa-link"></i> <span>Zones</span></a></li>
+
+        @endif
+
+          
+        
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -207,9 +218,9 @@ desired effect
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- To the right -->
-    <div class="pull-right hidden-xs">
+    {{-- <div class="pull-right hidden-xs">
       Anything you want
-    </div>
+    </div> --}}
     <!-- Default to the left -->
     <strong>Copyright &copy; 2023 <a href="#">Company</a>.</strong> OpenDigitizer
   </footer>

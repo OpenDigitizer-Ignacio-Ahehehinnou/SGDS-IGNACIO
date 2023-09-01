@@ -3,43 +3,57 @@
 
 @section("contenu")
 
-<div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h3 class="border-bottom pb-2 mb-5">Edition d'un administrateurs</h3>
+{{-- <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h3 class="border-bottom pb-2 mb-5">Edition d'un administrateurs</h3> --}}
     
         <div class="mt-2">
 
-        @if(session()->has("success"))
-        <div class="alert alert-success" >
-            <h5>{{session()->get('success')}}</h5>
-        </div>
-        @endif
+            @if(session()->has("success"))
+                <div class="alert alert-success" >
+                    <h5>{{session()->get('success')}}</h3>
+                </div>
+            @endif
+    
+    
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <ul>
+                        @foreach($errors->all() as $error)
+                        <h5>{{$error}}</h5>
+            
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="row">
 
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">Edition d'un administrateur</div>
+    
+    
+                <div class="panel-body">
 
-        @if($errors->any())
-        <div class="alert alert-danger" >
-            <ul >
-                @foreach($errors->all() as $error)
-                    <li>{{$error}}</li>
+            <a href="{{ route('modifier_user', ['userId' => $administrateur['userId']]) }}" class="btn btn-warning">Modifier mot de passe</a>
+                <br><br>
 
-                @endforeach
-            </ul>
-            </div>
-        @endif
-       
-
-        <form  method="post" action="{{ route('admin.update', ['administrateur'=>$administrateur['userId']] )}}">
+            <form  method="post" action="{{ route('admin.update', ['administrateur'=>$administrateur['userId']] )}}">
                 @csrf
                 <input type="hidden" name="_method" value="put">
 
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputEmail1" class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="nom" name="firstName" value="{{$administrateur['firstName'] }}">
+                        <input type="text" class="form-control" required="true" id="nom" name="firstName" value="{{$administrateur['firstName'] }}" style="border-radius: 10px;">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Prénoms</label>
-                        <input type="text" class="form-control" id="prenom" name="lastName" value="{{$administrateur['lastName'] }}">
+                        <input type="text" class="form-control" required="true" id="prenom" name="lastName" value="{{$administrateur['lastName'] }}" style="border-radius: 10px;">
                     </div>
 
                 </div>
@@ -47,12 +61,12 @@
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Matricule</label>
-                        <input type="text" class="form-control" id="email" name="matricule" value="{{$administrateur['matricule'] }}">
+                        <input type="text" class="form-control" required="true" id="email" name="matricule" value="{{$administrateur['matricule'] }}" style="border-radius: 10px;">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Téléphone</label>
-                        <input type="text" class="form-control" id="telephone" name="telephone"  value="{{$administrateur['telephone'] }}">
+                        <input type="text" class="form-control" id="telephone" required="true" name="telephone"  value="{{$administrateur['telephone'] }}" style="border-radius: 10px;">
                     </div>
 
                 </div>
@@ -61,18 +75,18 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Adresse</label>
-                        <input type="text" class="form-control" id="adresse" name="adress" value="{{$administrateur['adress'] }}">
+                        <input type="text" class="form-control" required="true" id="adresse" name="adress" value="{{$administrateur['adress'] }}" style="border-radius: 10px;">
                     </div>
 
                     <div class="mb-3 col-md-6">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" value="{{$administrateur['username'] }}">
+                        <label for="username" class="form-label">Nom utilisateur</label>
+                        <input type="text" class="form-control" required="true" id="username" name="username" value="{{$administrateur['username'] }}" style="border-radius: 10px;">
                     </div>
 
                     
                 </div>
 
-                <div class="row">
+                <div class="row" hidden>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -87,7 +101,7 @@
                     
                 </div>
 
-                <div class="row">
+                <div class="row" hidden>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Entreprise</label>
@@ -105,7 +119,7 @@
                     
                 </div>
 
-                <div class="row">
+                <div class="row" hidden>
 
                     <div class="mb-3 col-md-6"hidden="hidden">
                         <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
@@ -120,7 +134,7 @@
                     
                 </div>
                 
-                <div class="row">
+                <div class="row" hidden>
 
                 <div class="mb-3 col-md-6"hidden="hidden" >
                         <label for="activationStatus" class="form-label">Creator Id</label>
@@ -139,15 +153,18 @@
                 <div >
 
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
-                <a href="{{route('admin')}}" class="btn btn-danger">Annuler</a>
 
                 </div>
 
                
 
             </form>  
+
+                </div></div>
+                <div class="col-md-2"></div>
+                </div></div>
                     
-        </div>
+        {{-- </div> --}}
             
         
 </div>

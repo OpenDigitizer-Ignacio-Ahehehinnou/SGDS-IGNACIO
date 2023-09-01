@@ -3,9 +3,9 @@
 
 @section("contenu")
 
-<div class="my-3 p-3 bg-body rounded shadow-sm">
+{{-- <div class="my-3 p-3 bg-body rounded shadow-sm">
         <h3 class="border-bottom pb-2 mb-5">Edition d'une zone</h3>
-    
+     --}}
         <div class="mt-2">
 
         @if(session()->has("success"))
@@ -16,15 +16,29 @@
 
 
         @if($errors->any())
-        <div class="alert alert-danger" >
-            <ul >
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
                 @foreach($errors->all() as $error)
-                    <li>{{$error}}</li>
-
+                <h5>{{$error}}</h5>
+    
                 @endforeach
             </ul>
-            </div>
+        </div>
         @endif
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Edition d'une zone</div>
+
+
+                    <div class="panel-body">
+
        
 
         <form  method="post" action="{{ route('zone.update', ['zone'=>$zone['zoneId']] )}}">
@@ -32,19 +46,21 @@
                 <input type="hidden" name="_method" value="put">
 
                 <div class="row">
-                    <div class="mb-3 col-md-6">
+                    <div class="mb-3 col-md-12">
                         <label for="exampleInputEmail1" class="form-label">Zone</label>
-                        <input type="text" class="form-control" id="nom" name="zone" value="{{$zone['nom'] }}" style="border-radius: 10px;">
+                        <input type="text" class="form-control" id="nom" required="true" name="zone" value="{{$zone['nom'] }}" style="border-radius: 10px;">
                     </div>
-
-                    <div class="mb-3 col-md-6">
+                    {{-- <input type="text" class="form-control" id="id" name="id" value="{{$zone['zoneId'] }}" hidden="hiddien" > --}}
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-md-12">
                         <label for="exampleInputPassword1" class="form-label">Ville</label>
                         {{-- <input type="text" class="form-control" id="prenom" name="ville" value="{{$zone['cityModel']['nom'] }}"> --}}
-                         <select class="form-control" id="exampleSelect" name="ville" style="border-radius: 10px;">
+                         <select class="form-control" id="exampleSelect" required="true" name="ville" style="border-radius: 10px;">
 
-                        @foreach ($villes as $zone )
+                        @foreach ($villes as $ville )
 
-                            <option value="{{$zone['nom']}}">{{$zone['nom'] }}</option>
+                            <option value="{{$ville['cityId']}}">{{$ville['nom'] }}</option>
 
                         @endforeach
                         
@@ -88,7 +104,7 @@
                 <div >
 
                 <button type="submit" class="btn btn-warning">Modifier</button>
-                <a href="{{route('zone')}}" class="btn btn-danger">Annuler</a>
+                {{-- <a href="{{route('zone')}}" class="btn btn-danger">Annuler</a> --}}
 
                 </div>
 
@@ -96,9 +112,17 @@
 
             </form>  
                     
-        </div>
+        </form>
+    </div>
+</div>
+<div class="colmd-3"></div>
+</div>
+</div>
+
+</div>
+
             
         
-</div>
+{{-- </div> --}}
 
 @endsection

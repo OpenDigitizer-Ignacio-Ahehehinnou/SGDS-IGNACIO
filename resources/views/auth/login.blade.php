@@ -12,6 +12,7 @@
             background-size: cover;
             background-position: center;
             height: 100vh;
+            /* border-radius: 10px; */
         }
     </style>
 
@@ -29,7 +30,7 @@
 
                         <div>
                             <x-input-label for="email" :value="__('Email')" />
-                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                            <x-text-input id="email" style="border-radius: 10px;" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 

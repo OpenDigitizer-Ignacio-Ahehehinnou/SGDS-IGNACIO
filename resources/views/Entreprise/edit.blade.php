@@ -13,17 +13,23 @@
 
 
         @if($errors->any())
-        <div class="alert alert-danger" >
-            <ul >
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
                 @foreach($errors->all() as $error)
-                    <li>{{$error}}</li>
-
+                <h5>{{$error}}</h5>
+    
                 @endforeach
             </ul>
-            </div>
+        </div>
         @endif
 
-
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+    
 
         <div class="panel panel-default">
             <div class="panel-heading">Edition d'une entreprise</div>
@@ -40,13 +46,13 @@
                 <div class="row">
 
                     <div class="mb-3 col-md-6">
-                        <label for="nom" class="form-label"> Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{$entreprise['name'] }}">
+                        <label for="nom" class="form-label"> Entreprise</label>
+                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="name" name="name" value="{{$entreprise['name'] }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Adresse</label>
-                        <input type="text" class="form-control" id="adress" name="adress" value="{{$entreprise['adress'] }}">
+                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="adress" name="adress" value="{{$entreprise['adress'] }}">
                     </div>
 
                 </div>
@@ -56,12 +62,12 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Numéro IFU</label>
-                        <input type="number" class="form-control" id="ifu" name="ifu" value="{{$entreprise['ifu'] }}">
+                        <input type="number" class="form-control" required="true" style="border-radius: 10px;" id="ifu" name="ifu" value="{{$entreprise['ifu'] }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="siege" class="form-label">Siège</label>
-                        <input type="text" class="form-control" id="siege" name="siege"  value="{{$entreprise['siege'] }}">
+                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="siege" name="siege"  value="{{$entreprise['siege'] }}">
                     </div>
                 </div>
                 
@@ -69,12 +75,12 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{$entreprise['email'] }}">
+                        <input type="email" class="form-control" required="true" style="border-radius: 10px;" id="email" name="email" value="{{$entreprise['email'] }}">
                     </div>
 
                     <div class="mb-2 col-md-6">
                         <label for="telephone" class="form-label">Téléphone</label>
-                        <input type="number" class="form-control" id="telephone" name="telephone" value="{{$entreprise['telephone'] }}">
+                        <input type="number" class="form-control" required="true" style="border-radius: 10px;" id="telephone" name="telephone" value="{{$entreprise['telephone'] }}">
                     </div>
                 </div>
 
@@ -112,11 +118,12 @@
                 <br>
                
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
-                <a href="{{route('entreprise')}}" class="btn btn-danger">Annuler</a>
 
             </form>
                     
         </div>
+        <div class="col-md-2"></div>
+        </div></div>
 </div>
 </div>     
         

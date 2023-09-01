@@ -6,8 +6,11 @@ use App\Http\Controllers\SuperviseurController;
 use App\Http\Controllers\CollecteurController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\SignalementController;
+use App\Http\Controllers\superAdminController;
+
 use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EntrepriseZoneController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\VilleController;
 use App\Http\Controllers\ZoneController;
@@ -45,7 +48,10 @@ require __DIR__.'/auth.php';
 
 Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');
 Route::get('/profil', [AccueilController::class, 'profil'])->name('profil');
+Route::get('/profilUpdate', [AccueilController::class, 'update'])->name('profil_update');
 
+Route::get('/modifUSer/{userId}', [AccueilController::class, 'modifierUser'])->name('modifier_user');
+Route::get('/userModif', [AccueilController::class, 'userModif'])->name('user_modif');
 
 
 // le retour 
@@ -60,7 +66,7 @@ Route::get('/admin', [AdministrateurController::class, 'index'])->middleware(['a
 Route::get('/admin', [AdministrateurController::class, 'index'])->middleware(['auth', 'verified'])->name('admin');
 Route::get('/admin/create', [AdministrateurController::class, 'create'])->name('admin.create');
 Route::post('/admin/create', [AdministrateurController::class, 'store'])->name('admin.ajouter');
-Route::delete('/admin/{administrateur}', [AdministrateurController::class, 'delete'])->name('admin.supprimer');
+Route::post('/admin', [AdministrateurController::class, 'delete'])->name('admin.supprimer');
 Route::put('/admin/{administrateur}', [AdministrateurController::class, 'update'])->name('admin.update');
 Route::get('/admin/{administrateur}', [AdministrateurController::class, 'edit'])->name('admin.edit');
 
@@ -68,10 +74,23 @@ Route::get('/admin', [AdministrateurController::class, 'index'])->name('admin');
 // Route::get('/admin/{administrateur}', [AdministrateurController::class,'show'])->name('admin.show');
 
 
+
+Route::get('/superAdmin', [superAdminController::class, 'index'])->middleware(['auth', 'verified'])->name('superAdmin');
+Route::get('/superAdmin/create', [superAdminController::class, 'create'])->name('superAdmin.create');
+Route::post('/superAdmin/create', [superAdminController::class, 'store'])->name('superAdmin.ajouter');
+Route::post('/superAdmin', [superAdminController::class, 'delete'])->name('superAdmin.supprimer');
+Route::put('/superAdmin/{superAdmin}', [superAdminController::class, 'update'])->name('superAdmin.update');
+Route::get('/superAdmin/{superAdmin}', [superAdminController::class, 'edit'])->name('superAdmin.edit');
+Route::get('/superAdmin', [superAdminController::class, 'index'])->name('superAdmin');
+Route::get('/Detail', [superAdminController::class, 'detail'])->name('superAdmin.detail');
+
+
+
+
 Route::get('/superviseur', [SuperviseurController::class, 'index'])->middleware(['auth', 'verified'])->name('superviseur');
 Route::get('/superviseur/create', [SuperviseurController::class, 'create'])->name('superviseur.create');
 Route::post('/superviseur/create', [SuperviseurController::class, 'store'])->name('superviseur.ajouter');
-Route::delete('/superviseur/{superviseur}', [SuperviseurController::class, 'delete'])->name('superviseur.supprimer');
+Route::post('/superviseur', [SuperviseurController::class, 'delete'])->name('superviseur.supprimer');
 Route::put('/superviseur/{superviseur}', [SuperviseurController::class, 'update'])->name('superviseur.update');
 Route::get('/superviseur/{superviseur}', [SuperviseurController::class, 'edit'])->name('superviseur.edit');
 Route::get('/superviseur', [SuperviseurController::class, 'index'])->name('superviseur');
@@ -80,7 +99,7 @@ Route::get('/Detail', [SuperviseurController::class, 'detail'])->name('supervise
 Route::get('/collecteur', [CollecteurController::class, 'index'])->middleware(['auth', 'verified'])->name('collecteur');
 Route::get('/collecteur/create', [CollecteurController::class, 'create'])->name('collecteur.create');
 Route::post('/collecteur/create', [CollecteurController::class, 'store'])->name('collecteur.ajouter');
-Route::delete('/collecteur/{collecteur}', [CollecteurController::class, 'delete'])->name('collecteur.supprimer');
+Route::post('/collecteur', [CollecteurController::class, 'delete'])->name('collecteur.supprimer');
 Route::put('/collecteur/{collecteur}', [CollecteurController::class, 'update'])->name('collecteur.update');
 Route::get('/collecteur/{collecteur}', [CollecteurController::class, 'edit'])->name('collecteur.edit');
 Route::get('/collecteur', [CollecteurController::class, 'index'])->name('collecteur');
@@ -91,11 +110,11 @@ Route::get('/Detail', [CollecteurController::class, 'detail'])->name('collecteur
 Route::get('/entreprise', [EntrepriseController::class, 'index'])->middleware(['auth', 'verified'])->name('entreprise');
 Route::get('/entreprise/create', [EntrepriseController::class, 'create'])->name('entreprise.create');
 Route::post('/entreprise/create', [EntrepriseController::class, 'store'])->name('entreprise.ajouter');
-Route::delete('/entreprise/{entreprise}', [EntrepriseController::class, 'delete'])->name('entreprise.supprimer');
+Route::post('/entreprise', [EntrepriseController::class, 'delete'])->name('entreprise.supprimer');
 Route::put('/entreprise/{entreprise}', [EntrepriseController::class, 'update'])->name('entreprise.update');
 Route::get('/entreprise/{entreprise}', [EntrepriseController::class, 'edit'])->name('entreprise.edit');
 Route::get('/entreprise', [EntrepriseController::class, 'index'])->name('entreprise');
-Route::get('/Detail', [EntrepriseController::class, 'detail'])->name('entreprise.detail');
+Route::get('/Detail/{entreprise}', [EntrepriseController::class, 'detail'])->name('entreprise.detail');
 
 // SIGNALEMENT
 
@@ -113,7 +132,7 @@ Route::get('/Detail/{reportingId}', [SignalementController::class, 'detail'])->n
 Route::get('/ville', [VilleController::class, 'index'])->name('ville');
 Route::get('/ville/create', [VilleController::class, 'create'])->name('ville.create');
 Route::post('/ville/create', [VilleController::class, 'store'])->name('ville.ajouter');
-Route::delete('/ville/{ville}', [VilleController::class, 'delete'])->name('ville.supprimer');
+Route::post('/ville', [VilleController::class, 'delete'])->name('ville.supprimer');
 Route::put('/ville/{ville}', [VilleController::class, 'update'])->name('ville.update');
 Route::get('/ville/{ville}', [VilleController::class, 'edit'])->name('ville.edit');
 
@@ -123,7 +142,7 @@ Route::get('/ville/{ville}', [VilleController::class, 'edit'])->name('ville.edit
 Route::get('/zone', [ZoneController::class, 'index'])->name('zone');
 Route::get('/zone/create', [ZoneController::class, 'create'])->name('zone.create');
 Route::post('/zone/create', [ZoneController::class, 'store'])->name('zone.ajouter');
-Route::delete('/zone/{zone}', [ZoneController::class, 'delete'])->name('zone.supprimer');
+Route::post('/zone', [ZoneController::class, 'delete'])->name('zone.supprimer');
 Route::put('/zone/{zone}', [ZoneController::class, 'update'])->name('zone.update');
 Route::get('/zone/{zone}', [ZoneController::class, 'edit'])->name('zone.edit');
 

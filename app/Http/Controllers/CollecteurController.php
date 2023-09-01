@@ -18,15 +18,17 @@ class CollecteurController extends Controller
 
          // Récupérer la variable de la session
          $variableRecuperee = session('variableEnvoyee');
+         $entreprise = session('entreprise');
+         $role = session('role');
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.103:8080/api/v1/user-management/show/user');
+         ])->get('http://192.168.8.103:8080/api/v1/users-management/show/user');
 
          $collecteurs = $response->json();
 
-
-        return view('Collecteur/index',compact("collecteurs"));
+            //dd($collecteurs);
+        return view('Collecteur/index',compact("collecteurs","entreprise","role"));
     }
 
 
@@ -64,13 +66,38 @@ class CollecteurController extends Controller
     public function create()
     {
 
-        return view('Collecteur/create');
+        
+         // Récupérer la variable de la session
+         $variableRecuperee = session('variableEnvoyee');
+         $entreprise = session('entreprise');
+         $role = session('role');
+
+         $response = HTTP::withHeaders([
+             'Authorization' => 'Bearer ' . $variableRecuperee,
+         ])->get('http://192.168.8.103:8080/api/v1/entreprise-management/show/entreprise');
+ 
+          $entreprises = $response->json();
+         //dd($entreprises);
+
+        return view('Collecteur/create',compact('entreprises','entreprise','role'));
     }
 
     //Le store du create
 
     public function store(Request $request)
     {
+
+        $request->validate([
+            "firstName" => "required",
+            "lastName" => "required",
+            "matricule" => "required",
+            "telephone" => "required|numeric",
+            "username" => "required",
+            "adress" => "required",
+            "password" => "required|min:8",
+            "activationStatus" => "required"
+        ]);
+
         //ajouter un admin
         $test = array();
         //$test['id'] = $id;
@@ -97,24 +124,26 @@ class CollecteurController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.8.103:8080/api/v1/user-management/created/user',$test);
+        ])->post('http://192.168.8.103:8080/api/v1/users-management/create/user',$test);
 
         $collecteurs = $response->json();
 
-        return back()->with("success", "Collecteur ajouté avec succès")->with(compact("collecteurs"));
+        return redirect()->route('collecteur')->with("success", "Collecteur ajouté avec succès")->with(compact("collecteurs"));
     }
 
-    public function delete(User $collecteur, $id)
+    public function delete(Request $request)
     {
-        dd(1);
+        $donnees = $request->documentId;
+
+       // dd(1);
         $variableRecuperee = session('variableEnvoyee');
-        $url = 'http://192.168.8.103:8080/api/v1/user-management/delete/user/' . $id;
-        dd($variableRecuperee,$url);
+        $url = 'http://192.168.8.103:8080/api/v1/users-management/delete/user/' . $donnees;
+        //dd($variableRecuperee,$url);
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->delete($url);
-        dd($response);
+        //dd($response);
 
         return back()->with("successDelete", "Le collecteur a été supprimé avec succès");
     }
@@ -127,10 +156,13 @@ class CollecteurController extends Controller
             "firstName" => "required",
             "lastName" => "required",
             "matricule" => "required",
-            "telephone" => "required",
-            "roleId" => "required",
+            "telephone" => "required|numeric",
+            "username" => "required",
             "adress" => "required",
+            "password" => "required",
+            "activationStatus" => "required"
         ]);
+
 
         $test = array();
         //$test['id'] = $id;
@@ -160,7 +192,7 @@ class CollecteurController extends Controller
         $client = new Client();
 
 
-        $response = $client->put("http://192.168.8.103:8080/api/v1/user-management/update/user/{$id}", [
+        $response = $client->put("http://192.168.8.103:8080/api/v1/users-management/update/user/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -169,7 +201,7 @@ class CollecteurController extends Controller
             'json' => $dataToUpdate,
         ]);
 
-        return back()->with("success", "Collecteur mis à jour avec succès");
+        return redirect()->route('collecteur')->with("success", "Collecteur mis à jour avec succès");
     }
 
 
@@ -179,7 +211,7 @@ class CollecteurController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.103:8080/api/v1/user-management/show/user/{userId}' . $id);
+        ])->get('http://192.168.8.103:8080/api/v1/users-management/show/user/{userId}' . $id);
 
         $collecteur = $response->json();
 

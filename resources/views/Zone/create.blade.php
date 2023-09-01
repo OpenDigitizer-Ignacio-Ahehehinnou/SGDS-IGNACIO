@@ -10,26 +10,33 @@
 @endif
 
 
-@if($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach($errors->all() as $error)
-        <li>{{$error}}</li>
-
-        @endforeach
-    </ul>
-</div>
-@endif
+        @if($errors->any())
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
+                @foreach($errors->all() as $error)
+                <h5>{{$error}}</h5>
+    
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
 <br><br>
 
-<div class="panel panel-default">
-    <div class="panel-heading">Ajouter une zone</div>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
 
-        <div id="msg200"></div>
-    <div class="panel-body">
+    <div class="panel panel-default">
+        <div class="panel-heading">Ajouter une zone</div>
 
 
+        <div class="panel-body">
+
+            <div id="msg200"></div>
         <form method="post" action="{{ route('zone.ajouter')}}">
             @csrf
             {{-- <input type="text" class="form-control" id="nom" name="userId" value="31" hidden="hidden"> --}}
@@ -42,13 +49,12 @@
             <div class="row ">
                 <div class="mb-3 col-md-6">
                     <label for="exampleInputEmail1" class="form-label">Zone</label>
-                    <input type="text" class="form-control" id="nom" name="nom" style="border-radius: 10px;">
+                    <input type="text" class="form-control" required="true" id="nom" name="nom" style="border-radius: 10px;">
                 </div>
 
                 <div class="mb-3 col-md-6">
                     <label for="exampleInputPassword1" class="form-label">Ville</label>
-                    <select class="form-control" id="ville
-                    " name="ville" style="border-radius: 10px;">
+                    <select class="form-control" id="ville" required="true" name="ville" style="border-radius: 10px;">
 
                         @foreach ($villes as $ville )
 
@@ -115,9 +121,8 @@
             </table>
             <br>
             <div>
-
-                <button type="submit" id="envoyerDonnees" class="btn btn-primary">Enregistrer</button>
-                <a href="{{route('zone')}}" class="btn btn-danger">Annuler</a>
+                <div id="msg20"></div>
+                <button type="submit" id="envoyerDonnees" class="btn btn-success">Enregistrer</button>
             </div>
 
 
@@ -127,7 +132,8 @@
 
 
     
-
+<div class="col-md-2"></div>
+    </div></div>
 
 </div>
 
@@ -155,13 +161,13 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="nom">Altitude :</label>
-                            <input type="text" class="form-control" id="altitude" name="altitude"
+                            <input type="text" class="form-control" required="true" id="altitude" name="altitude"
                                 style="border-radius:10px;">
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="prenom">Longitude :</label>
-                            <input type="text" class="form-control" id="longitude" name="longitude"
+                            <input type="text" class="form-control" required="true" id="longitude" name="longitude"
                                 style="border-radius:10px;">
                         </div>
 
@@ -171,13 +177,13 @@
 
                         <div class="form-group col-md-6">
                             <label for="prenom">Latitude :</label>
-                            <input type="text" class="form-control" id="latitude" name="latitude"
+                            <input type="text" class="form-control" required="true" id="latitude" name="latitude"
                                 style="border-radius:10px;">
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="prenom">Ordre :</label>
-                            <input type="text" class="form-control" id="ordre" name="ordre"
+                            <input type="text" class="form-control" required="true" id="ordre" name="ordre"
                                 style="border-radius:10px;">
                         </div>
                     </div>
@@ -186,7 +192,7 @@
                     <!-- Ajoutez d'autres champs ici -->
 
                     <!-- Bouton de soumission du formulaire -->
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
                 </form>
 
             </div>
@@ -199,23 +205,17 @@
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+
 <script>
     $(document).ready(function () {
-
-    
-
-    $('.voir').on('click', function(e) {
-        e.preventDefault()
-        $('#detailModal').modal('show')
-        //alert("Ouverture du formulaire d'inscription")
-
-        
+        $('.voir').on('click', function(e) {
+            e.preventDefault()
+            $('#detailModal').modal('show')
+            //alert("Ouverture du formulaire d'inscription")
+            
+        });
     });
-});
-
-
 </script>
 
 <script>
@@ -229,6 +229,14 @@
             var longitude = $("#longitude").val();
             var latitude = $("#latitude").val();
             var ordre = $("#ordre").val();
+
+            // if(altitude =="" || longitude=="" || ordre=="" || latitude==""){
+
+            //     $('#msg20').html(` <p  class="text-danger">
+            //     <b>Les champs (altitude,longitude,latitude,ordre) ne peuvent pas êtes vide...</b>
+            //                 </p>`);
+            //     //$('#confirm_password').css("border","2px solid red");
+            // }
 
             // Créer une nouvelle ligne dans le tableau avec les valeurs récupérées
             var newRow = $("<tr>");
@@ -246,6 +254,28 @@
             $("#latitude").val("");
             $("#ordre").val("");
         });
+
+        $('#altitude').on('input', function(e) {
+            var inputVal = $(this).val();
+            var onlyNumbers = inputVal.replace(/\D/g, ''); // Utilisez /\D/g pour supprimer tout ce qui n'est pas un chiffre
+            $(this).val(onlyNumbers);
+        });
+        $('#longitude').on('input', function(e) {
+            var inputVal = $(this).val();
+            var onlyNumbers = inputVal.replace(/\D/g, ''); // Utilisez /\D/g pour supprimer tout ce qui n'est pas un chiffre
+            $(this).val(onlyNumbers);
+        });
+        $('#latitude').on('input', function(e) {
+            var inputVal = $(this).val();
+            var onlyNumbers = inputVal.replace(/\D/g, ''); // Utilisez /\D/g pour supprimer tout ce qui n'est pas un chiffre
+            $(this).val(onlyNumbers);
+        });
+        $('#ordre').on('input', function(e) {
+            var inputVal = $(this).val();
+            var onlyNumbers = inputVal.replace(/\D/g, ''); // Utilisez /\D/g pour supprimer tout ce qui n'est pas un chiffre
+            $(this).val(onlyNumbers);
+        });
+
     });
 </script>
 
@@ -268,6 +298,7 @@
                     ordre: ordre
                 });
             });
+           // alert(altitude)
 
             // Récupérez les données des champs "nom" et "ville"
             var nom = $("#nom").val();
@@ -284,38 +315,48 @@
                 tableauDonnees: tableauDonnees
             };
 
-            // Envoyez les données au contrôleur via une requête AJAX
-            $.ajax({
-                type: "POST",
-                url: "{{ route('zone.ajouter')}}",
-                data: donneesAEnvoyer,
-                success: function (response) {
+            if(altitude =="" || latitude==""){
 
-                    if(parseInt(response)==200 || parseInt(response)==500){
-                        
-                        parseInt(response)==500?($("#msg200").html(`<div class='alert alert-danger text-center' role='alert'>
-                            <strong>Une erreur s'est produite</strong> veuillez réessayez.
-                            
-                            </div>`)
-                        ):($('#msg200').html(`<div class='alert alert-success text-center' role='alert'>
-                            <strong>Candidature supprimée avec succès. </strong>
-                            
-                            </div>`)
-                        ); 
-                    }
-                    
-                    var url="{{route('zone')}}" 
-                    if(response==200){
-                        setTimeout(function(){
-                            window.location=url
-                        },1000) 
-                    }  else{
-                        $("#msg200").html(response);
+                $('#msg20').html(` <p  class="text-danger">
+                <b>Les champs (zone, ville) ne peuvent pas êtes vide...</b>
+                            </p>`);
+                //$('#confirm_password').css("border","2px solid red");
+            }else{
 
+
+                // Envoyez les données au contrôleur via une requête AJAX
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('zone.ajouter')}}",
+                    data: donneesAEnvoyer,
+                    success: function (response) {
+
+                        if(parseInt(response)==200 || parseInt(response)==500){
+                            
+                            parseInt(response)==500?($("#msg200").html(`<div class='alert alert-danger text-center' role='alert'>
+                                <strong>Une erreur s'est produite</strong> veuillez réessayez.
+                                
+                                </div>`)
+                            ):($('#msg200').html(`<div class='alert alert-success text-center' role='alert'>
+                                <strong>La zone a été ajoutée avec succès. </strong>
+                                
+                                </div>`)
+                            ); 
                         }
-                },
-                
-            });
+                        
+                        var url="{{route('zone')}}" 
+                        if(response==200){
+                            setTimeout(function(){
+                                window.location=url
+                            },1000) 
+                        }  else{
+                            $("#msg200").html(response);
+
+                            }
+                    },
+                    
+                });
+             }
         });
     });
 </script>
