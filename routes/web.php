@@ -119,11 +119,7 @@ Route::get('/Detail/{entreprise}', [EntrepriseController::class, 'detail'])->nam
 // SIGNALEMENT
 
 Route::get('/signalement', [SignalementController::class, 'index'])->middleware(['auth', 'verified'])->name('signalement');
-Route::get('/signalement/create', [SignalementController::class, 'create'])->name('signalement.create');
-Route::post('/signalement/create', [SignalementController::class, 'store'])->name('signalement.ajouter');
-Route::delete('/signalement/{signalement}', [SignalementController::class, 'delete'])->name('signalement.supprimer');
-Route::put('/signalement/{signalement}', [SignalementController::class, 'update'])->name('signalement.update');
-Route::get('/signalement/{signalement}', [SignalementController::class, 'edit'])->name('signalement.edit');
+Route::post('/signalement', [SignalementController::class, 'delete'])->name('signalement.supprimer');
 Route::get('/signalement', [SignalementController::class, 'index'])->name('signalement');
 Route::get('/Detail/{reportingId}', [SignalementController::class, 'detail'])->name('signalement.detail');
 

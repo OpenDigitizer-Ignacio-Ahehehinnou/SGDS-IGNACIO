@@ -22,40 +22,40 @@ class AccueilController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.103:8080/api/v1/user-management/show/user');
+        ])->get('http://192.168.1.5:8080/api/v1/user-management/show/user');
 
         $administrateurs = $response->json();
 
         $respons = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.103:8080/api/v1/entreprise-management/show/entreprise');
+        ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
 
         $entreprises = $respons->json();
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.103:8080/api/v1/reporting-management/show/reporting');
+        ])->get('http://192.168.1.5:8080/api/v1/reporting-management/show/reporting');
 
         $signalements = $response->json();
 
         //dd($entreprises);
 
         if ($role === "SUPERADMIN") {
-           // dd(50);
+            // dd(50);
             $libelles = [];
 
 
             foreach ($administrateurs as $administrateur) {
                 if (isset($administrateur['roleModel']['libelle'])) {
                     $libelles[] = $administrateur['roleModel']['libelle'];
-                   // dd($libelles);
+                    // dd($libelles);
                 }
             }
 
             $countCollector = 0; // Initialisez le compteur à zéro
             $countSupervisor = 0;
             $countAdmin = 0;
-            $countSignalement=count($signalements);
+            $countSignalement = count($signalements);
 
             foreach ($libelles as $libelle) {
                 if ($libelle === "COLLECTOR") {
@@ -76,67 +76,52 @@ class AccueilController extends Controller
             }
 
             //dd($countAdmin);
-            return view('Accueil/index', compact('countAdmin', 'countSignalement','countCollector', 'countSupervisor'));
+            return view('Accueil/index', compact('countAdmin', 'countSignalement', 'countCollector', 'countSupervisor'));
         }
 
         if ($role === "ADMIN") {
 
-           // dd(10);
             $libelles = [];
             $entreprises = [];
-
 
             foreach ($administrateurs as $administrateur) {
                 if (isset($administrateur['roleModel']['libelle'])) {
                     $libelles[] = $administrateur['roleModel']['libelle'];
+                }
+
+                if (isset($administrateur['entrepriseModel']['name'])) {
                     $entreprises[] = $administrateur['entrepriseModel']['name'];
-
-                   //dd($libelles,$entreprises);
-
                 }
             }
-            //dd(10);
-            $countCollector = 0; // Initialisez le compteur à zéro
+               // dd($libelles,$entreprises);
+            $countCollector = 0;
             $countSupervisor = 0;
             $countAdmin = 0;
-            $countSignalement=count($signalements);
-            //dd($countSignalement);
-            
-
+            $countSignalement = count($signalements);
 
             for ($i = 0; $i < count($libelles) && $i < count($entreprises); $i++) {
                 $libelle = $libelles[$i];
                 $entrepris = $entreprises[$i];
-            
-                if ($libelle === "COLLECTOR" && $entrepris === $entreprisez ) {
-                    $countCollector++;
-                    //dd($countCollector);
-                }
-            }
 
-            for ($i = 0; $i < count($libelles) && $i < count($entreprises); $i++) {
-                $libelle = $libelles[$i];
-                $entrepris = $entreprises[$i];
-            
-                if ($libelle === "SUPERVISOR" && $entrepris === $entreprisez ) {
+                if ($libelle === "SUPERVISOR" && $entrepris === $entreprisez) {
                     $countSupervisor++;
-                    //dd($countSupervisor);
+                }
+            
+
+                if ($libelle === "ADMIN" && $entrepris === $entreprisez) {
+                    $countAdmin++;
+                }
+
+                if ($libelle === "COLLECTOR" && $entrepris === $entreprisez) {
+                    $countCollector++;
                 }
             }
 
-            for ($i = 0; $i < count($libelles) && $i < count($entreprises); $i++) {
-                $libelle = $libelles[$i];
-                $entrepris = $entreprises[$i];
-            
-                if ($libelle === "ADMIN" && $entrepris === $entreprisez ) {
-                    $countAdmin++;
-                   // dd($countAdmin);
-                }
-            }
-            
-            return view('Accueil/index', compact('countAdmin','countSignalement', 'countCollector', 'countSupervisor'));
+            //dd($countAdmin,$countCollector,$countSupervisor);
+
+            return view('Accueil/index', compact('countAdmin', 'countSignalement', 'countCollector', 'countSupervisor'));
         }
-        return view('Accueil/index', compact('countAdmin', 'countSignalement','countCollector', 'countSupervisor'));
+        return view('Accueil/index', compact('countAdmin', 'countSignalement', 'countCollector', 'countSupervisor'));
     }
 
 
@@ -151,7 +136,7 @@ class AccueilController extends Controller
         $adresse = session('adresse');
 
 
-        return view('Accueil/profil',compact('nom','prenom','adresse','role','entreprise','matricule','telephone'));
+        return view('Accueil/profil', compact('nom', 'prenom', 'adresse', 'role', 'entreprise', 'matricule', 'telephone'));
     }
 
 
@@ -182,16 +167,16 @@ class AccueilController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.8.103:8080/api/v1/users-management/decode', $dataToSend);
+        ])->post('http://192.168.1.5:8080/api/v1/users-management/decode', $dataToSend);
 
         $administrateurs = $response->json();
-       // dd($administrateurs);
+        // dd($administrateurs);
 
 
         if ($administrateurs['passwordIsVerified'] == true) {
 
             try {
-                $url = 'http://192.168.8.103:8080/api/v1/users-management/update/user/password/' . $userId;
+                $url = 'http://192.168.1.5:8080/api/v1/users-management/update/user/password/' . $userId;
 
                 $response = HTTP::withHeaders([
                     'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -202,7 +187,7 @@ class AccueilController extends Controller
                 return new Response(200);
             } catch (Exception $e) {
                 //dd(0);
-            //return new Response(500);
+                //return new Response(500);
             }
         } else {
             //dd(0);
@@ -217,7 +202,7 @@ class AccueilController extends Controller
 
         }
 
-        
+
 
 
         return view('Accueil/profil');
@@ -253,7 +238,7 @@ class AccueilController extends Controller
 
 
         try {
-            $url = 'http://192.168.8.103:8080/api/v1/users-management/update/user/password/' . $id;
+            $url = 'http://192.168.1.5:8080/api/v1/users-management/update/user/password/' . $id;
 
             $response = HTTP::withHeaders([
                 'Authorization' => 'Bearer ' . $variableRecuperee,

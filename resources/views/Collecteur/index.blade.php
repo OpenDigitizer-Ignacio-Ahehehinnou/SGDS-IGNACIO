@@ -78,9 +78,9 @@
 
                             @foreach($collecteurs as $collecteur)
 
-                            @if( $role == "ADMIN" )
+                            @if($role == "ADMIN" && isset($collecteur['entrepriseModel']['name']) && isset($collecteur['roleModel']['libelle']))
                             @if($collecteur['entrepriseModel']['name'] == $entreprise && $collecteur['roleModel']['libelle'] == 'COLLECTOR')
-
+                            
                             <tr>
                                 <td>{{$collecteur['firstName']}} {{$collecteur['lastName']}}</td>
                                 <td>{{$collecteur['matricule']}}</td>

@@ -20,7 +20,12 @@
                 <br>
                 @if(session()->has("successDelete"))
                     <div class="alert alert-success" >
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+                          </button>
                         <h5>{{session()->get('successDelete')}}</h5>
+
+                       
                     </div>
                 @endif
 
@@ -69,15 +74,11 @@
                                
                                 {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
                                     <a href="{{route( 'signalement.detail', ['reportingId'=>$signalement['reportingId']])}}" type="button" class="btn btn-success"><i class="bi bi-eye-fill"></i></a>
-                                    <!-- <a href="{{route('signalement.edit', ['signalement'=>$signalement['reportingId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a> -->
-                                    <a type="button" class="btn btn-danger" onclick="if(confirm('voulez-vous supprimer cet Entreprise ???')){
-                                        document.getElementById('form-{{$signalement['reportingId']}}').submit() }"><i class="bi bi-trash3-fill"></i></a>
+                                    
 
-                                        <form id="form-{{$signalement['reportingId']}}" action="{{ route( 'signalement.supprimer', ['signalement'=>$signalement['reportingId']])}}" method="post">
-                                            @csrf
-                                                <input type="hidden" name="_method" value="delete">
-                                        </form>
-                                {{-- </div> --}}
+                                <button type="button" class="btn btn-danger" data-key="{{ $signalement['reportingId'] }}" data-toggle="modal" data-target="#confirmationModal">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
 
 
                             </td>
@@ -100,60 +101,33 @@
 
     <div id="map"></div>
 
-
-
-         <!-- Modal -->
-         <div class="modal fade" id="detailModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content ">
-                    <div class="modal-header " style="background-color:#69B42D; color:white;">
-                        <h2  class="modal-title" id="exampleModalLabel">Détails sur signalement</h2>
-                    </div>
-                    <div class="modal-body">
-
-                    <table class="table table-bordered" >
-                        <tbody>
-                        <tr>
-                            
-                            <th>Altitude</th>
-                            <td>{{$signalement['altitude']}}</td>
-                        </tr>
-                        <tr>
-                            <th>Latitude</th>
-                            <td>{{$signalement['latitude']}}</td>
-                        </tr>
-                        <tr>
-                            <th>Longitude</th>
-                            <td>{{$signalement['longitude']}}</td>
-                        </tr>
-                        <tr>
-                            <th>Description</th>
-                            <td>{{$signalement['description']}}</td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>{{$signalement['status']}}</td>
-                        </tr>
-                        <tr>
-                            <th>Photo</th>
-                        <td> <img src="{{ $signalement['photo'] }}"width="300" height="200" 200px; alt="Ma photo"></td>
-
-                        </tr>
-                        </tbody>
-
-                    </table>
-
-                        
-                        
-                        
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fermer</button>
-                    </div>
-                </div>
+    
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('signalement.supprimer') }}">
+                @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation de suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body m-3">
+                <p class="mb-0">Voulez vous vraiment supprimer ce signalement ?</p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="documentId" id="documentId" value="">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button type="submit" class="btn btn-danger">Oui</button>
+            </div>
+            </form>
         </div>
+    </div>
+        </div>
 
+
+
+
+        
 
 
        <!-- Inclure jQuery -->
@@ -213,6 +187,20 @@
         }
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+       $('#confirmationModal').on('show.bs.modal', function(e) {
+           var button = $(e.relatedTarget);
+           var deleteId = button.data('key');
+           var modal = $(this);
+           modal.find('#documentId').val(deleteId);
+       })
+
+
+   });
+   </script>
 
 
 

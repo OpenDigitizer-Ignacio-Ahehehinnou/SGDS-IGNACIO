@@ -49,7 +49,7 @@
                 <div class="align-items-center" style="margin:auto; text-align: center;">
 
                     <button type="submit" class="btn btn-success btn-sm"
-                        style="margin: 0 auto 20px; display: block;padding:8px;">Connexion</button>
+                        style="margin: 0 auto 20px; display: block; border-radius: 10px;padding:8px;">Connexion</button>
                     
                 </div>
                

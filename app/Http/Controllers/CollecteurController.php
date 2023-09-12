@@ -23,7 +23,7 @@ class CollecteurController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.103:8080/api/v1/users-management/show/user');
+         ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
 
          $collecteurs = $response->json();
 
@@ -74,7 +74,7 @@ class CollecteurController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.103:8080/api/v1/entreprise-management/show/entreprise');
+         ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
  
           $entreprises = $response->json();
          //dd($entreprises);
@@ -107,6 +107,8 @@ class CollecteurController extends Controller
         $test['matricule'] = $request['matricule'];
         $test['telephone'] = $request['telephone'];
         $test['adress'] = $request['adress'];
+        $test['photoProfil'] = $request['photo'];
+
         $test['username'] = $request['username'];
         $test['password'] = $request['password'];
         $test['activationStatus'] = $request['activationStatus'];
@@ -124,7 +126,7 @@ class CollecteurController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.8.103:8080/api/v1/users-management/create/user',$test);
+        ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
 
         $collecteurs = $response->json();
 
@@ -137,7 +139,7 @@ class CollecteurController extends Controller
 
        // dd(1);
         $variableRecuperee = session('variableEnvoyee');
-        $url = 'http://192.168.8.103:8080/api/v1/users-management/delete/user/' . $donnees;
+        $url = 'http://192.168.1.5:8080/api/v1/users-management/delete/user/' . $donnees;
         //dd($variableRecuperee,$url);
 
         $response = HTTP::withHeaders([
@@ -192,7 +194,7 @@ class CollecteurController extends Controller
         $client = new Client();
 
 
-        $response = $client->put("http://192.168.8.103:8080/api/v1/users-management/update/user/{$id}", [
+        $response = $client->put("http://192.168.1.5:8080/api/v1/users-management/update/user/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -211,7 +213,7 @@ class CollecteurController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.103:8080/api/v1/users-management/show/user/{userId}' . $id);
+        ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user/{userId}' . $id);
 
         $collecteur = $response->json();
 

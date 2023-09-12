@@ -22,7 +22,7 @@
             <div class="alert alert-success" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true" style="font-size: 30px;">&times;</span>
-                  </button>
+                </button>
                 <h5>{{session()->get('success')}}</h5>
 
                 
@@ -48,7 +48,7 @@
             <div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true" style="font-size: 30px;">&times;</span>
-                  </button>
+                </button>
                 <h5>{{session()->get('successDelete')}}</h5>
 
                 
@@ -80,29 +80,15 @@
 
 
                                 @foreach($administrateurs as $administrateur)
-                                @if( $role == "ADMIN" )
-                                    @if($administrateur['entrepriseModel']['name'] == $entreprise && $administrateur['roleModel']['libelle'] == 'ADMIN')
-
+                                @if($role == "ADMIN" && isset($administrateur['entrepriseModel']['name']) && isset($administrateur['roleModel']['libelle']))
+                                @if($administrateur['entrepriseModel']['name'] == $entreprise && $administrateur['roleModel']['libelle'] == 'ADMIN')
+                                
                                     <tr>
                                         <td>{{$administrateur['firstName']}} {{$administrateur['lastName']}}</td>
                                         <td>{{$administrateur['matricule']}}</td>
                                         <td>{{$administrateur['telephone']}}</td>
                                         <td>{{$administrateur['adress']}}</td>
                                         <td>{{$administrateur['entrepriseModel']['name']}}</td>
-
-                                        
-                                        {{-- <td>
-                                                <a href="{{ route( 'admin.edit', ['administrateur'=>$administrateur['userId']])}}"
-                                                    type="button" class="btn btn-warning"><i
-                                                        class="bi bi-pencil-square"></i></a>
-
-
-                                                <button type="button" class="btn btn-danger" data-key="{{ $administrateur['userId'] }}" data-toggle="modal" data-target="#confirmationModal">
-                                                    <i class="bi bi-trash3-fill"></i>
-                                                </button>
-
-                                        </td> --}}
-
                                     </tr>
                                 
                                     @endif
@@ -168,34 +154,6 @@
         </div>
     </div>
         </div>
-
-
-<!-- Modal de confirmation -->
-{{-- <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Confirmation de suppression</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Êtes-vous sûr de vouloir supprimer cet administrateur ?
-            </div>
-            <div class="modal-footer">
-                
-                <form id="form-{{$administrateur['userId']}}"
-                    action="{{ route( 'admin.supprimer', ['administrateur'=>$administrateur['userId']])}}" method="post">
-                    @csrf
-                    <input type="hidden" name="_method" value="delete">
-                    <button type="submit" class="btn btn-danger">Supprimer</button>
-                
-                </form>
-            </div>
-        </div>
-    </div>
-</div> --}}
 
 
 <!-- Modal -->
@@ -271,15 +229,15 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 
-       $('#confirmationModal').on('show.bs.modal', function(e) {
-           var button = $(e.relatedTarget);
-           var deleteId = button.data('key');
-           var modal = $(this);
-           modal.find('#documentId').val(deleteId);
-       })
+        $('#confirmationModal').on('show.bs.modal', function(e) {
+            var button = $(e.relatedTarget);
+            var deleteId = button.data('key');
+            var modal = $(this);
+            modal.find('#documentId').val(deleteId);
+        })
 
 
-   });
+    });
    </script>
 
 

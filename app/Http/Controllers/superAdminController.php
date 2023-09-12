@@ -19,7 +19,7 @@ class superAdminController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.103:8080/api/v1/users-management/show/user');
+         ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
 
          $superAdmin = $response->json();
 

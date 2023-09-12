@@ -26,7 +26,7 @@ class AdministrateurController extends Controller
             //dd($entreprise);
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.103:8080/api/v1/users-management/show/user');
+        ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
 
         $administrateurs = $response->json();
        //dd($administrateurs);
@@ -48,7 +48,7 @@ class AdministrateurController extends Controller
             //dd($entreprise);
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.8.103:8080/api/v1/entreprise-management/show/entreprise');
+         ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
  
           $entreprises = $response->json();
          //dd($entreprises);
@@ -102,7 +102,7 @@ class AdministrateurController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.8.103:8080/api/v1/users-management/create/user',$test);
+        ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
 
         $administrateurs = $response->json();
 
@@ -118,7 +118,7 @@ class AdministrateurController extends Controller
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.8.103:8080/api/v1/users-management/delete/user/' .$donnees;
+        $url = 'http://192.168.1.5:8080/api/v1/users-management/delete/user/' .$donnees;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -170,7 +170,7 @@ class AdministrateurController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-        $response = $client->put("http://192.168.8.103:8080/api/v1/users-management/update/user/{$id}", [
+        $response = $client->put("http://192.168.1.5:8080/api/v1/users-management/update/user/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -191,7 +191,7 @@ class AdministrateurController extends Controller
            $variableRecuperee = session('variableEnvoyee');
            $response = HTTP::withHeaders([
                'Authorization' => 'Bearer ' . $variableRecuperee,
-           ])->get('http://192.168.8.103:8080/api/v1/users-management/show/user/' . $id);
+           ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user/' . $id);
 
 
         $administrateur = $response->json();

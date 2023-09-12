@@ -132,7 +132,7 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="roleModel" class="form-label">Role</label>
-                        <input type="text" class="form-control" id="roleId" name="roleId" value="4">
+                        <input type="text" class="form-control" id="roleId" name="roleId" value="3">
 
                     </div>
                 </div>
@@ -154,8 +154,8 @@
                     <div class="mb-3 col-md-4">
                         <label for="activationStatus" class="form-label">photo</label>
                         <input type="text" class="form-control" id="photo"
-                            value="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 "
-                            name="photo">
+                        value="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 "
+                        name="photo">
                     </div>
 
 

@@ -81,9 +81,9 @@
 
                             @foreach($superviseurs as $superviseur)
 
-                            @if( $role == "SUPERVISOR" )
+                            @if($role == "ADMIN" && isset($superviseur['entrepriseModel']['name']) && isset($superviseur['roleModel']['libelle']))
                             @if($superviseur['entrepriseModel']['name'] == $entreprise && $superviseur['roleModel']['libelle'] == 'SUPERVISOR')
-
+                            
                             <tr>
                                 <td>{{$superviseur['firstName']}} {{$superviseur['lastName']}}</td>
                                 <td>{{$superviseur['matricule']}}</td>
