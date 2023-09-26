@@ -27,7 +27,7 @@ class CollecteurController extends Controller
 
          $collecteurs = $response->json();
 
-            //dd($collecteurs);
+           // dd($collecteurs);
         return view('Collecteur/index',compact("collecteurs","entreprise","role"));
     }
 
@@ -66,7 +66,7 @@ class CollecteurController extends Controller
     public function create()
     {
 
-        
+
          // Récupérer la variable de la session
          $variableRecuperee = session('variableEnvoyee');
          $entreprise = session('entreprise');
@@ -75,7 +75,7 @@ class CollecteurController extends Controller
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
          ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
- 
+
           $entreprises = $response->json();
          //dd($entreprises);
 

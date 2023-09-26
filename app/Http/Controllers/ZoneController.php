@@ -16,13 +16,13 @@ class ZoneController extends Controller
     public function index(){
 
          // Récupérer la variable de la session
-         $variableRecuperee = session('variableEnvoyee');
+        $variableRecuperee = session('variableEnvoyee');
 
-         $response = HTTP::withHeaders([
-             'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.1.5:8080/api/v1/zones-management/show/zone');
- 
-         $zones = $response->json();
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://192.168.1.5:8080/api/v1/zones-management/show/zone');
+
+        $zones = $response->json();
                 //dd($zones);
         return view('Zone.index' , compact("zones"));
     }
@@ -30,7 +30,7 @@ class ZoneController extends Controller
     public function create()
     {
           // Récupérer la variable de la session
-          $variableRecuperee = session('variableEnvoyee');
+        $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -38,7 +38,7 @@ class ZoneController extends Controller
 
         $villes = $response->json();
         //dd($villes);
-      
+
         return view('Zone.create', compact('villes'));
     }
 
@@ -48,7 +48,7 @@ class ZoneController extends Controller
         $donnees = $request->all();
 
             //dd($donnees);
-        
+
         // Créez un tableau associatif avec la structure souhaitée
         $zonePoint = [
             'zoneDto' => [
@@ -61,7 +61,7 @@ class ZoneController extends Controller
             ],
             'pointsDtos' => []
         ];
-    
+
         // Ajoutez les données du tableau dans la structure souhaitée
         foreach ($donnees['tableauDonnees'] as $item) {
             $point = [
@@ -75,7 +75,7 @@ class ZoneController extends Controller
                 'ordre' => $item['ordre'],
                 'zoneId' => 1
             ];
-    
+
             $zonePoint['pointsDtos'][] = $point;
         }
         try {
@@ -84,18 +84,18 @@ class ZoneController extends Controller
             $response = HTTP::withHeaders([
                 'Authorization' => 'Bearer ' . $variableRecuperee,
             ])->post('http://192.168.1.5:8080/api/v1/zones-management/create/zone_with_points',$zonePoint);
-            
+
             $zones = $response->json();
             //dd($zones);
             return new Response(200);
         } catch (Exception $e) {
-        
+
             return new Response(500);
         }
 
     }
-    
-        
+
+
     public function update(Request $request, $id)
     {
 
@@ -119,7 +119,7 @@ class ZoneController extends Controller
         $dataToUpdate = $test;
         //dd($dataToUpdate);
 
-        
+
         $variableRecuperee = session('variableEnvoyee');
 
         // Créez une instance du client GuzzleHttp
@@ -142,30 +142,31 @@ class ZoneController extends Controller
     {
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
-    
+
         // Utilisez la bonne syntaxe pour inclure $id dans l'URL
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->get("http://192.168.1.5:8080/api/v1/zones-management/show/zone/{$id}");
-    
+
         $zone = $response->json();
 
        // dd($zone);
-    
+
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->get('http://192.168.1.5:8080/api/v1/cities-management/show/city');
-    
+
         $villes = $response->json();
-    
+
         return view('Zone/edit', compact("zone", "villes"));
     }
-    
+
 
     public function delete(Request $request)
     {
 
         $donnees = $request->documentId;
+        //dd($donnees);
 
         $variableRecuperee = session('variableEnvoyee');
 

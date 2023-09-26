@@ -45,15 +45,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
   <!-- Google Font -->
-  
+
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-  
-  
+
+
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
 
-  
+
 
 </head>
 <!--
@@ -99,10 +99,10 @@ desired effect
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          
-                
-           
-                
+
+
+
+
           <!-- User Account Menu -->
           <li class="dropdown user user-menu connexion">
             <!-- Menu Toggle Button -->
@@ -110,7 +110,7 @@ desired effect
               <!-- The user image in the navbar-->
               <img src="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 " class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              
+
               <span class="hidden-xs">{{ $role }}</span>
             </a>
             <ul class="dropdown-menu oui">
@@ -120,11 +120,11 @@ desired effect
 
                 <p>
                   {{ $nom }} {{ $prenom }} <br>
-                                
+
                 </p>
               </li>
-              
-                
+
+
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
@@ -138,7 +138,7 @@ desired effect
             </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
-          
+
         </ul>
       </div>
 		</nav>
@@ -175,7 +175,7 @@ desired effect
 <br><br>
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
-        
+
         <li class="active"><a href="{{route ('accueil') }}"><i class="fa fa-dashboard"></i> <span>Accueil</span></a></li>
         {{-- <li><a href="{{ route('superAdmin')}} "><i class="fa  fa-users"></i> <span>Super admin</span></a></li> --}}
 
@@ -187,12 +187,14 @@ desired effect
         @if ($role == "SUPERADMIN")
           <li><a href="{{ route('entreprise')}}"><i class="fa fa-university"></i> <span>Entreprises</span></a></li>
           <li><a href="{{ route('ville')}}"><i class="fa fa-university"></i> <span>Villes</span></a></li>
+          <li><a href="{{ route('categorie')}}"><i class="fa fa-university"></i> <span>Catégorie déchet</span></a></li>
+
           <li><a href="{{ route('zone')}}"><i class="fa fa-link"></i> <span>Zones</span></a></li>
 
         @endif
 
-          
-        
+
+
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -201,7 +203,7 @@ desired effect
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    
+
 
     <!-- Main content -->
     <section class="content container-fluid">
@@ -226,7 +228,7 @@ desired effect
   </footer>
 
   <!-- Control Sidebar -->
- 
+
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
   immediately after the control sidebar -->
@@ -278,7 +280,7 @@ desired effect
         $('.oui').hide();
         //alert("Ouverture du formulaire d'inscription")
 
-        
+
     });
 
     $('.connexion').on('mouseover ', function(e) {
@@ -286,7 +288,7 @@ desired effect
         $('.oui').show();
         //alert("Ouverture du formulaire d'inscription")
 
-        
+
     });
     });
 </script>

@@ -37,7 +37,7 @@
             <ul>
                 @foreach($errors->all() as $error)
                 <h5>{{$error}}</h5>
-    
+
                 @endforeach
             </ul>
         </div>
@@ -65,6 +65,7 @@
                         <thead>
                             <tr>
                                 <th>Nom & prénoms</th>
+                                <th>Nom d'utilisateur</th>
                                 <th>Matricule(s)</th>
                                 <th> Téléphone</th>
                                 {{-- <th>Rôle</th> --}}
@@ -80,9 +81,11 @@
 
                             @if($role == "ADMIN" && isset($collecteur['entrepriseModel']['name']) && isset($collecteur['roleModel']['libelle']))
                             @if($collecteur['entrepriseModel']['name'] == $entreprise && $collecteur['roleModel']['libelle'] == 'COLLECTOR')
-                            
+
                             <tr>
                                 <td>{{$collecteur['firstName']}} {{$collecteur['lastName']}}</td>
+                                <td>{{$collecteur['username']}}</td>
+
                                 <td>{{$collecteur['matricule']}}</td>
                                 <td>{{$collecteur['telephone']}}</td>
                                 <td>{{$collecteur['adress']}}</td>
@@ -108,15 +111,17 @@
                             @endif
                                 @else
 
-                                        @if( $collecteur['roleModel']['libelle'] == 'COLLECTOR')
+                                        @if(isset($collecteur['roleModel']) && $collecteur['roleModel']['libelle'] == 'COLLECTOR')
+
                                 <tr>
                                     <td>{{$collecteur['firstName']}} {{$collecteur['lastName']}}</td>
+                                    <td>{{$collecteur['username']}}</td>
                                     <td>{{$collecteur['matricule']}}</td>
                                     <td>{{$collecteur['telephone']}}</td>
                                     <td>{{$collecteur['adress']}}</td>
                                     <td>{{$collecteur['entrepriseModel']['name']}}</td>
 
-                                    
+
                                     <td>
                                             <a href="{{ route( 'collecteur.edit', ['collecteur'=>$collecteur['userId']])}}"
                                                 type="button" class="btn btn-warning"><i
@@ -131,7 +136,7 @@
 
                                 </tr>
                                 @endif
-                            
+
                                 @endif
                             @endforeach
 
@@ -230,7 +235,7 @@
                 $('#detailModal2').modal('show')
                 //alert("Ouverture du formulaire d'inscription")
 
-                
+
             });
 
 </script>

@@ -7,42 +7,43 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 
-
-class VilleController extends Controller
+class CategorieController extends Controller
 {
     //
 
-    public function index(){
+    public function index()
+    {
 
-         // Récupérer la variable de la session
+        // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/cities-management/show/city');
+        ])->get('http://192.168.1.5:8080/api/v1/categories-management/show/category');
 
-        $villes = $response->json();
-       // dd($villes);
+        $categories = $response->json();
+        // dd($categories);
 
-        return view('Ville.index', compact("villes"));
+        return view('Categorie.index', compact("categories"));
     }
 
     public function create()
     {
         //ajouter un admin
 
-        return view('Ville/create');
+        return view('Categorie/create');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         $request->validate([
-            "code" => "required",
-            "nom" => "required|alpha"
+            "nom" => "required",
+            "type" => "required"
         ]);
 
         $test = array();
-        $test['code'] = $request['code'];
+        $test['type'] = $request['type'];
         $test['nom'] = $request['nom'];
         $test['creatorUsername'] = $request['creatorUsername'];
         $test['creatorId'] = $request['creatorId'];
@@ -54,16 +55,14 @@ class VilleController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/cities-management/create/city',$test);
+        ])->post('http://192.168.1.5:8080/api/v1/categories-management/create/category', $test);
 
-        $villes = $response->json();
+        $categories = $response->json();
 
-            //dd($villes);
+        //dd($villes);
 
         // return back()->with("success", "Ville ajoutée avec succès")->with(compact("villes"));
-        return redirect()->route('ville')->with("success", "Ville ajoutée avec succès")->with(compact("villes"));
-
-
+        return redirect()->route('categorie')->with("success", "Catégorie ajoutée avec succès")->with(compact("categories"));
     }
 
     public function delete(Request $request)
@@ -72,28 +71,29 @@ class VilleController extends Controller
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.1.5:8080/api/v1/cities-management/delete/city/' . $donnees;
+        $url = 'http://192.168.1.5:8080/api/v1/categories-management/delete/category/' . $donnees;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->delete($url);
 
-        return back()->with("successDelete", "La ville a été supprimée avec succès");
+        return back()->with("successDelete", "La catégorie a été supprimée avec succès");
     }
+
 
     public function update(Request $request, $id)
     {
 
         $request->validate([
-            "code" => "required",
-            "nom" => "required|alpha",
+            "type" => "required",
+            "nom" => "required",
 
         ]);
 
         $test = array();
         //$test['id'] = $id;
-        $test['cityId'] = $request['cityId'];
-        $test['code'] = $request['code'];
+        $test['categoryId'] = $request['categoryId'];
+        $test['type'] = $request['type'];
         $test['nom'] = $request['nom'];
         $test['creatorUsername'] = $request['creatorUsername'];
         $test['creatorId'] = $request['creatorId'];
@@ -108,7 +108,7 @@ class VilleController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-        $response = $client->put("http://192.168.1.5:8080/api/v1/cities-management/update/city/{$id}", [
+        $response = $client->put("http://192.168.1.5:8080/api/v1/categories-management/update/category/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -117,27 +117,22 @@ class VilleController extends Controller
             'json' => $dataToUpdate,
         ]);
 
-        return redirect()->route('ville')->with("success", "Ville mis à jour avec succès");
-
-
+        return redirect()->route('categorie')->with("success", "Catégorie mis à jour avec succès");
     }
 
     public function edit($id)
     {
 
-         // Récupérer la variable de la session
-         $variableRecuperee = session('variableEnvoyee');
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
 
-         $response = HTTP::withHeaders([
-             'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.1.5:8080/api/v1/cities-management/show/city/{cityId}' .$id);
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://192.168.1.5:8080/api/v1/categories-management/show/category/{categorieId}' . $id);
 
-         $ville = $response->json();
-         //dd($ville);
+        $categorie = $response->json();
+        //dd($ville);
 
-        return view('Ville/edit', compact("ville"));
+        return view('Categorie/edit', compact("categorie"));
     }
-
-
-
 }

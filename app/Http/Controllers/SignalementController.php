@@ -38,7 +38,7 @@ class SignalementController extends Controller
 
         $signalements = $response->json();
         // dd($signalements);
-    
+
         return view('Signalement/detail', compact("signalements"));
     }
 
@@ -49,12 +49,12 @@ class SignalementController extends Controller
             //dd($donnees);
 
         $variableRecuperee = session('variableEnvoyee');
-    
+
         $url = 'http://192.168.1.5:8080/api/v1/reporting-management/delete/reportings/' . $donnees;
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->delete($url);
-    
+
         return back()->with("successDelete", "Signalement supprimé avec succès");
 
     }

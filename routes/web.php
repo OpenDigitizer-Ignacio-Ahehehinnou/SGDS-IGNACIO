@@ -10,6 +10,7 @@ use App\Http\Controllers\superAdminController;
 
 use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\EntrepriseZoneController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\VilleController;
@@ -37,6 +38,19 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+Route::get('/identifiant', [ProfileController::class, 'username'])->name('username');
+Route::post('/identifiant', [ProfileController::class, 'username2'])->name('profil.username2');
+
+Route::get('/code/{username}', [ProfileController::class, 'code'])->name('code');
+Route::post('/code', [ProfileController::class, 'code2'])->name('code2');
+
+Route::get('/newPass/{username}', [ProfileController::class, 'newPass'])->name('newPass');
+Route::get('/newPass2', [ProfileController::class, 'newPass2'])->name('newPass2');
+
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -54,7 +68,7 @@ Route::get('/modifUSer/{userId}', [AccueilController::class, 'modifierUser'])->n
 Route::get('/userModif', [AccueilController::class, 'userModif'])->name('user_modif');
 
 
-// le retour 
+// le retour
 Route::get('/', [AuthController::class, 'login'])->name('login');
 Route::post('/', [AuthController::class, 'handlelogin'])->name('handlelogin');
 
@@ -121,7 +135,7 @@ Route::get('/Detail/{entreprise}', [EntrepriseController::class, 'detail'])->nam
 Route::get('/signalement', [SignalementController::class, 'index'])->middleware(['auth', 'verified'])->name('signalement');
 Route::post('/signalement', [SignalementController::class, 'delete'])->name('signalement.supprimer');
 Route::get('/signalement', [SignalementController::class, 'index'])->name('signalement');
-Route::get('/Detail/{reportingId}', [SignalementController::class, 'detail'])->name('signalement.detail');
+Route::get('/Details/{reportingId}', [SignalementController::class, 'detail'])->name('signalement.detail');
 
 //VILLE
 
@@ -148,3 +162,13 @@ Route::get('/zone/{zone}', [ZoneController::class, 'edit'])->name('zone.edit');
 Route::get('/point', [PointController::class, 'index'])->name('point');
 Route::get('/point/create', [PointController::class, 'create'])->name('point.create');
 Route::post('/point/create', [PointController::class, 'store'])->name('point.ajouter');
+
+
+//CATEGORIE
+
+Route::get('/categorie', [CategorieController::class, 'index'])->name('categorie');
+Route::get('/categorie/create', [CategorieController::class, 'create'])->name('categorie.create');
+Route::post('/categorie/create', [CategorieController::class, 'store'])->name('categorie.ajouter');
+Route::post('/categorie', [CategorieController::class, 'delete'])->name('categorie.supprimer');
+Route::put('/categorie/{categorie}', [CategorieController::class, 'update'])->name('categorie.update');
+Route::get('/categorie/{categorie}', [CategorieController::class, 'edit'])->name('categorie.edit');

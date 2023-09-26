@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class EntrepriseController extends Controller
 {
-    
+
     public $view_administrateur_nom, $view_student_prenom, $view_student_telephone;
 
     public function index()
@@ -28,13 +28,13 @@ class EntrepriseController extends Controller
         //dd($entreprises);
 
         return view('Entreprise/index',compact("entreprises"));
-        
+
     }
-    
+
 
     public function detail(Request $request,$id)
     {
-    
+
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
@@ -54,7 +54,7 @@ class EntrepriseController extends Controller
                 $zoneIds[] = $entreprise['zoneId'];
             }
         }
-        
+
         // Maintenant, $zoneIds contient toutes les valeurs 'zoneId' du tableau JSON
        // dump($zoneIds);
 
@@ -62,18 +62,18 @@ class EntrepriseController extends Controller
             $response = HTTP::withHeaders([
                 'Authorization' => 'Bearer ' . $variableRecuperee,
             ])->get("http://192.168.1.5:8080/api/v1/zones-management/show/zone/{$zoneId}");
-        
+
             $zone = $response->json();
-            
+
             // Vérifiez si la réponse contient des données valides avant d'ajouter à $zones
             if (!empty($zone)) {
                 $zones[] = $zone;
             }
         }
-        
+
         // Maintenant, $zones contient les zones correspondant aux identifiants de zone dans $zoneIds
         //dd($zones);
-        
+
 
         return view('entreprise/voir',compact('zones'));
     }
@@ -98,7 +98,7 @@ class EntrepriseController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $request->validate([
             "name"=>"required",
             "ifu"=>"required",
@@ -123,20 +123,18 @@ class EntrepriseController extends Controller
          $test['creatorId'] = $request['creatorId'];
          $test['createdAt'] = $request['createdAt'];
          $test['deletedFlag'] = $request['deletedFlag'];
-    
-          
+
+
         //dd($test);
 
-      
-
-        
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->post('http://192.168.1.5:8080/api/v1/entreprise-management/create/entreprises',$test);
-        
+
         $entreprises = $response->json();
+       // dd($entreprises);
         $entrepriseId = $entreprises['entrepriseId'];
         //dump($entreprises);
         $test2 = array();
@@ -147,10 +145,10 @@ class EntrepriseController extends Controller
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->post('http://192.168.1.5:8080/api/v1/entreprises_zones-management/create/entreprise_zone',$test2);
-        
+
 
         $entreprisesZone = $response->json();
-        //dd($entreprisesZone);
+       // dd($entreprisesZone);
 
        return redirect()->route('entreprise')->with("success", "Entreprise ajouté avec succès")->with(compact("entreprises"));;
 
@@ -164,16 +162,16 @@ class EntrepriseController extends Controller
             //dd($donnees);
 
         $variableRecuperee = session('variableEnvoyee');
-    
+
         $url = 'http://192.168.1.5:8080/api/v1/entreprise-management/delete/entreprises/' . $donnees;
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->delete($url);
-    
+
         return back()->with("successDelete", "Entreprise a été supprimé avec succès");
 
     }
-    
+
 
     public function update(Request $request, $id)
     {
@@ -186,7 +184,7 @@ class EntrepriseController extends Controller
             "adress"=>"required",
             "telephone"=>"required",
         ]);
-    
+
         $test = array();
         //$test['id'] = $id;
         $test['name'] = $request['name'];
@@ -221,17 +219,17 @@ class EntrepriseController extends Controller
             'json' => $dataToUpdate,
         ]);
 
-        
+
         //$response = HTTP::withBody(json_encode($test))->put('http://192.168.100.14:8080/api/v1/entreprise-management/update/entreprise/{id}' . $id);
-       
-        
+
+
         return redirect()->route('entreprise')->with("success", "Entreprise mis à jour avec succès");
 
        // return view('Admin/create',compact("classes"));
     }
     public function edit($id)
     {
-        
+
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([

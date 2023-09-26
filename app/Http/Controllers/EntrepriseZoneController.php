@@ -22,7 +22,7 @@ class EntrepriseZoneController extends Controller
             //dd($entreprise);
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.8.103:8080/api/v1/entreprises_zones-management/create/entreprise_zone');
+        ])->get('http://192.168.1.5:8080/api/v1/entreprises_zones-management/create/entreprise_zone');
 
         $entrepriseZone = $response->json();
        //dd($entrepriseZone);

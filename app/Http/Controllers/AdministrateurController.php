@@ -49,10 +49,10 @@ class AdministrateurController extends Controller
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
          ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
- 
+
           $entreprises = $response->json();
          //dd($entreprises);
- 
+
         //ajouter un admin
         return view('Admin/create',compact('entreprises','entreprise','role'));
     }
@@ -76,7 +76,7 @@ class AdministrateurController extends Controller
         //ajouter un admin
         $donnees = $request->all();
 
-       
+
         $test = array();
         //$test['id'] = $id;
        // $test['userId'] = $donnees['userId'];
@@ -96,8 +96,8 @@ class AdministrateurController extends Controller
         $test['createdAt'] = $donnees['createdAt'];
         $test['roleId'] = $donnees['roleId'];
         $test['deletedFlag'] = $donnees['deletedFlag'];
-        //dd($test);
-        
+       // dd($test);
+
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
@@ -105,6 +105,7 @@ class AdministrateurController extends Controller
         ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
 
         $administrateurs = $response->json();
+        //dd($administrateurs);
 
         //return  back()->with("success", "Administrateur ajouté avec succè!")->with(compact("administrateurs"));
         return redirect()->route('admin')->with("success", "Administrateur ajouté avec succès")->with(compact("administrateurs"));

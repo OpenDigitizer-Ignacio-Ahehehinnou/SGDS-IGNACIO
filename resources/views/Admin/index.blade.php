@@ -14,7 +14,7 @@
                     <a href="{{ route ('admin.create')}}" type="button" style="margin-right: 200px;" class="btn btn-primary ml-auto">Ajouter un admin</a>
                 </div>
             </div>
-            
+
             @endif
             <br>
 
@@ -25,7 +25,7 @@
                 </button>
                 <h5>{{session()->get('success')}}</h5>
 
-                
+
             </div>
             @endif
 
@@ -38,7 +38,7 @@
                 <ul>
                     @foreach($errors->all() as $error)
                     <h5>{{$error}}</h5>
-        
+
                     @endforeach
                 </ul>
             </div>
@@ -51,7 +51,7 @@
                 </button>
                 <h5>{{session()->get('successDelete')}}</h5>
 
-                
+
             </div>
             @endif
             <div class="row ">
@@ -65,6 +65,7 @@
                             <thead>
                                 <tr>
                                     <th>Nom & prénoms</th>
+                                    <th>Nom d'utilisateur</th>
                                     <th>Matricule(s)</th>
                                     <th> Téléphone</th>
                                     {{-- <th>Rôle</th> --}}
@@ -82,27 +83,30 @@
                                 @foreach($administrateurs as $administrateur)
                                 @if($role == "ADMIN" && isset($administrateur['entrepriseModel']['name']) && isset($administrateur['roleModel']['libelle']))
                                 @if($administrateur['entrepriseModel']['name'] == $entreprise && $administrateur['roleModel']['libelle'] == 'ADMIN')
-                                
+
                                     <tr>
                                         <td>{{$administrateur['firstName']}} {{$administrateur['lastName']}}</td>
+                                        <td>{{$administrateur['username']}}</td>
                                         <td>{{$administrateur['matricule']}}</td>
                                         <td>{{$administrateur['telephone']}}</td>
                                         <td>{{$administrateur['adress']}}</td>
                                         <td>{{$administrateur['entrepriseModel']['name']}}</td>
                                     </tr>
-                                
+
                                     @endif
                                 @else
 
-                                        @if( $administrateur['roleModel']['libelle'] == 'ADMIN')
+@if(isset($administrateur['roleModel']) && $administrateur['roleModel']['libelle'] == 'ADMIN')
                                 <tr>
                                     <td>{{$administrateur['firstName']}} {{$administrateur['lastName']}}</td>
+                                    <td>{{$administrateur['username']}}</td>
+
                                     <td>{{$administrateur['matricule']}}</td>
                                     <td>{{$administrateur['telephone']}}</td>
                                     <td>{{$administrateur['adress']}}</td>
                                     <td>{{$administrateur['entrepriseModel']['name']}}</td>
 
-                                    
+
                                     <td>
                                             <a href="{{ route( 'admin.edit', ['administrateur'=>$administrateur['userId']])}}"
                                                 type="button" class="btn btn-warning"><i
@@ -117,7 +121,7 @@
 
                                 </tr>
                                 @endif
-                            
+
                                 @endif
 
                                 @endforeach
@@ -211,15 +215,15 @@
     crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        
-            
+
+
 
             $('.voir').on('click', function(e) {
                 e.preventDefault()
                 $('#detailModal').modal('show')
                 //alert("Ouverture du formulaire d'inscription")
 
-                
+
             });
         });
 

@@ -23,12 +23,12 @@ class SuperviseurController extends Controller
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
          ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
- 
+
          $superviseurs = $response->json();
-        //dd($superviseurs);
+       // dd($superviseurs);
         return view('Superviseur/index',compact("superviseurs","entreprise","role"));
     }
-    
+
 
     public function detail(Request $request, Superviseurs $superviseur, $id)
     {
@@ -63,7 +63,7 @@ class SuperviseurController extends Controller
 
     public function create()
     {
-        
+
          // Récupérer la variable de la session
          $variableRecuperee = session('variableEnvoyee');
          $entreprise = session('entreprise');
@@ -72,7 +72,7 @@ class SuperviseurController extends Controller
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
          ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
- 
+
           $entreprises = $response->json();
          //dd($entreprises);
         //ajouter un admin
@@ -96,7 +96,7 @@ class SuperviseurController extends Controller
             "activationStatus" => "required"
         ]);
 
-       
+
         $test = array();
         //$test['id'] = $id;
         $test['userId'] = $request['userId'];
@@ -125,9 +125,9 @@ class SuperviseurController extends Controller
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
-        
+
         $superviseurs = $response->json();
- 
+
 
 
         return redirect()->route('superviseur')->with("success", "Superviseur ajouté avec succès")->with(compact("superviseurs"));;

@@ -18,20 +18,20 @@
 
     <link rel="stylesheet" href="{{ asset('css/auth.css')}}">
 
-    <form method="post" action="{{ route('handlelogin')}}">
+    <form method="post" action="{{ route('profil.username2')}}">
 
         @csrf
         @method('POST')
 
         <div class="box">
-            <h1 class="alert alert-success">SGDS - LOGIN </h1>
+            <h1 class="alert alert-success">SGDS </h1>
 
             @if(Session::get('error_msg'))
 
-            <b style="font-size: 13px;color:red;">{{Session::get('error_msg')}}</b>
+            <b style="font-size: 13px;color:red;">{{Session::get('error_msg')}}</b><br><br>
 
             @endif
-
+            <h6>Veuillez entrer votre nom d'utilisateur</h6>
             <div class="d-flex justify-content-center">
                 <div class="mb-3">
                     <input type="text" name="username" class="email form-control" placeholder="Nom utilisateur"
@@ -39,29 +39,13 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center">
-                <div class="mb-3">
-                    <input type="password" name="password" class="email form-control" placeholder="Mot de passe"
-                        style="border-radius: 10px;" />
-                </div>
-            </div>
-            <div class="d-flex justify-content-end mt-3">
-                <div class="align-items-center" style="margin:auto; text-align: center;">
 
-                    <button type="submit" class="btn btn-success btn-sm"
-                        style="margin: 0 auto 20px; display: block; border-radius: 10px;padding:8px;">Connexion</button>
-
-                </div>
-
+            <div class="">
+                <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="border-radius: 10px;margin-right: 170px;">Annuler</a>
+                <button type="submit" class="btn btn-success btn-sm" style="border-radius: 10px;">Générer code</button>
             </div>
 
-            <div class="d-flex justify-content-start" style="margin-left: 2rem">
 
-                <a href="{{ route ('username') }}"style="text-decoration: none; display: block; margin-bottom: 10px; text-align: start; font-size:10px;"class="mm">Mot de passe oublié</a>
-
-            </div>
-            <!-- End Btn -->
-            <!-- End Btn2 -->
         </div>
         <!-- End Box -->
     </form>

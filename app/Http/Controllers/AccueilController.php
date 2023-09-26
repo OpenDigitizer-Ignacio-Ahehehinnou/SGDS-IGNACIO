@@ -106,7 +106,7 @@ class AccueilController extends Controller
                 if ($libelle === "SUPERVISOR" && $entrepris === $entreprisez) {
                     $countSupervisor++;
                 }
-            
+
 
                 if ($libelle === "ADMIN" && $entrepris === $entreprisez) {
                     $countAdmin++;
@@ -217,6 +217,7 @@ class AccueilController extends Controller
         // Passez ensuite cette variable à la vue pour l'affichage.
         return view('Accueil/modifierUser', compact('user'));
     }
+
 
     public function userModif(Request $request)
     {

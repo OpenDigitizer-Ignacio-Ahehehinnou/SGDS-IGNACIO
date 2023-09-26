@@ -25,21 +25,21 @@ class AuthController extends Controller
         $authentification = HTTP::withHeaders([
             'Content-Type' => 'application/json',
         ])->post('http://192.168.1.5:8080/api/v1/users-management/authenticate', $credentials);
-        
+
         $administrateurs = $authentification->json();
         //dd($authentification->status());
 
         //Controller identifiant
         if ($authentification->status() == 500 ) {
             return redirect()->back()->with('error_msg', 'Identifiant incorrect, veuillez réessayer.');
-        } 
+        }
 
             $token=$administrateurs['token'];
-           
+
 
             $username=$administrateurs['userResponseDto']['username'];
             $userId=$administrateurs['userResponseDto']['userId'];
-           $entreprise=$administrateurs['userResponseDto']['entrepriseModel']['name'];
+            $entreprise=$administrateurs['userResponseDto']['entrepriseModel']['name'];
           // $entreprise=1;
             $role=$administrateurs['userResponseDto']['roleModel']['libelle'];
             $nom=$administrateurs['userResponseDto']['lastName'];
@@ -48,7 +48,7 @@ class AuthController extends Controller
             $telephone=$administrateurs['userResponseDto']['telephone'];
             $adresse=$administrateurs['userResponseDto']['adress'];
 
-           //dd($nom,$prenom,$entreprise);
+           //dd($token,$prenom,$entreprise);
             // Stocker la variable dans une session
             session(['variableEnvoyee' => $token, 'nom'=>$nom,'adresse'=>$adresse,'prenom'=>$prenom,'matricule'=>$matricule,'telephone'=>$telephone,'username'=>$username,'userId'=>$userId,'entreprise'=>$entreprise,'role'=>$role]);
 

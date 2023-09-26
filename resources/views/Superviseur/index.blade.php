@@ -13,9 +13,9 @@
 
 </div>
 <div class="container-fluid">
-    
+
     <div class="my-3 p-3 mt-5 bg-body rounded shadow-sm">
-       
+
         <br>
 
         @if(session()->has("success"))
@@ -38,7 +38,7 @@
             <ul>
                 @foreach($errors->all() as $error)
                 <h5>{{$error}}</h5>
-    
+
                 @endforeach
             </ul>
         </div>
@@ -65,6 +65,7 @@
                         <thead>
                             <tr>
                                 <th>Nom & prénoms</th>
+                                <th>Nom d'utilisateur</th>
                                 <th>Matricule(s)</th>
                                 <th> Téléphone</th>
                                 {{-- <th>Rôle</th> --}}
@@ -83,15 +84,16 @@
 
                             @if($role == "ADMIN" && isset($superviseur['entrepriseModel']['name']) && isset($superviseur['roleModel']['libelle']))
                             @if($superviseur['entrepriseModel']['name'] == $entreprise && $superviseur['roleModel']['libelle'] == 'SUPERVISOR')
-                            
+
                             <tr>
                                 <td>{{$superviseur['firstName']}} {{$superviseur['lastName']}}</td>
+                                <td>{{$superviseur['username']}}</td>
                                 <td>{{$superviseur['matricule']}}</td>
                                 <td>{{$superviseur['telephone']}}</td>
                                 <td>{{$superviseur['adress']}}</td>
                                 <td>{{$superviseur['entrepriseModel']['name']}}</td>
 
-                                
+
                                 <td>
 
                                         <a href="{{route('superviseur.edit', ['superviseur'=>$superviseur['userId'] ] )}}"
@@ -111,15 +113,17 @@
                             @endif
                             @else
 
-                                    @if( $superviseur['roleModel']['libelle'] == 'SUPERVISOR')
+                                    @if(isset($superviseur['roleModel']) && $superviseur['roleModel']['libelle'] == 'SUPERVISOR')
+
                             <tr>
                                 <td>{{$superviseur['firstName']}} {{$superviseur['lastName']}}</td>
+                                <td>{{$superviseur['username']}}</td>
                                 <td>{{$superviseur['matricule']}}</td>
                                 <td>{{$superviseur['telephone']}}</td>
                                 <td>{{$superviseur['adress']}}</td>
                                 <td>{{$superviseur['entrepriseModel']['name']}}</td>
 
-                                
+
                                 <td>
                                         <a href="{{ route( 'superviseur.edit', ['superviseur'=>$superviseur['userId']])}}"
                                             type="button" class="btn btn-warning"><i
@@ -134,7 +138,7 @@
 
                             </tr>
                             @endif
-                        
+
                             @endif
                             @endforeach
 
@@ -238,7 +242,7 @@
                 $('#detailModal3').modal('show')
                 //alert("Ouverture du formulaire d'inscription")
 
-                
+
             });
 
 </script>
@@ -254,7 +258,7 @@
 
 
    });
-   
+
 </script>
 
 

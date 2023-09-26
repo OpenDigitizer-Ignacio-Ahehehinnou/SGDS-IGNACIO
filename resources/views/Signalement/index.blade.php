@@ -8,11 +8,11 @@
     <div class="container-fluid">
         <div class="my-3 p-3 mt-5 bg-body rounded shadow-sm">
             <h3 class="border-bottom pb-2 mb-5">Liste des signalements</h3>
-        
+
             <div class="mt-2">
                 {{-- <div class="d-flex justify-content-between mb-2">
                     <!-- la pagination sans oublier code bootstrap dans provider(AppServiceProvider) -->
-            
+
                     <a href="{{ route ('signalement.create')}}" type="button" class=" btn btn-primary">Ajouter un signalement</a></div>
 
                 </div> --}}
@@ -25,7 +25,7 @@
                           </button>
                         <h5>{{session()->get('successDelete')}}</h5>
 
-                       
+
                     </div>
                 @endif
 
@@ -38,7 +38,7 @@
                         </div> -->
                             <!-- /.box-header -->
                         <div class="box-body">
-               
+
                 <table id="example" class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -49,11 +49,11 @@
                             <th scope="col">Latitude</th>
 
                             <th scope="col">Longitude</th>
-                            <th scope="col">Description</th>
-                           
+                            {{-- <th scope="col">Description</th> --}}
+
                             {{-- <th scope="col">Status</th> --}}
-                           
-                           
+
+
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -61,20 +61,20 @@
                         @foreach($signalements as $signalement)
                         <tr>
                             {{-- <td>{{$loop->index +1}}</td> --}}
-                            <td>{{$signalement['uniqueCode']}}</td> 
+                            <td>{{$signalement['uniqueCode']}}</td>
 
                             <td>{{$signalement['altitude']}}</td>
                             <td>{{$signalement['latitude']}}</td>
-                             <td>{{$signalement['longitude']}}</td> 
-                            <td>{{$signalement['description']}}</td>
+                             <td>{{$signalement['longitude']}}</td>
+                            {{-- <td>{{$signalement['description']}}</td> --}}
                             {{-- <td> <img src="{{ $signalement['photo'] }}"width="300" height="200" 200px; alt="Ma photo"></td> --}}
-                          
+
                             <td>
                                 {{-- {{ route( 'admin.supprimer', ['administrateur'=>$administrateur['userId']])}} --}}
-                               
+
                                 {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
                                     <a href="{{route( 'signalement.detail', ['reportingId'=>$signalement['reportingId']])}}" type="button" class="btn btn-success"><i class="bi bi-eye-fill"></i></a>
-                                    
+
 
                                 <button type="button" class="btn btn-danger" data-key="{{ $signalement['reportingId'] }}" data-toggle="modal" data-target="#confirmationModal">
                                     <i class="bi bi-trash3-fill"></i>
@@ -85,10 +85,10 @@
 
                         </tr>
                     @endforeach
-                        
-                    
+
+
                     </tbody>
-                    
+
                 </table>
                 {{-- <p>Place Name: <span id="place-name"></span></p> --}}
 
@@ -101,7 +101,7 @@
 
     <div id="map"></div>
 
-    
+
 <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -127,7 +127,7 @@
 
 
 
-        
+
 
 
        <!-- Inclure jQuery -->
@@ -140,15 +140,15 @@
         <script>
 
         $(document).ready(function () {
-           
-            
+
+
 
             $('.voir5').on('click', function(e) {
                 e.preventDefault()
                 $('#detailModal5').modal('show')
                 //alert("Ouverture du formulaire d'inscription")
 
-                
+
             });
         });
         </script>

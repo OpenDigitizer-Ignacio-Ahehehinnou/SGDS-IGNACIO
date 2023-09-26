@@ -95,28 +95,28 @@
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Entreprise</label>
                         {{-- <input type="text" class="form-control" id="entrepriseId" name="entrepriseId" style="border-radius: 10px;"> --}}
-                    
+
                         <select class="form-control" id="entrepriseId" required="true" name="entrepriseId" style="border-radius: 10px;">
 
                             @if($role =="ADMIN")
                                 @foreach ($entreprises as $entrepris )
-                            
+
                                 @if($entrepris['name'] == $entreprise)
-        
+
                                 <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
                                 @endif
                                 @endforeach
                             @endif
-                            
+
                             @if($role =="SUPERADMIN")
                                 @foreach ($entreprises as $entrepris )
 
                                 <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
-                                
+
                                 @endforeach
                             @endif
                         </select>
-                    
+
                     </div>
 
 
@@ -132,7 +132,7 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="roleModel" class="form-label">Role</label>
-                        <input type="text" class="form-control" id="roleId" name="roleId" value="3">
+                        <input type="text" class="form-control" id="roleId" name="roleId" value="4">
 
                     </div>
                 </div>
@@ -141,7 +141,7 @@
 
                     <div class="mb-3 col-md-4">
                         <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
-            
+
                         <input type="text" class="form-control" id="creatorUsername" value="Ignacio" name="creatorUsername">
 
                     </div>
