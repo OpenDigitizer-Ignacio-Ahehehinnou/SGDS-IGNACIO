@@ -6,9 +6,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Administrateur;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\saveAdminRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 
 
 use function Pest\Laravel\json;
@@ -29,11 +31,12 @@ class AdministrateurController extends Controller
         ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
 
         $administrateurs = $response->json();
-       //dd($administrateurs);
+       // dd($administrateurs);
+        
 
-        return view('Admin/index', compact("administrateurs","entreprise","role"));
-    }
-
+        //dd($usernames);
+return view('Admin/index', compact("administrateurs", "entreprise", "role"));
+}
 
 
 
@@ -73,13 +76,18 @@ class AdministrateurController extends Controller
             "activationStatus" => "required"
         ]);
 
+         // Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
+    $createdAt = Carbon::now()->toIso8601String();
+        //dd($createdAt);
+    // Utilisez la date obtenue comme nécessaire dans votre réponse JSON.
+    //return response()->json(["createdAt" => $createdAt]);
         //ajouter un admin
         $donnees = $request->all();
 
 
         $test = array();
         //$test['id'] = $id;
-       // $test['userId'] = $donnees['userId'];
+        $test['userId'] = 105;
         $test['firstName'] = $donnees['firstName'];
         $test['lastName'] = $donnees['lastName'];
         $test['matricule'] = $donnees['matricule'];
@@ -93,13 +101,35 @@ class AdministrateurController extends Controller
         $test['entrepriseId'] = $donnees['entrepriseId'];
         $test['creatorUsername'] = $donnees['creatorUsername'];
         $test['creatorId'] = $donnees['creatorId'];
-        $test['createdAt'] = $donnees['createdAt'];
+        $test['createdAt'] = $createdAt;
         $test['roleId'] = $donnees['roleId'];
         $test['deletedFlag'] = $donnees['deletedFlag'];
-       // dd($test);
+        //dd($test);
 
-        // Récupérer la variable de la session
-        $variableRecuperee = session('variableEnvoyee');
+            $variableRecuperee = session('variableEnvoyee');
+
+             //dd($entreprise);
+             $response = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
+    
+            $administrateurs = $response->json();
+
+
+            $usernames = []; // Initialisez un tableau vide pour stocker les usernames
+
+            foreach ($administrateurs as $administrateur) {
+                $username = $administrateur["username"];
+                $usernames[] = $username; // Ajoutez chaque username au tableau $usernames
+            }
+            
+            // Maintenant, le tableau $usernames contient tous les usernames
+
+        if (in_array($donnees['username'], $usernames)) {
+            // Le username est présent dans la liste
+            return redirect()->route('collecteur.create')->with("success", "Le nom d'utilisateur est déjà utilisé")->with(compact("administrateurs"));
+        } else {
+            // Le username n'est pas présent dans la liste
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
@@ -109,6 +139,7 @@ class AdministrateurController extends Controller
 
         //return  back()->with("success", "Administrateur ajouté avec succè!")->with(compact("administrateurs"));
         return redirect()->route('admin')->with("success", "Administrateur ajouté avec succès")->with(compact("administrateurs"));
+        }
 
     }
 

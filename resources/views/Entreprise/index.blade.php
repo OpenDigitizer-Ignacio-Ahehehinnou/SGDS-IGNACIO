@@ -58,7 +58,7 @@
                     <div class="box">
                        
                         <div class="box-body">
-                            <table id="example" class="table table-bordered table-striped">
+                            <table id="example" class="table table-bordered table-striped example">
                             <thead>
                         <tr>
                             <th scope="col">Entreprise</th>
@@ -79,6 +79,8 @@
                             <td>{{$entreprise['email']}}</td>
                             <td>{{$entreprise['ifu']}}</td> 
                             <td>{{$entreprise['telephone']}}</td>
+                            <td hidden>{{$entreprise['createdAt']}}</td>
+
                             <td>{{$entreprise['siege']}}</td>  
                             {{-- <td>{{$entreprise['']}}</td>        --}}
                             <td>
@@ -246,7 +248,29 @@
    
 </script>
 
+<script>
+    // Lorsque la page est chargée
+$(document).ready(function() {
+    // Sélectionnez le tableau par son ID
+    const table = $('.example');
 
+    // Sélectionnez toutes les lignes sauf la première (l'en-tête)
+    const rows = table.find('tr:gt(0)').toArray();
+
+    // Triez les lignes en fonction de la colonne createdAt en ordre décroissant
+    rows.sort(function(a, b) {
+        const dateA = new Date($(a).find('td:eq(4)').text());
+        const dateB = new Date($(b).find('td:eq(4)').text());
+        return dateB - dateA;
+    });
+
+    // Remplacez les lignes dans le tableau avec les lignes triées
+    $.each(rows, function(index, row) {
+        table.append(row);
+    });
+});
+
+</script>
 
 
 @endsection

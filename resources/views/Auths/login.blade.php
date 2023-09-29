@@ -41,9 +41,10 @@
 
             <div class="d-flex justify-content-center">
                 <div class="mb-3">
-                    <input type="password" name="password" class="email form-control" placeholder="Mot de passe"
+                    <input type="password" id="password" name="password" class="email form-control" placeholder="Mot de passe"
                         style="border-radius: 10px;" />
                 </div>
+
             </div>
             <div class="d-flex justify-content-end mt-3">
                 <div class="align-items-center" style="margin:auto; text-align: center;">
@@ -67,10 +68,11 @@
     </form>
 
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
     </script>
+
+
 
 </body>
 

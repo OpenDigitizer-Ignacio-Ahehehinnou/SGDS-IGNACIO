@@ -61,7 +61,7 @@
                             </div> -->
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="example" class="table table-bordered table-striped">
+                        <table id="example" class="table table-bordered table-striped za">
                             <thead>
                                 <tr>
                                     <th>Nom & prénoms</th>
@@ -89,7 +89,9 @@
                                         <td>{{$administrateur['username']}}</td>
                                         <td>{{$administrateur['matricule']}}</td>
                                         <td>{{$administrateur['telephone']}}</td>
+                                        <td hidden="hidden">{{$administrateur['createdAt']}}</td>
                                         <td>{{$administrateur['adress']}}</td>
+
                                         <td>{{$administrateur['entrepriseModel']['name']}}</td>
                                     </tr>
 
@@ -103,7 +105,9 @@
 
                                     <td>{{$administrateur['matricule']}}</td>
                                     <td>{{$administrateur['telephone']}}</td>
+                                    <td hidden="hidden">{{$administrateur['createdAt']}}</td>
                                     <td>{{$administrateur['adress']}}</td>
+
                                     <td>{{$administrateur['entrepriseModel']['name']}}</td>
 
 
@@ -127,6 +131,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -242,8 +247,30 @@
 
 
     });
-   </script>
+</script>
+<script>
+    // Lorsque la page est chargée
+$(document).ready(function() {
+    // Sélectionnez le tableau par son ID
+    const table = $('.za');
 
+    // Sélectionnez toutes les lignes sauf la première (l'en-tête)
+    const rows = table.find('tr:gt(0)').toArray();
+
+    // Triez les lignes en fonction de la colonne createdAt en ordre décroissant
+    rows.sort(function(a, b) {
+        const dateA = new Date($(a).find('td:eq(4)').text());
+        const dateB = new Date($(b).find('td:eq(4)').text());
+        return dateB - dateA;
+    });
+
+    // Remplacez les lignes dans le tableau avec les lignes triées
+    $.each(rows, function(index, row) {
+        table.append(row);
+    });
+});
+
+</script>
 
 
 @endsection

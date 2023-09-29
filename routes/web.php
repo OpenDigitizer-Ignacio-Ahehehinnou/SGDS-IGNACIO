@@ -100,7 +100,6 @@ Route::get('/Detail', [superAdminController::class, 'detail'])->name('superAdmin
 
 
 
-
 Route::get('/superviseur', [SuperviseurController::class, 'index'])->middleware(['auth', 'verified'])->name('superviseur');
 Route::get('/superviseur/create', [SuperviseurController::class, 'create'])->name('superviseur.create');
 Route::post('/superviseur/create', [SuperviseurController::class, 'store'])->name('superviseur.ajouter');

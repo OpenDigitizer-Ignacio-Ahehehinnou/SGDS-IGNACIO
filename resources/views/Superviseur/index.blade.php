@@ -61,7 +61,7 @@
                         </div> -->
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="example" class="table table-bordered table-striped">
+                    <table id="example" class=" example table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Nom & prénoms</th>
@@ -90,6 +90,8 @@
                                 <td>{{$superviseur['username']}}</td>
                                 <td>{{$superviseur['matricule']}}</td>
                                 <td>{{$superviseur['telephone']}}</td>
+                                <td hidden>{{$superviseur['createdAt']}}</td>
+
                                 <td>{{$superviseur['adress']}}</td>
                                 <td>{{$superviseur['entrepriseModel']['name']}}</td>
 
@@ -120,7 +122,9 @@
                                 <td>{{$superviseur['username']}}</td>
                                 <td>{{$superviseur['matricule']}}</td>
                                 <td>{{$superviseur['telephone']}}</td>
+                                <td hidden>{{$superviseur['createdAt']}}</td>
                                 <td>{{$superviseur['adress']}}</td>
+
                                 <td>{{$superviseur['entrepriseModel']['name']}}</td>
 
 
@@ -182,56 +186,6 @@
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="detailModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content ">
-            <div class="modal-header " style="background-color:#69B42D; color:white;">
-                <h2 class="modal-title" id="exampleModalLabel">Détail superviseur</h2>
-            </div>
-            <div class="modal-body">
-
-                <table class="table table-bordered">
-                    <tbody>
-
-
-                        <tr>
-
-                            <th>Nom & prénoms</th>
-                            <td>Dossou Jean</td>
-                        </tr>
-                        <tr>
-                            <th>Matricule</th>
-                            <td>AS0052</td>
-                        </tr>
-                        <tr>
-                            <th>Téléphone</th>
-                            <td>78451203</td>
-                        </tr>
-                        <tr>
-                            <th>Rôle</th>
-                            <td>Superviseur</td>
-                        </tr>
-                        <tr>
-                            <th>Adresse</th>
-                            <td>Cotonou/Akpakpa</td>
-                        </tr>
-                    </tbody>
-
-                </table>
-
-
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
@@ -261,5 +215,28 @@
 
 </script>
 
+<script>
+    // Lorsque la page est chargée
+$(document).ready(function() {
+    // Sélectionnez le tableau par son ID
+    const table = $('.example');
+
+    // Sélectionnez toutes les lignes sauf la première (l'en-tête)
+    const rows = table.find('tr:gt(0)').toArray();
+
+    // Triez les lignes en fonction de la colonne createdAt en ordre décroissant
+    rows.sort(function(a, b) {
+        const dateA = new Date($(a).find('td:eq(4)').text());
+        const dateB = new Date($(b).find('td:eq(4)').text());
+        return dateB - dateA;
+    });
+
+    // Remplacez les lignes dans le tableau avec les lignes triées
+    $.each(rows, function(index, row) {
+        table.append(row);
+    });
+});
+
+</script>
 
 @endsection

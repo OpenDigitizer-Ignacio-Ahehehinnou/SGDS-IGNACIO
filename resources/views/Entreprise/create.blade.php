@@ -8,8 +8,13 @@
     <div class="mt-2">
 
         @if(session()->has("success"))
-        <div class="alert alert-success" >
-            <h5>{{session()->get('success')}}</h3>
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+            </button>
+            <h5>{{session()->get('success')}}</h5>
+
+
         </div>
         @endif
 
@@ -47,12 +52,12 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="nom" class="form-label">Raison sociale</label>
-                                <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="nom" name="name" aria-describedby="nom">
+                                <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="nom" name="name" aria-describedby="nom" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="adresse" class="form-label">Adresse</label>
-                                <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="adresse" name="adress">
+                                <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="adresse" name="adress" value="{{old('adress')}}" required>
                             </div>
 
                         </div>
@@ -61,12 +66,12 @@
 
                                 <div class="mb-3 col-md-6">
                                     <label for="ifu" class="form-label">Numéro IFU</label>
-                                    <input type="number" required="true" style="border-radius: 10px;" class="form-control" id="ifu" name="ifu">
+                                    <input type="number" required="true" style="border-radius: 10px;" class="form-control" id="ifu" name="ifu" value="{{old('ifu')}}">
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label for="siege" class="form-label">Siège</label>
-                                    <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="siege" name="siege">
+                                    <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="siege" name="siege" value="{{old('siege')}}">
                                 </div>
 
                         </div>
@@ -76,12 +81,12 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" required="true" style="border-radius: 10px;" class="form-control" id="email" name="email">
+                                <input type="email" required="true" style="border-radius: 10px;" class="form-control" id="email" name="email" value="{{old('email')}}">
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="telephone" class="form-label">Téléphone</label>
-                                <input type="number" required="true" style="border-radius: 10px;" class="form-control" id="telephone" name="telephone">
+                                <input type="number" required="true" style="border-radius: 10px;" class="form-control" id="telephone" name="telephone" value="{{old('telephone')}}">
                             </div>
 
 
@@ -90,7 +95,7 @@
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label for="nom_responsable" class="form-label">Nom et prénom du responsable</label>
-                                <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="nom_responsable" name="nom_responsable">
+                                <input type="text" required="true" style="border-radius: 10px;" class="form-control" id="nom_responsable" name="nom_responsable" value="{{old('nom_responsable')}}">
                             </div>
 
                             <div class="mb-3 col-md-6">

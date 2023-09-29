@@ -75,6 +75,9 @@
                                         <input type="password" class="form-control" id="new_password"
                                             name="new_password"
                                             style="border-radius: 10px;">
+
+                                            <div id="password-info" class="invalid-text"></div>
+
                                     </div>
                                 </div>
 
@@ -91,7 +94,7 @@
                                 <div class="form-group">
                                     <div class="col-offset-2">
                                         <button type="submit" class="btn btn-success"
-                                            id="sauvegarder">Sauvegarder</button>
+                                            id="sauvegarder" disabled>Sauvegarder</button>
                                     </div>
                                 </div>
                             </div>
@@ -109,10 +112,67 @@
 
 </section>
 
-@endsection
 
+
+<style>
+    input {
+        width: 200px;
+        padding: 5px;
+    }
+    .valid {
+        border: 2px solid green;
+    }
+    .invalid {
+        border: 2px solid red;
+    }
+    .valid-text {
+        color: green;
+    }
+    .invalid-text {
+        color: red;
+    }
+</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
+    const passwordInput = document.getElementById('new_password');
+    const passwordInfo = document.getElementById('password-info');
+    const submitBtn = document.getElementById('sauvegarder');
+
+    passwordInput.addEventListener('input', function () {
+        const password = passwordInput.value;
+        const isValid = validatePassword(password);
+
+        if (isValid) {
+            passwordInput.classList.remove('invalid');
+            passwordInput.classList.add('valid');
+            passwordInfo.classList.remove('invalid-text');
+            passwordInfo.classList.add('valid-text');
+            passwordInfo.textContent = 'Mot de passe valide.';
+            submitBtn.disabled = false;
+
+            // Ajouter une temporisation pour cacher le message de succès
+        setTimeout(function () {
+            passwordInfo.textContent = ''; // Effacer le contenu du message
+        }, 3000); // Attendre 3 secondes (3000 millisecondes) avant de cacher le message
+    
+    
+    
+    } else {
+            passwordInput.classList.remove('valid');
+            passwordInput.classList.add('invalid');
+            passwordInfo.classList.remove('valid-text');
+            passwordInfo.classList.add('invalid-text');
+            passwordInfo.textContent = 'Le mot de passe doit contenir au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.';
+            submitBtn.disabled = true;
+        }
+    });
+
+    function validatePassword(password) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    }
+</script>
 <script>
     $(document).ready(function () {
         // Lorsque le bouton "Envoyer" est cliqué
@@ -140,6 +200,10 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                             </div>`);
+                            setTimeout(function () {
+                    msg200.textContent = ''; // Effacer le contenu du message
+                }, 3000); // Attendre 3 secondes (3000 millisecondes) avant de cacher le message
+    
 
             }else if(new_password != new_password_confirmation){
 
@@ -149,7 +213,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                             </div>`);
-                //$('#confirm_password').css("border","2px solid red");
+                            $('#new_password_confirmation').css("border","2px solid red");
+                setTimeout(function () {
+                    msg200.textContent = ''; // Effacer le contenu du message
+                }, 3000); // Attendre 3 secondes (3000 millisecondes) avant de cacher le message
+    
+
             }else if((new_password.length) < pass){
                 $('#msg200').html(` <div class='alert alert-warning text-center' role='alert'>
                 <b>Votre mot de passe doit être supérieur ou égal à huit caractères </b>
@@ -157,7 +226,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                             </div>`);
+                            setTimeout(function () {
+                    msg200.textContent = ''; // Effacer le contenu du message
+                }, 3000); // Attendre 3 secondes (3000 millisecondes) avant de cacher le message
+    
             }else{
+                $('#new_password_confirmation').css("border","2px solid green");
 
             // Envoyez les données au contrôleur via une requête AJAX
             $.ajax({
@@ -197,3 +271,5 @@
         });
     });
 </script>
+
+@endsection

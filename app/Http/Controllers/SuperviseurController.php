@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 
 
 class SuperviseurController extends Controller
@@ -96,7 +97,9 @@ class SuperviseurController extends Controller
             "activationStatus" => "required"
         ]);
 
-
+// Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
+$createdAt = Carbon::now()->toIso8601String();
+//dd($createdAt);
         $test = array();
         //$test['id'] = $id;
         $test['userId'] = $request['userId'];
@@ -113,27 +116,45 @@ class SuperviseurController extends Controller
         $test['entrepriseId'] = $request['entrepriseId'];
         $test['creatorUsername'] = $request['creatorUsername'];
         $test['creatorId'] = $request['creatorId'];
-        $test['createdAt'] = $request['createdAt'];
+        $test['createdAt'] = $createdAt;
         $test['roleId'] = $request['roleId'];
         $test['deletedFlag'] = $request['deletedFlag'];
 
-        //dd($test);
-       // $response = HTTP::withBody(json_encode($test))->post('http://192.168.100.14:8080/api/v1/user-management/created/user');
-
-         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
 
-        $superviseurs = $response->json();
+        //dd($entreprise);
+         $response = HTTP::withHeaders([
+             'Authorization' => 'Bearer ' . $variableRecuperee,
+         ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
+
+         $administrateurs = $response->json();
 
 
+       $usernames = []; // Initialisez un tableau vide pour stocker les usernames
 
-        return redirect()->route('superviseur')->with("success", "Superviseur ajouté avec succès")->with(compact("superviseurs"));;
+         foreach ($administrateurs as $administrateur) {
+             $username = $administrateur["username"];
+             $usernames[] = $username; // Ajoutez chaque username au tableau $usernames
+        }
 
-       // return view('Admin/create',compact("classes"));
-    }
+       // Maintenant, le tableau $usernames contient tous les usernames
+
+         if (in_array($request['username'], $usernames)) {
+             // Le username est présent dans la liste
+             return redirect()->route('superviseur.create')->with("success", "Le nom d'utilisateur est déjà utilisé")->with(compact("administrateurs"));
+         } else {
+             // Le username n'est pas présent dans la liste
+         $response = HTTP::withHeaders([
+             'Authorization' => 'Bearer ' . $variableRecuperee,
+         ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
+
+         $superviseurs = $response->json();
+
+         return redirect()->route('superviseur')->with("success", "Superviseur ajouté avec succès")->with(compact("collecteurs"));
+     }
+
+
+     }
 
     public function delete( Request $request)
     {

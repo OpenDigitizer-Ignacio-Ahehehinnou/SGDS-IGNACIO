@@ -5,8 +5,13 @@
 <div class="mt-2">
 
     @if(session()->has("success"))
-    <div class="alert alert-success">
-        <h5>{{session()->get('success')}}</h3>
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+        </button>
+        <h5>{{session()->get('success')}}</h5>
+
+
     </div>
     @endif
 
@@ -90,6 +95,9 @@
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
                         <input type="text" class="form-control" required="true" id="password" name="password" style="border-radius: 10px;">
+                    
+                        <div id="password-info" class="invalid-text"></div>
+
                     </div>
 
                     <div class="mb-3 col-md-6">
@@ -179,7 +187,7 @@
                 <br>
                 <div>
 
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="submit" class="btn btn-primary" id="envoyerDonnees" disabled>Enregistrer</button>
 
                 </div>
             </form>
@@ -192,5 +200,65 @@
 </div>
 
 </div>
+
+
+<style>
+    input {
+        width: 200px;
+        padding: 5px;
+    }
+    .valid {
+        border: 2px solid green;
+    }
+    .invalid {
+        border: 2px solid red;
+    }
+    .valid-text {
+        color: green;
+    }
+    .invalid-text {
+        color: red;
+    }
+</style>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+
+<script>
+    const passwordInput = document.getElementById('password');
+    const passwordInfo = document.getElementById('password-info');
+    const submitBtn = document.getElementById('envoyerDonnees');
+
+    passwordInput.addEventListener('input', function () {
+        const password = passwordInput.value;
+        const isValid = validatePassword(password);
+
+        if (isValid) {
+            passwordInput.classList.remove('invalid');
+            passwordInput.classList.add('valid');
+            passwordInfo.classList.remove('invalid-text');
+            passwordInfo.classList.add('valid-text');
+            passwordInfo.textContent = 'Mot de passe valide.';
+            submitBtn.disabled = false;
+
+            // Ajouter une temporisation pour cacher le message de succès
+        setTimeout(function () {
+            passwordInfo.textContent = ''; // Effacer le contenu du message
+        }, 3000); // Attendre 3 secondes (3000 millisecondes) avant de cacher le message
+    } else {
+            passwordInput.classList.remove('valid');
+            passwordInput.classList.add('invalid');
+            passwordInfo.classList.remove('valid-text');
+            passwordInfo.classList.add('invalid-text');
+            passwordInfo.textContent = 'Le mot de passe doit contenir au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.';
+            submitBtn.disabled = true;
+        }
+    });
+
+    function validatePassword(password) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    }
+</script>
 
 @endsection

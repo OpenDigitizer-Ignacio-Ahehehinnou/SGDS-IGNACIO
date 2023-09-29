@@ -135,7 +135,6 @@ class AccueilController extends Controller
         $telephone = session('telephone');
         $adresse = session('adresse');
 
-
         return view('Accueil/profil', compact('nom', 'prenom', 'adresse', 'role', 'entreprise', 'matricule', 'telephone'));
     }
 

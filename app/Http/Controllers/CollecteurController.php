@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Collecteurs;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 
 use App\Models\User;
 
@@ -98,6 +99,9 @@ class CollecteurController extends Controller
             "activationStatus" => "required"
         ]);
 
+         // Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
+    $createdAt = Carbon::now()->toIso8601String();
+    //dd($createdAt);
         //ajouter un admin
         $test = array();
         //$test['id'] = $id;
@@ -115,15 +119,35 @@ class CollecteurController extends Controller
         $test['entrepriseId'] = $request['entrepriseId'];
         $test['creatorUsername'] = $request['creatorUsername'];
         $test['creatorId'] = $request['creatorId'];
-        $test['createdAt'] = $request['createdAt'];
+        $test['createdAt'] = $createdAt;
         $test['roleId'] = $request['roleId'];
         $test['deletedFlag'] = $request['deletedFlag'];
 
        // dump($test);
+       $variableRecuperee = session('variableEnvoyee');
+
+       //dd($entreprise);
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
+
+        $administrateurs = $response->json();
 
 
-        // Récupérer la variable de la session
-        $variableRecuperee = session('variableEnvoyee');
+      $usernames = []; // Initialisez un tableau vide pour stocker les usernames
+
+        foreach ($administrateurs as $administrateur) {
+            $username = $administrateur["username"];
+            $usernames[] = $username; // Ajoutez chaque username au tableau $usernames
+        }
+
+      // Maintenant, le tableau $usernames contient tous les usernames
+
+        if (in_array($request['username'], $usernames)) {
+            // Le username est présent dans la liste
+            return redirect()->route('admin.create')->with("success", "Le nom d'utilisateur est déjà utilisé")->with(compact("administrateurs"));
+        } else {
+            // Le username n'est pas présent dans la liste
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
@@ -131,6 +155,9 @@ class CollecteurController extends Controller
         $collecteurs = $response->json();
 
         return redirect()->route('collecteur')->with("success", "Collecteur ajouté avec succès")->with(compact("collecteurs"));
+    }
+
+
     }
 
     public function delete(Request $request)
@@ -149,7 +176,6 @@ class CollecteurController extends Controller
 
         return back()->with("successDelete", "Le collecteur a été supprimé avec succès");
     }
-
 
     public function update(Request $request, $id)
     {

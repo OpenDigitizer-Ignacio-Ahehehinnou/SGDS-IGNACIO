@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Entreprises;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -107,6 +108,12 @@ class EntrepriseController extends Controller
             "adress"=>"required",
             "telephone"=>"required",
         ]);
+
+        // Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
+    $createdAt = Carbon::now()->toIso8601String();
+    //dd($createdAt);
+
+
          //ajouter un admin
          $test = array();
         //$test['id'] = $id;
@@ -121,7 +128,7 @@ class EntrepriseController extends Controller
          $test['siege'] = $request['siege'];
          $test['creatorUsername'] = $request['creatorUsername'];
          $test['creatorId'] = $request['creatorId'];
-         $test['createdAt'] = $request['createdAt'];
+         $test['createdAt'] = $createdAt;
          $test['deletedFlag'] = $request['deletedFlag'];
 
 
