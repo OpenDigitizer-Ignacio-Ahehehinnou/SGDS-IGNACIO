@@ -3,18 +3,16 @@
 @section("contenu")
 
 
-
 <div class="mt-2">
 
     @if(session()->has("success"))
-    <div class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true" style="font-size: 30px;">&times;</span>
-        </button>
-        <h5>{{session()->get('success')}}</h5>
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+            </button>
+            <h5>{{session()->get('success')}}</h5>
 
-
-    </div>
+        </div>
     @endif
 
 
@@ -65,11 +63,11 @@
                         </div>
 
                         <div class="row">
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="exampleInputPassword1" class="form-label">Matricule</label>
                                 <input type="text" class="form-control" required="true" id="matricule" name="matricule" value="{{old('matricule')}}"
                                     style="border-radius: 10px;" required>
-                            </div>
+                            </div> --}}
 
                             <div class="mb-3 col-md-6">
                                 <label for="exampleInputPassword1" class="form-label">Téléphone</label>
@@ -77,36 +75,21 @@
                                     style="border-radius: 10px;" required>
                             </div>
 
-                        </div>
-
-                        <div class="row">
-
                             <div class="mb-3 col-md-6">
                                 <label for="exampleInputPassword1" class="form-label">Adresse</label>
                                 <input type="text" class="form-control" required="true" id="adresse" name="adress" value="{{old('adress')}}"
                                     style="border-radius: 10px;" required>
                             </div>
 
-                            <div class="mb-3 col-md-6">
-                                <label for="username" class="form-label">Nom utilisateur</label>
-                                <input type="text" class="form-control" required="true" id="username" name="username"value="{{old('username')}}"
-                                    style="border-radius: 10px;" required>
-                            </div>
-
-
                         </div>
 
                         <div class="row">
 
                             <div class="mb-3 col-md-6">
-                                <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
-                                <input type="text" class="form-control" required="true" id="password" name="password" value="{{old('password')}}"
+                                <label for="username" class="form-label">Nom utilisateur</label>
+                                <input type="text" class="form-control" required="true" id="username" name="username"value="{{old('username')}}"
                                     style="border-radius: 10px;" required>
-
-                                    <div id="password-info" class="invalid-text"></div>
-
                             </div>
-
 
                             <div class="mb-3 col-md-6">
                                 <label for="exampleInputPassword1" class="form-label">Entreprise</label>
@@ -116,7 +99,6 @@
                                     @foreach ($entreprises as $entrepris )
 
                                     @if($entrepris['name'] == $entreprise)
-
                                     <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
                                     @endif
                                     @endforeach
@@ -132,6 +114,31 @@
                                 </select>
 
                             </div>
+
+
+                        </div>
+
+                        
+                        <div class="row">
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
+                                <input type="text" class="form-control" required="true" id="password" name="password" value="{{old('password')}}"
+                                    style="border-radius: 10px;" required>
+
+                                    <div id="password-info" class="invalid-text"></div>
+
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Confimer mot de passe</label>
+                                <input type="text" class="form-control" required="true" id="password_confirm" name="password_confirm" value="{{old('password_confirm')}}"
+                                    style="border-radius: 10px;" required>
+
+                                    <div id="password-info2" class="invalid-text"></div>
+
+                            </div>
+
 
                         </div>
 
@@ -199,10 +206,8 @@
                             <button type="submit" class="btn btn-primary" id="envoyerDonnees" disabled>Enregistrer</button>
                             {{-- <a href="{{route('admin')}}" class="btn btn-danger">Annuler</a> --}}
                         </div>
-                        
+
                 </div>
-
-
 
                 </form>
 
@@ -239,75 +244,15 @@
 
 <script>
     // Obtenir la date actuelle
-  var today = new Date();
-  
+    var today = new Date();
+
   // Convertir la date en format lisible par l'homme
-  var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  var dateStr = today.toLocaleDateString('fr-FR', options);
-  
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var dateStr = today.toLocaleDateString('fr-FR', options);
+
   // Afficher la date sur la page
-  document.getElementById("date").textContent = dateStr;
-</script>
+    document.getElementById("date").textContent = dateStr;
 
-<script>
-    $(document).ready(function () {
-        // Lorsque le bouton "Envoyer" est cliqué
-        $("#envoyerDonnees").click(function () {
-            
-            // Récupérez les données des champs "nom" et "ville"
-            var nom = $("#nom").val();
-            var prenom = $("#prenom").val();
-            var matricule = $("#matricule").val();
-            var telephone = $("#telephone").val();
-            var adresse = $("#adresse").val();
-            var username = $("#username").val();
-            var password = $("#password").val();
-            var photo = $("#photo").val();
-
-            var activationStatus = $("#activationStatus").val();
-            // Récupérer le jeton CSRF depuis la balise meta
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            //alert(tableauDonnees)
-            // Créez un objet JSON contenant toutes les données
-            var donneesAEnvoyer = {
-                _token: csrfToken,nom,photo,prenom,matricule,telephone,password,adresse,username,activationStatus
-                
-            };
-
-            // Envoyez les données au contrôleur via une requête AJAX
-            $.ajax({
-                type: "POST",
-                url: "{{ route('admin.ajouter')}}",
-                data: donneesAEnvoyer,
-                success: function (response) {
-
-                    if(parseInt(response)==200 || parseInt(response)==500){
-                        
-                        parseInt(response)==500?($("#msg200").html(`<div class='alert alert-danger text-center' role='alert'>
-                            <strong>Une erreur s'est produite</strong> veuillez réessayez.
-                            
-                            </div>`)
-                        ):($('#msg200').html(`<div class='alert alert-success text-center' role='alert'>
-                            <strong>Admin ajoutée avec succès. </strong>
-                            </div>`)
-                        ); 
-                    }
-                    
-                    var url="{{route('admin')}}" 
-                    if(response==200){
-                        setTimeout(function(){
-                            window.location=url
-                        },1000) 
-                    }  else{
-                        $("#msg200").html(response);
-
-                        }
-                },
-                
-            });
-        });
-    });
 </script>
 
 
@@ -346,5 +291,24 @@
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         return regex.test(password);
     }
+
+    //Controle pour refuser la saisie des chiffres dans intitulé nom et prenom
+    $('#nom').on('input', function(e) {
+        var inputVal = $(this).val();
+        var onlyLetters = inputVal.replace(/[0-9]/g, '');
+        $(this).val(onlyLetters);
+    });
+
+    $('#prenom').on('input', function(e) {
+        var inputVal = $(this).val();
+        var onlyLetters = inputVal.replace(/[0-9]/g, '');
+        $(this).val(onlyLetters);
+    });
+    $('#telephone').on('input', function(e) {
+        var inputVal = $(this).val();
+        var onlyNumbers = inputVal.replace(/[^0-9]/g, ''); // Utilisez cette expression régulière pour ne garder que les chiffres
+        $(this).val(onlyNumbers);
+    });
+
 </script>
 @endsection

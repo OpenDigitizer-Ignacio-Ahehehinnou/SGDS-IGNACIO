@@ -86,7 +86,7 @@ class ProfileController extends Controller
         // Effectuez une requête HTTP POST vers l'URL distante en envoyant le JSON
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->send('POST', 'http://192.168.1.5:8080/api/v1/users-management/generate/verification_code', [
+        ])->send('POST', 'http://192.168.1.6:8080/api/v1/users-management/generate/verification_code', [
             'body' => $jsonData,
         ]);
             $administrateurs = $response->json();
@@ -145,7 +145,7 @@ class ProfileController extends Controller
        // Effectuez une requête HTTP POST vers l'URL distante en envoyant le JSON
        $response = Http::withHeaders([
            'Content-Type' => 'application/json',
-       ])->send('POST', 'http://192.168.1.5:8080/api/v1/users-management/verification/generated_code', [
+       ])->send('POST', 'http://192.168.1.6:8080/api/v1/users-management/verification/generated_code', [
            'body' => $jsonData,
        ]);
            $administrateurs = $response->json();
@@ -175,7 +175,7 @@ class ProfileController extends Controller
         $passwordNew = $request['new_password'];
 
         try {
-            $url = 'http://192.168.1.5:8080/api/v1/users-management/update/user/password_recovery/' .$username;
+            $url = 'http://192.168.1.6:8080/api/v1/users-management/update/user/password_recovery/' .$username;
 
             $response = Http::put($url, ['password' => $passwordNew]);
 

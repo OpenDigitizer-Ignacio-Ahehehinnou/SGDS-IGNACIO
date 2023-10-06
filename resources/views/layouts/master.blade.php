@@ -39,7 +39,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- AdminLTE Skins. Choose a skin from the css/skins
       folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../../AdminLTE/dist/css/skins/_all-skins.min.css">
-
+<!-- Collez le code d'intégration de Google Fonts ici -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 
 
@@ -292,7 +295,86 @@ desired effect
     });
     });
 </script>
+<script>
+    $(document).ready(function(){
+        $('#example1').DataTable({
+            "pageLenght":5,
+            "responsive" : true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
+                }
+            })
+
+            $('.connexion').on('mouseout', function(e) {
+        e.preventDefault()
+        $('.oui').hide();
+        //alert("Ouverture du formulaire d'inscription")
 
 
+    });
+
+    $('.connexion').on('mouseover ', function(e) {
+        e.preventDefault()
+        $('.oui').show();
+        //alert("Ouverture du formulaire d'inscription")
+
+
+    });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#example2').DataTable({
+            "pageLenght":5,
+            "responsive" : true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
+                }
+            })
+
+            $('.connexion').on('mouseout', function(e) {
+        e.preventDefault()
+        $('.oui').hide();
+        //alert("Ouverture du formulaire d'inscription")
+
+
+    });
+
+    $('.connexion').on('mouseover ', function(e) {
+        e.preventDefault()
+        $('.oui').show();
+        //alert("Ouverture du formulaire d'inscription")
+
+
+    });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#example3').DataTable({
+            "pageLenght":5,
+            "responsive" : true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
+                }
+            })
+
+            $('.connexion').on('mouseout', function(e) {
+        e.preventDefault()
+        $('.oui').hide();
+        //alert("Ouverture du formulaire d'inscription")
+
+
+    });
+
+    $('.connexion').on('mouseover ', function(e) {
+        e.preventDefault()
+        $('.oui').show();
+        //alert("Ouverture du formulaire d'inscription")
+
+
+    });
+    });
+</script>
 </body>
 </html>

@@ -17,13 +17,14 @@ class EntrepriseController extends Controller
 
     public function index()
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
+        ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise');
 
          $entreprises = $response->json();
         //dd($entreprises);
@@ -36,16 +37,17 @@ class EntrepriseController extends Controller
     public function detail(Request $request,$id)
     {
 
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get("http://192.168.1.5:8080/api/v1/entreprises_zones-management/show/entreprises_zone/{$id}");
+        ])->get("http://192.168.1.6:8080/api/v1/entreprises_zones-management/show/entreprises_zone/{$id}");
 
         $entreprises = $response->json();
-       // dd($entreprises);
+        //dd($entreprises);
         $zoneIds = []; // Initialiser un tableau pour stocker les zoneIds
 
         foreach ($entreprises as $entreprise) {
@@ -57,12 +59,12 @@ class EntrepriseController extends Controller
         }
 
         // Maintenant, $zoneIds contient toutes les valeurs 'zoneId' du tableau JSON
-       // dump($zoneIds);
+        //dd($zoneIds);
 
         foreach ($zoneIds as $zoneId) {
             $response = HTTP::withHeaders([
                 'Authorization' => 'Bearer ' . $variableRecuperee,
-            ])->get("http://192.168.1.5:8080/api/v1/zones-management/show/zone/{$zoneId}");
+            ])->get("http://192.168.1.6:8080/api/v1/zones-management/show/zone/{$zoneId}");
 
             $zone = $response->json();
 
@@ -82,13 +84,14 @@ class EntrepriseController extends Controller
 
     public function create()
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/zones-management/show/zone');
+        ])->get('http://'.$ip_adress.'/api/v1/zones-management/show/zone');
 
         $zones = $response->json();
        // dd($zones);
@@ -99,6 +102,7 @@ class EntrepriseController extends Controller
 
     public function store(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         $request->validate([
             "name"=>"required",
@@ -115,21 +119,21 @@ class EntrepriseController extends Controller
 
 
          //ajouter un admin
-         $test = array();
+        $test = array();
         //$test['id'] = $id;
-         $test['name'] = $request['name'];
-         $test['adress'] = $request['adress'];
-         $test['nom_responsable'] = $request['nom_responsable'];
-         $test['email'] = $request['email'];
-         $test['zoneId'] = $request['zone'];
+        $test['name'] = $request['name'];
+        $test['adress'] = $request['adress'];
+        $test['nom_responsable'] = $request['nom_responsable'];
+        $test['email'] = $request['email'];
+        $test['zoneId'] = $request['zone'];
 
-         $test['ifu'] = $request['ifu'];
-         $test['telephone'] = $request['telephone'];
-         $test['siege'] = $request['siege'];
-         $test['creatorUsername'] = $request['creatorUsername'];
-         $test['creatorId'] = $request['creatorId'];
-         $test['createdAt'] = $createdAt;
-         $test['deletedFlag'] = $request['deletedFlag'];
+        $test['ifu'] = $request['ifu'];
+        $test['telephone'] = $request['telephone'];
+        $test['siege'] = $request['siege'];
+        $test['creatorUsername'] = $request['creatorUsername'];
+        $test['creatorId'] = $request['creatorId'];
+        $test['createdAt'] = $createdAt;
+        $test['deletedFlag'] = $request['deletedFlag'];
 
 
         //dd($test);
@@ -138,7 +142,7 @@ class EntrepriseController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/entreprise-management/create/entreprises',$test);
+        ])->post('http://'.$ip_adress.'/api/v1/entreprise-management/create/entreprises',$test);
 
         $entreprises = $response->json();
        // dd($entreprises);
@@ -151,7 +155,7 @@ class EntrepriseController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/entreprises_zones-management/create/entreprise_zone',$test2);
+        ])->post('http://'.$ip_adress.'/api/v1/entreprises_zones-management/create/entreprise_zone',$test2);
 
 
         $entreprisesZone = $response->json();
@@ -164,13 +168,14 @@ class EntrepriseController extends Controller
 
     public function delete(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         $donnees = $request->documentId;
             //dd($donnees);
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.1.5:8080/api/v1/entreprise-management/delete/entreprises/' . $donnees;
+        $url = 'http://'.$ip_adress.'/api/v1/entreprise-management/delete/entreprises/' . $donnees;
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->delete($url);
@@ -182,6 +187,8 @@ class EntrepriseController extends Controller
 
     public function update(Request $request, $id)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         //ajouter un admin
         $request->validate([
             "name"=>"required",
@@ -217,7 +224,7 @@ class EntrepriseController extends Controller
         $client = new Client();
 
 
-        $response = $client->put("http://192.168.1.5:8080/api/v1/entreprise-management/update/entreprise/{$id}", [
+        $response = $client->put("http://192.168.1.6:8080/api/v1/entreprise-management/update/entreprise/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -236,12 +243,13 @@ class EntrepriseController extends Controller
     }
     public function edit($id)
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise/{entrepriseId}' . $id);
+        ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise/{entrepriseId}' . $id);
 
         $entreprise = $response->json();
 

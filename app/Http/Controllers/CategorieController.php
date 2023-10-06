@@ -13,16 +13,17 @@ class CategorieController extends Controller
 
     public function index()
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/categories-management/show/category');
+        ])->get('http://'.$ip_adress.'/api/v1/categories-management/show/category');
 
         $categories = $response->json();
-        // dd($categories);
+        //dd($categories);
 
         return view('Categorie.index', compact("categories"));
     }
@@ -36,6 +37,7 @@ class CategorieController extends Controller
 
     public function store(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         $request->validate([
             "nom" => "required",
@@ -55,7 +57,7 @@ class CategorieController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/categories-management/create/category', $test);
+        ])->post('http://'.$ip_adress.'/api/v1/categories-management/create/category', $test);
 
         $categories = $response->json();
 
@@ -67,11 +69,13 @@ class CategorieController extends Controller
 
     public function delete(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         $donnees = $request->documentId;
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.1.5:8080/api/v1/categories-management/delete/category/' . $donnees;
+        $url = 'http://'.$ip_adress.'/api/v1/categories-management/delete/category/' . $donnees;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -83,6 +87,8 @@ class CategorieController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $ip_adress = env('APP_IP_ADRESS');
 
         $request->validate([
             "type" => "required",
@@ -108,7 +114,7 @@ class CategorieController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-        $response = $client->put("http://192.168.1.5:8080/api/v1/categories-management/update/category/{$id}", [
+        $response = $client->put("http://192.168.1.6:8080/api/v1/categories-management/update/category/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -122,13 +128,14 @@ class CategorieController extends Controller
 
     public function edit($id)
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/categories-management/show/category/{categorieId}' . $id);
+        ])->get('http://'.$ip_adress.'/api/v1/categories-management/show/category/{categorieId}' . $id);
 
         $categorie = $response->json();
         //dd($ville);

@@ -13,6 +13,7 @@ class AccueilController extends Controller
     //
     public function index()
     {
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
@@ -22,19 +23,19 @@ class AccueilController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/user-management/show/user');
-
+        ])->get('http://'.$ip_adress.'/api/v1/user-management/show/user');
+        //'http://'.$ip_adress.'/
         $administrateurs = $response->json();
 
         $respons = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
+        ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise');
 
         $entreprises = $respons->json();
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/reporting-management/show/reporting');
+        ])->get('http://'.$ip_adress.'/api/v1/reporting-management/show/reporting');
 
         $signalements = $response->json();
 
@@ -141,6 +142,8 @@ class AccueilController extends Controller
 
     public function update(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         $donnees = $request->all();
         //dd($donnees);
 
@@ -166,7 +169,7 @@ class AccueilController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/users-management/decode', $dataToSend);
+        ])->post('http://'.$ip_adress.'/api/v1/users-management/decode', $dataToSend);
 
         $administrateurs = $response->json();
         // dd($administrateurs);
@@ -175,7 +178,7 @@ class AccueilController extends Controller
         if ($administrateurs['passwordIsVerified'] == true) {
 
             try {
-                $url = 'http://192.168.1.5:8080/api/v1/users-management/update/user/password/' . $userId;
+                $url = 'http://'.$ip_adress.'/api/v1/users-management/update/user/password/' . $userId;
 
                 $response = HTTP::withHeaders([
                     'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -220,6 +223,9 @@ class AccueilController extends Controller
 
     public function userModif(Request $request)
     {
+
+        $ip_adress = env('APP_IP_ADRESS');
+
         $donnees = $request->all();
         //dd($donnees);
 
@@ -238,7 +244,7 @@ class AccueilController extends Controller
 
 
         try {
-            $url = 'http://192.168.1.5:8080/api/v1/users-management/update/user/password/' . $id;
+            $url = 'http://'.$ip_adress.'/api/v1/users-management/update/user/password/' . $id;
 
             $response = HTTP::withHeaders([
                 'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -246,13 +252,13 @@ class AccueilController extends Controller
 
             $admin = $response->json();
             // dd($admin);
+            //return redirect()->back()->with('success', 'Les mots de passe ne correspondent pas.');
+
             return new Response(200);
         } catch (Exception $e) {
             //dd(0);
             return new Response(500);
         }
-
-
 
         return view('Accueil/profil');
     }

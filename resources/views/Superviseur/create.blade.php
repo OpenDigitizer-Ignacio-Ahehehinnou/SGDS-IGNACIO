@@ -5,7 +5,7 @@
 <div class="mt-2">
 
     @if(session()->has("success"))
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-danger" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true" style="font-size: 30px;">&times;</span>
         </button>
@@ -51,58 +51,47 @@
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputEmail1" class="form-label">Nom</label>
                         <input type="text" class="form-control" required="true" id="nom" name="firstName"
-                            style="border-radius: 10px;">
+                            style="border-radius: 10px;" value="{{old('firstName')}}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Prénoms</label>
                         <input type="text" class="form-control" required="true" id="prenom" name="lastName"
-                            style="border-radius: 10px;">
+                            style="border-radius: 10px;" value="{{old('lastName')}}">
                     </div>
 
                 </div>
 
                 <div class="row">
-                    <div class="mb-3 col-md-6">
+                    {{-- <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Matricule</label>
                         <input type="text" class="form-control" required="true" id="email" name="matricule"
                             style="border-radius: 10px;">
-                    </div>
+                    </div> --}}
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Téléphone</label>
                         <input type="text" class="form-control" required="true" id="telephone" name="telephone"
-                            style="border-radius: 10px;">
+                            style="border-radius: 10px;" value="{{old('telephone')}}">
                     </div>
-
-                </div>
-
-                <div class="row">
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Adresse</label>
                         <input type="text" class="form-control" required="true" id="adresse" name="adress"
-                            style="border-radius: 10px;">
+                            style="border-radius: 10px;" value="{{old('adress')}}">
                     </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="username" class="form-label">Nom utilisateur</label>
-                        <input type="text" class="form-control" required="true" id="username" name="username"
-                            style="border-radius: 10px;">
-                    </div>
-
 
                 </div>
 
                 <div class="row">
 
+                
                     <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
-                        <input type="text" class="form-control" required="true" id="password" name="password"
-                            style="border-radius: 10px;">
-                            <div id="password-info" class="invalid-text"></div>
-
+                        <label for="username" class="form-label">Nom utilisateur</label>
+                        <input type="text" class="form-control" required="true" id="username" name="username"
+                            style="border-radius: 10px;" value="{{old('username')}}">
                     </div>
+
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Entreprise</label>
                         {{-- <input type="text" class="form-control" id="entrepriseId" name="entrepriseId"
@@ -131,6 +120,29 @@
 
                         </select>
                     </div>
+
+
+                </div>
+
+                <div class="row">
+
+                    <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
+                        <input type="text" class="form-control" required="true" id="password" name="password"
+                            style="border-radius: 10px;" value="{{old('password')}}">
+                            <div id="password-info" class="invalid-text"></div>
+
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">Confimer mot de passe</label>
+                        <input type="text" class="form-control" required="true" id="password_confirm" name="password_confirm" value="{{old('password_confirm')}}"
+                            style="border-radius: 10px;" required>
+
+                            <div id="password-info2" class="invalid-text"></div>
+
+                    </div>
+                    
 
                 </div>
 
@@ -270,6 +282,25 @@
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         return regex.test(password);
     }
+
+    //Controle pour refuser la saisie des chiffres dans intitulé nom et prenom
+    $('#nom').on('input', function(e) {
+        var inputVal = $(this).val();
+        var onlyLetters = inputVal.replace(/[0-9]/g, '');
+        $(this).val(onlyLetters);
+    });
+
+    $('#prenom').on('input', function(e) {
+        var inputVal = $(this).val();
+        var onlyLetters = inputVal.replace(/[0-9]/g, '');
+        $(this).val(onlyLetters);
+    });
+    $('#telephone').on('input', function(e) {
+        var inputVal = $(this).val();
+        var onlyNumbers = inputVal.replace(/[^0-9]/g, ''); // Utilisez cette expression régulière pour ne garder que les chiffres
+        $(this).val(onlyNumbers);
+    });
+
 </script>
 
 @endsection

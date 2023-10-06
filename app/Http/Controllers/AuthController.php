@@ -20,11 +20,13 @@ class AuthController extends Controller
 
     public function handlelogin(AuthRequest $request){
 
+        $ip_adress = env('APP_IP_ADRESS');
+
         $credentials = $request->only(['username', 'password']);
 
         $authentification = HTTP::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('http://192.168.1.5:8080/api/v1/users-management/authenticate', $credentials);
+        ])->post('http://'.$ip_adress.'/api/v1/users-management/authenticate', $credentials);
 
         $administrateurs = $authentification->json();
         //dd($authentification->status());
@@ -40,7 +42,7 @@ class AuthController extends Controller
             $username=$administrateurs['userResponseDto']['username'];
             $userId=$administrateurs['userResponseDto']['userId'];
             $entreprise=$administrateurs['userResponseDto']['entrepriseModel']['name'];
-          // $entreprise=1;
+            // $entreprise=1;
             $role=$administrateurs['userResponseDto']['roleModel']['libelle'];
             $nom=$administrateurs['userResponseDto']['lastName'];
             $prenom=$administrateurs['userResponseDto']['firstName'];

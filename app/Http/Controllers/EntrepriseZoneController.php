@@ -14,6 +14,8 @@ class EntrepriseZoneController extends Controller
     //
     public function index()
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
         $entreprise = session('entreprise');
@@ -22,7 +24,7 @@ class EntrepriseZoneController extends Controller
             //dd($entreprise);
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/entreprises_zones-management/create/entreprise_zone');
+        ])->get('http://'.$ip_adress.'/api/v1/entreprises_zones-management/create/entreprise_zone');
 
         $entrepriseZone = $response->json();
        //dd($entrepriseZone);

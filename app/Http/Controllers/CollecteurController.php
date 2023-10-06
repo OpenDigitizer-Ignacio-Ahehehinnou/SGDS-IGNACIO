@@ -16,6 +16,8 @@ class CollecteurController extends Controller
 
     public function index()
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
 
          // Récupérer la variable de la session
          $variableRecuperee = session('variableEnvoyee');
@@ -24,7 +26,7 @@ class CollecteurController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
+         ])->get('http://'.$ip_adress.'/api/v1/users-management/show/user');
 
          $collecteurs = $response->json();
 
@@ -35,6 +37,8 @@ class CollecteurController extends Controller
 
     public function detail(Request $request, Collecteurs $collecteur, $id)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
        // ajouter un admin
         $request->validate([
             "nom"=>"required",
@@ -67,6 +71,7 @@ class CollecteurController extends Controller
     public function create()
     {
 
+        $ip_adress = env('APP_IP_ADRESS');
 
          // Récupérer la variable de la session
          $variableRecuperee = session('variableEnvoyee');
@@ -75,7 +80,7 @@ class CollecteurController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.1.5:8080/api/v1/entreprise-management/show/entreprise');
+         ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise');
 
           $entreprises = $response->json();
          //dd($entreprises);
@@ -87,11 +92,12 @@ class CollecteurController extends Controller
 
     public function store(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
 
         $request->validate([
             "firstName" => "required",
             "lastName" => "required",
-            "matricule" => "required",
             "telephone" => "required|numeric",
             "username" => "required",
             "adress" => "required",
@@ -102,19 +108,31 @@ class CollecteurController extends Controller
          // Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
     $createdAt = Carbon::now()->toIso8601String();
     //dd($createdAt);
+
+     // Vous pouvez personnaliser le préfixe selon vos besoins
+     $prefix = 'SGDS_Collecteur_';
+
+            
+     $nombreAleatoire = rand(0, 1000); // Utilisation de rand()
+
+
+     // Formatage du nouveau matricule avec la partie numérique
+     $newMatricule = $prefix . $nombreAleatoire;
+ //Fin matricule
         //ajouter un admin
         $test = array();
         //$test['id'] = $id;
         $test['userId'] = $request['userId'];
         $test['firstName'] = $request['firstName'];
         $test['lastName'] = $request['lastName'];
-        $test['matricule'] = $request['matricule'];
+        $test['matricule'] = $newMatricule;
         $test['telephone'] = $request['telephone'];
         $test['adress'] = $request['adress'];
         $test['photoProfil'] = $request['photo'];
 
         $test['username'] = $request['username'];
         $test['password'] = $request['password'];
+        $test['password_confirm'] = $request['password_confirm'];
         $test['activationStatus'] = $request['activationStatus'];
         $test['entrepriseId'] = $request['entrepriseId'];
         $test['creatorUsername'] = $request['creatorUsername'];
@@ -124,33 +142,44 @@ class CollecteurController extends Controller
         $test['deletedFlag'] = $request['deletedFlag'];
 
        // dump($test);
+       if ($request['password_confirm'] != $request['password']) {
+        return redirect()->back()->withInput($test)->with('success', 'Les mots de passe ne correspondent pas.');
+    }
        $variableRecuperee = session('variableEnvoyee');
 
        //dd($entreprise);
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user');
+        ])->get('http://'.$ip_adress.'/api/v1/users-management/show/user');
 
         $administrateurs = $response->json();
 
 
-      $usernames = []; // Initialisez un tableau vide pour stocker les usernames
+        $usernames = []; // Initialisez un tableau vide pour stocker les usernames
 
         foreach ($administrateurs as $administrateur) {
             $username = $administrateur["username"];
             $usernames[] = $username; // Ajoutez chaque username au tableau $usernames
         }
 
-      // Maintenant, le tableau $usernames contient tous les usernames
+        $telephones = []; // Initialisez un tableau vide pour stocker les usernames
 
-        if (in_array($request['username'], $usernames)) {
-            // Le username est présent dans la liste
-            return redirect()->route('admin.create')->with("success", "Le nom d'utilisateur est déjà utilisé")->with(compact("administrateurs"));
-        } else {
+        foreach ($administrateurs as $administrateur) {
+            $telephone = $administrateur["telephone"];
+            $telephones[] = $telephone; // Ajoutez chaque username au tableau $usernames
+        }
+
+        
+    if (in_array($request['username'], $usernames)) {
+        // Le username est présent dans la liste
+        return redirect()->back()->withInput($test)->with("success", "Le nom d'utilisateur est déjà utilisé")->with(compact("administrateurs"));
+    }else if (in_array($request['telephone'], $telephones)){
+        return redirect()->back()->withInput($test)->with("success", "Le numéro de téléphone est déjà utilisé")->with(compact("administrateurs"));
+    } else {
             // Le username n'est pas présent dans la liste
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/users-management/create/user',$test);
+        ])->post('http://'.$ip_adress.'/api/v1/users-management/create/user',$test);
 
         $collecteurs = $response->json();
 
@@ -162,11 +191,13 @@ class CollecteurController extends Controller
 
     public function delete(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         $donnees = $request->documentId;
 
        // dd(1);
         $variableRecuperee = session('variableEnvoyee');
-        $url = 'http://192.168.1.5:8080/api/v1/users-management/delete/user/' . $donnees;
+        $url = 'http://'.$ip_adress.'/api/v1/users-management/delete/user/' . $donnees;
         //dd($variableRecuperee,$url);
 
         $response = HTTP::withHeaders([
@@ -179,11 +210,12 @@ class CollecteurController extends Controller
 
     public function update(Request $request, $id)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         //ajouter un admin
         $request->validate([
             "firstName" => "required",
             "lastName" => "required",
-            "matricule" => "required",
             "telephone" => "required|numeric",
             "username" => "required",
             "adress" => "required",
@@ -220,7 +252,7 @@ class CollecteurController extends Controller
         $client = new Client();
 
 
-        $response = $client->put("http://192.168.1.5:8080/api/v1/users-management/update/user/{$id}", [
+        $response = $client->put("http://192.168.1.6:8080/api/v1/users-management/update/user/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -235,11 +267,13 @@ class CollecteurController extends Controller
 
     public function edit($id)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/users-management/show/user/{userId}' . $id);
+        ])->get('http://'.$ip_adress.'/api/v1/users-management/show/user/{userId}' . $id);
 
         $collecteur = $response->json();
 

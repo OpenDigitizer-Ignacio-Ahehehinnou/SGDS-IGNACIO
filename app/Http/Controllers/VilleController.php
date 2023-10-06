@@ -19,7 +19,7 @@ class VilleController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/cities-management/show/city');
+        ])->get('http://192.168.1.6:8080/api/v1/cities-management/show/city');
 
         $villes = $response->json();
        // dd($villes);
@@ -54,7 +54,7 @@ class VilleController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://192.168.1.5:8080/api/v1/cities-management/create/city',$test);
+        ])->post('http://192.168.1.6:8080/api/v1/cities-management/create/city',$test);
 
         $villes = $response->json();
 
@@ -72,7 +72,7 @@ class VilleController extends Controller
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.1.5:8080/api/v1/cities-management/delete/city/' . $donnees;
+        $url = 'http://192.168.1.6:8080/api/v1/cities-management/delete/city/' . $donnees;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -108,7 +108,7 @@ class VilleController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-        $response = $client->put("http://192.168.1.5:8080/api/v1/cities-management/update/city/{$id}", [
+        $response = $client->put("http://192.168.1.6:8080/api/v1/cities-management/update/city/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -130,7 +130,7 @@ class VilleController extends Controller
 
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://192.168.1.5:8080/api/v1/cities-management/show/city/{cityId}' .$id);
+         ])->get('http://192.168.1.6:8080/api/v1/cities-management/show/city/{cityId}' .$id);
 
          $ville = $response->json();
          //dd($ville);

@@ -20,7 +20,7 @@ class ZoneController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/zones-management/show/zone');
+        ])->get('http://192.168.1.6:8080/api/v1/zones-management/show/zone');
 
         $zones = $response->json();
                 //dd($zones);
@@ -34,7 +34,7 @@ class ZoneController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/cities-management/show/city');
+        ])->get('http://192.168.1.6:8080/api/v1/cities-management/show/city');
 
         $villes = $response->json();
         //dd($villes);
@@ -83,7 +83,7 @@ class ZoneController extends Controller
             $variableRecuperee = session('variableEnvoyee');
             $response = HTTP::withHeaders([
                 'Authorization' => 'Bearer ' . $variableRecuperee,
-            ])->post('http://192.168.1.5:8080/api/v1/zones-management/create/zone_with_points',$zonePoint);
+            ])->post('http://192.168.1.6:8080/api/v1/zones-management/create/zone_with_points',$zonePoint);
 
             $zones = $response->json();
             //dd($zones);
@@ -125,7 +125,7 @@ class ZoneController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-        $response = $client->put("http://192.168.1.5:8080/api/v1/zones-management/update/zone/{$id}", [
+        $response = $client->put("http://192.168.1.6:8080/api/v1/zones-management/update/zone/{$id}", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -146,7 +146,7 @@ class ZoneController extends Controller
         // Utilisez la bonne syntaxe pour inclure $id dans l'URL
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get("http://192.168.1.5:8080/api/v1/zones-management/show/zone/{$id}");
+        ])->get("http://192.168.1.6:8080/api/v1/zones-management/show/zone/{$id}");
 
         $zone = $response->json();
 
@@ -154,7 +154,7 @@ class ZoneController extends Controller
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://192.168.1.5:8080/api/v1/cities-management/show/city');
+        ])->get('http://192.168.1.6:8080/api/v1/cities-management/show/city');
 
         $villes = $response->json();
 
@@ -170,7 +170,7 @@ class ZoneController extends Controller
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://192.168.1.5:8080/api/v1/zones-management/delete/zone/' . $donnees;
+        $url = 'http://192.168.1.6:8080/api/v1/zones-management/delete/zone/' . $donnees;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,

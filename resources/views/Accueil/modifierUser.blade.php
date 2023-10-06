@@ -40,6 +40,7 @@
 
                                     </div>
                                 </div>
+                                <input type="hidden" id="id" name="id" value="{{$user}}">
                                 <div class="form-group">
 
                                     <div class="">
@@ -141,10 +142,11 @@
             e.preventDefault();
         
             var id= $("#id").val();
+          // var id= 65,
             var new_password = $("#new_password").val();
             var new_password_confirmation = $("#new_password_confirmation").val();
             var pass= 8;
-
+           // alert(id)
 
             // Récupérer le jeton CSRF depuis la balise meta
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -225,7 +227,7 @@
                             ); 
                         }
                         
-                        var url="{{route('accueil')}}" 
+                        var url="{{route('admin')}}" 
                         if(response==200){
                             setTimeout(function(){
                                 window.location=url
@@ -241,7 +243,7 @@
             }
         });
     });
-</script> 
+</script>  
 @endsection
 
 
