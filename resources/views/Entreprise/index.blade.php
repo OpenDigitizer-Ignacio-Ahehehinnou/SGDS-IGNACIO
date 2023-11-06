@@ -14,6 +14,7 @@
                     <!-- la pagination sans oublier code bootstrap dans provider(AppServiceProvider) -->
             
                     <a href="{{ route ('entreprise.create')}}" type="button" class=" btn btn-primary">Ajouter une entreprise</a></div>
+                    <a href="{{ route ('entreprise2')}}" type="button" class=" btn btn-primary">Entreprises supprimés</a></div>
 
                 </div>
                     <br>
@@ -54,64 +55,68 @@
                 
             </div>
             @endif
-                <div class="row ">
-                    <div class="box">
-                       
-                        <div class="box-body">
-                            <table id="example" class="table table-bordered table-striped example">
-                            <thead>
-                        <tr>
-                            <th scope="col">Entreprise</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Ifu</th>
-                            <th scope="col">Téléphone</th> 
-                            <th scope="col">Siège</th>
-                            {{-- <th scope="col">Zone</th> --}}
-
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($entreprises as $entreprise)
-                        <tr>
-                            {{-- <td>{{$loop->index +1}}</td> --}}
-                            <td>{{$entreprise['name']}}</td>
-                            <td>{{$entreprise['email']}}</td>
-                            <td>{{$entreprise['ifu']}}</td> 
-                            <td>{{$entreprise['telephone']}}</td>
-                            <td hidden>{{$entreprise['createdAt']}}</td>
-
-                            <td>{{$entreprise['siege']}}</td>  
-                            {{-- <td>{{$entreprise['']}}</td>        --}}
-                            <td>
 
 
-                                {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
-                                    <a href="{{route('entreprise.detail', ['entreprise'=>$entreprise['entrepriseId'] ] )}}" type="button" class="btn btn-success"><i class="bi bi-eye-fill"></i></a>
+            <div class="row ">
+                <div class="box">
+                   
+                    <div class="box-body">
+                        <table id="example" class="table table-bordered table-striped example">
+                        <thead>
+                    <tr>
+                        <th scope="col">Entreprise</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Ifu</th>
+                        <th scope="col">Téléphone</th> 
+                        <th scope="col">Adresse</th>
+                        {{-- <th scope="col">Zone</th> --}}
 
-                                    <a href="{{route('entreprise.edit', ['entreprise'=>$entreprise['entrepriseId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-                                    
-                                    <button type="button" class="btn btn-danger"
-                                    data-key="{{ $entreprise['entrepriseId'] }}" data-toggle="modal"
-                                    data-target="#confirmationModal">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </button>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($entreprises as $entreprise)
+                    <tr>
+                        {{-- <td>{{$loop->index +1}}</td> --}}
+                        <td>{{$entreprise['name']}}</td>
+                        <td>{{$entreprise['email']}}</td>
+                        <td>{{$entreprise['ifu']}}</td> 
+                        <td>{{$entreprise['telephone']}}</td>
+                        <td hidden>{{$entreprise['createdAt']}}</td>
+
+                        <td>{{$entreprise['address']}}</td>  
+                        {{-- <td>{{$entreprise['']}}</td>        --}}
+                        <td>
 
 
-                            </td>
+                            {{-- <div class="btn-group" role="group" aria-label="Basic outlined example"> --}}
+                                <a href="{{route('entreprise.detail', ['entreprise'=>$entreprise['entrepriseId'] ] )}}" type="button" class="btn btn-success"><i class="bi bi-eye-fill"></i></a>
 
-                            </tr>
-                           
-                            @endforeach
-
+                                <a href="{{route('entreprise.edit', ['entreprise'=>$entreprise['entrepriseId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                                 
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
+                                <button type="button" class="btn btn-danger"
+                                data-key="{{ $entreprise['entrepriseId'] }}" data-toggle="modal"
+                                data-target="#confirmationModal">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+
+
+                        </td>
+
+                        </tr>
+                       
+                        @endforeach
+
+                            
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- /.box -->
+                    <!-- /.box-body -->
                 </div>
+                <!-- /.box -->
+            </div>
+           
+
                 
             </div>
         </div>

@@ -75,7 +75,6 @@
 
                             @foreach($superAdmin as $collecteur)
 
-                            @if ( $collecteur['roleModel']['libelle'] == "SUPERADMIN")
 
                             <tr>
                                 <td>{{$collecteur['firstName']}} {{$collecteur['lastName']}}</td>
@@ -107,7 +106,6 @@
                                 </td>
 
                             </tr>
-                            @endif
                             @endforeach
 
 

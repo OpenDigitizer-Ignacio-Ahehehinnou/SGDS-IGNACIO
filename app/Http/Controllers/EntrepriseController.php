@@ -23,15 +23,39 @@ class EntrepriseController extends Controller
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise');
+             'Authorization' => 'Bearer ' . $variableRecuperee,
+         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/active');
+       // $response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/active");
 
-         $entreprises = $response->json();
-        //dd($entreprises);
-
+        $entreprisess = $response->json();
+        //dd($entreprisess);
+        $entreprises=$entreprisess['data']['content'];
+    
         return view('Entreprise/index',compact("entreprises"));
 
     }
+
+
+    public function ListeSupprimer()
+    {
+        $ip_adress = env('APP_IP_ADRESS');
+
+        // Récupérer la variable de la session
+        $variableRecuperee = session('variableEnvoyee');
+
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/deleted');
+       // $response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/deleted");
+
+        $entreprisess = $response->json();
+        //dd($entreprisess);
+        $entreprises=$entreprisess['data']['content'];
+    
+        return view('Entreprise/EntrepriseSupprimer',compact("entreprises"));
+
+    }
+
 
 
     public function detail(Request $request,$id)
@@ -41,61 +65,26 @@ class EntrepriseController extends Controller
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
+        $entreprise = session('entreprise');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get("http://192.168.1.6:8080/api/v1/entreprises_zones-management/show/entreprises_zone/{$id}");
+        ])->get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/{$id}");
+       // $response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/{$id}");
 
-        $entreprises = $response->json();
-        //dd($entreprises);
-        $zoneIds = []; // Initialiser un tableau pour stocker les zoneIds
-
-        foreach ($entreprises as $entreprise) {
-            // Vérifier si la clé 'zoneId' existe dans chaque élément
-            if (isset($entreprise['zoneId'])) {
-                // Ajouter la valeur 'zoneId' au tableau $zoneIds
-                $zoneIds[] = $entreprise['zoneId'];
-            }
-        }
-
-        // Maintenant, $zoneIds contient toutes les valeurs 'zoneId' du tableau JSON
-        //dd($zoneIds);
-
-        foreach ($zoneIds as $zoneId) {
-            $response = HTTP::withHeaders([
-                'Authorization' => 'Bearer ' . $variableRecuperee,
-            ])->get("http://192.168.1.6:8080/api/v1/zones-management/show/zone/{$zoneId}");
-
-            $zone = $response->json();
-
-            // Vérifiez si la réponse contient des données valides avant d'ajouter à $zones
-            if (!empty($zone)) {
-                $zones[] = $zone;
-            }
-        }
-
-        // Maintenant, $zones contient les zones correspondant aux identifiants de zone dans $zoneIds
-        //dd($zones);
-
-
-        return view('entreprise/voir',compact('zones'));
+        $entreprisess = $response->json();
+        $entreprises=$entreprisess['data'];
+       // dd($entreprises);
+       
+        return view('entreprise/voir',compact('entreprises','entreprise'));
     }
 
 
     public function create()
     {
-        $ip_adress = env('APP_IP_ADRESS');
 
-        // Récupérer la variable de la session
-        $variableRecuperee = session('variableEnvoyee');
-
-        $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://'.$ip_adress.'/api/v1/zones-management/show/zone');
-
-        $zones = $response->json();
-       // dd($zones);
-        return view('Entreprise/create',compact('zones'));
+    
+        return view('Entreprise/create');
     }
 
     //Le store du create
@@ -108,61 +97,187 @@ class EntrepriseController extends Controller
             "name"=>"required",
             "ifu"=>"required",
             "email"=>"required",
-            "siege"=>"required",
-            "adress"=>"required",
+            "code"=>"required",
+            "address"=>"required",
             "telephone"=>"required",
         ]);
 
-        // Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
-    $createdAt = Carbon::now()->toIso8601String();
-    //dd($createdAt);
-
-
+        
          //ajouter un admin
         $test = array();
         //$test['id'] = $id;
         $test['name'] = $request['name'];
-        $test['adress'] = $request['adress'];
-        $test['nom_responsable'] = $request['nom_responsable'];
+        $test['address'] = $request['address'];
+        $test['manager'] = $request['manager'];
         $test['email'] = $request['email'];
-        $test['zoneId'] = $request['zone'];
-
         $test['ifu'] = $request['ifu'];
         $test['telephone'] = $request['telephone'];
-        $test['siege'] = $request['siege'];
-        $test['creatorUsername'] = $request['creatorUsername'];
-        $test['creatorId'] = $request['creatorId'];
-        $test['createdAt'] = $createdAt;
+        $test['code'] = $request['code'];
+        $test['userIdForLog'] = $request['userIdForLog'];
+        $test['updatedAt'] = $request['updatedAt'];
+        $test['updatedBy'] = $request['updatedBy'];
+        $test['createdBy'] = $request['createdBy'];
+        $test['isParentCompany'] = $request['isParentCompany'];
         $test['deletedFlag'] = $request['deletedFlag'];
-
 
         //dd($test);
 
-        // Récupérer la variable de la session
+       // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
+
+        $response2 = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/emailVerification/forCreation', [
+           // 'userId' => $test['userId'],
+            'email' => $test['email']
+            // 'matricule' => $test['matricule']
+        ]);
+
+        $emails= $response2->json();
+        $email=$emails['data'];
+        //dd($emails);
+        if($email['isEmailExist'] == true){
+
+            return redirect()->back()->with('success', 'Cet adresse mail pour entreprise existe déjà.');
+
+        }
+
+
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://'.$ip_adress.'/api/v1/entreprise-management/create/entreprises',$test);
+        ])->post('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/create/entreprise',$test);
 
-        $entreprises = $response->json();
-       // dd($entreprises);
-        $entrepriseId = $entreprises['entrepriseId'];
-        //dump($entreprises);
-        $test2 = array();
-        $test2['zoneId'] = $request['zone'];
-        $test2['entrepriseId'] = $entrepriseId;
+        // $variableRecuperee = session('variableEnvoyee');
+        // $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/create/entreprise',$test);
+        
+        $entreprisess = $response->json();
 
-        $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://'.$ip_adress.'/api/v1/entreprises_zones-management/create/entreprise_zone',$test2);
+        if($entreprisess['code']=== 200){
+        $entreprises=$entreprisess['data'];
+        
 
 
-        $entreprisesZone = $response->json();
-       // dd($entreprisesZone);
+        // Enregistrer le manager
 
-       return redirect()->route('entreprise')->with("success", "Entreprise ajouté avec succès")->with(compact("entreprises"));;
+        
+        $request->validate([
+            "firstName" => "required",
+            "lastName" => "required",
+            "telephone" => "required|numeric",
+            "username" => "required",
+            "adress" => "required",
+            "password" => "required|min:8",
+            "email" => "required"
+        ]);
 
+         // Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
+        $createdAt = Carbon::now()->toIso8601String();
+        //dd($createdAt);
+        //Générer matricule
+            // Vous pouvez personnaliser le préfixe selon vos besoins
+            $prefix = 'SGDS_AdminManager_';
+
+            $nombreAleatoire = rand(0, 1000); // Utilisation de rand()
+
+            // Formatage du nouveau matricule avec la partie numérique
+            $newMatricule = $prefix . $nombreAleatoire;
+        //Fin matricule
+        //ajouter un admin
+        $donnees = $request->all();
+
+        //dd($donnees);
+        $test = array();
+        //$test['id'] = $id;
+       // $test['userId'] = 105;
+        $test['firstName'] = $donnees['firstName'];
+        $test['lastName'] = $donnees['lastName'];
+        if($request['matricule']  === null){
+            $test['matricule'] = $newMatricule;
+        }else{
+            $test['matricule'] = $donnees['matricule'];
+
+        }
+        $test['telephone'] = $donnees['telephone'];
+        $test['photoProfil'] = $donnees['photoProfil'];
+
+        $test['adress'] = $donnees['adress'];
+        $test['username'] = $donnees['username'];
+        $test['password'] = $donnees['password'];
+        $test['password_confirm'] = $donnees['password_confirm'];
+
+        $test['email'] = $donnees['email'];
+        $test['entrepriseId'] = $entreprises['entrepriseId'];
+        $test['roleId'] = $donnees['roleId'];
+        $test['isEnabled'] = true;
+        $test['isAccountNonExpired'] = true;
+        $test['isAccountNonLocked'] = true;
+        $test['isCredentialsNonExpired'] = true;
+        $test['creatorUsername'] = $donnees['creatorUsername'];
+        $test['creatorId'] = $donnees['creatorId'];
+        $test['createdAt'] = $createdAt;
+        $test['roleId'] = $donnees['roleId'];
+        $test['deletedFlag'] = $donnees['deletedFlag'];
+        //dd($test);
+        if ($donnees['password_confirm'] != $donnees['password']) {
+            return redirect()->back()->withInput($donnees)->with('success', 'Les mots de passe ne correspondent pas.');
+        }
+
+             $variableRecuperee = session('variableEnvoyee');
+
+             $response1 = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/userUniqueVerification/forCreation', [
+                'email' => $test['email'],
+                'username' => $test['username'],
+                'matricule' => $test['matricule']
+            ]);
+            $email= $response1->json();
+           // dd($email);
+
+            $emails=$email['data'];
+            //dd($emails);
+            if($emails['isUsernameExist'] == true){
+
+                return redirect()->back()->withInput($donnees)->with('success', 'Le nom d\'utilisateur existe déjà.');
+
+            }
+            if($emails['isEmailExist'] == true){
+
+                return redirect()->back()->withInput($donnees)->with('success', 'Le mail existe déjà.');
+
+            }
+            if($emails['isMatriculeExist'] == true){
+
+                return redirect()->back()->withInput($donnees)->with('success', 'Le matricule existe déjà.');
+
+            }
+
+            $response = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->POST('http://'.$ip_adress.'/odsolidwaist/manages-users/create', $test);
+        
+            
+            // $variableRecuperee = session('variableEnvoyee');
+            // $response = HTTP::POST('http://'.$ip_adress.'/odsolidwaist/manages-users/create', $test);
+        
+            $administrateurss = $response->json();
+            $administrateurs = $administrateurss['data'];
+
+
+
+
+
+
+
+
+
+
+        return redirect()->route('entreprise')->with("success", "Entreprise ajouté avec succès")->with(compact("entreprises"));;
+        }else{
+            //dd(10);
+            return redirect()->route('entreprise')->with("success", "Echec lors del'\ajout d'\entreprise");;
+
+        }
        // return view('Admin/create',compact("classes"));
     }
 
@@ -175,48 +290,52 @@ class EntrepriseController extends Controller
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://'.$ip_adress.'/api/v1/entreprise-management/delete/entreprises/' . $donnees;
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->delete($url);
-
+        ])->put('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/delete/entreprise/' . $donnees);
+    
         return back()->with("successDelete", "Entreprise a été supprimé avec succès");
 
     }
 
-
     public function update(Request $request, $id)
     {
-        $ip_adress = env('APP_IP_ADRESS');
+        $ip_adress= env('APP_IP_ADRESS');
 
         //ajouter un admin
         $request->validate([
             "name"=>"required",
             "ifu"=>"required",
             "email"=>"required",
-            "siege"=>"required",
-            "adress"=>"required",
+            "code"=>"required",
+            "address"=>"required",
             "telephone"=>"required",
         ]);
 
         $test = array();
         //$test['id'] = $id;
+        $test['entrepriseId'] = $request['entrepriseId'];
+
         $test['name'] = $request['name'];
         $test['address'] = $request['address'];
-        $test['siege'] = $request['siege'];
+        $test['manager'] = $request['manager'];
+
         $test['telephone'] = $request['telephone'];
         $test['ifu'] = $request['ifu'];
         $test['email'] = $request['email'];
         $test['entrepriseId'] = $request['entrepriseId'];
-        $test['creatorUsername'] = $request['creatorUsername'];
-        $test['creatorId'] = $request['creatorId'];
-        $test['createdAt'] = $request['createdAt'];
+        $test['isParentCompany'] = false;
+        $test['code'] = $request['code'];
+        $test['createdBy'] = $request['createdBy'];
         $test['deletedFlag'] = $request['deletedFlag'];
+        $test['updatedBy'] = $request['updatedBy'];
+        $test['updatedAt'] = $request['updatedAt'];
+        $test['userIdForLog'] = $request['userIdForLog'];
 
 
         //dd($test);
         $dataToUpdate = $test;
-
+        //dd($dataToUpdate);
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
 
@@ -224,7 +343,7 @@ class EntrepriseController extends Controller
         $client = new Client();
 
 
-        $response = $client->put("http://192.168.1.6:8080/api/v1/entreprise-management/update/entreprise/{$id}", [
+        $response = $client->put("http://" .$ip_adress."/odsolidwaist/manages-entreprise/update/entreprise", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -237,10 +356,11 @@ class EntrepriseController extends Controller
         //$response = HTTP::withBody(json_encode($test))->put('http://192.168.100.14:8080/api/v1/entreprise-management/update/entreprise/{id}' . $id);
 
 
-        return redirect()->route('entreprise')->with("success", "Entreprise mis à jour avec succès");
+        return redirect()->route('admin')->with("success", "Entreprise mis à jour avec succès");
 
        // return view('Admin/create',compact("classes"));
     }
+
     public function edit($id)
     {
         $ip_adress = env('APP_IP_ADRESS');
@@ -249,9 +369,11 @@ class EntrepriseController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise/{entrepriseId}' . $id);
+        ])->get('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/{entrepriseId}' . $id);
 
-        $entreprise = $response->json();
+        $entreprises = $response->json();
+        $entreprise=$entreprises['data'];
+
 
         return view('Entreprise/edit',compact("entreprise"));
     }

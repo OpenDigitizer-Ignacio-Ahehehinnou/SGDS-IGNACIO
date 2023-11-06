@@ -24,19 +24,21 @@
             <!-- Main content -->
     <section class="content">
 
+      @if($role == 12)
+
         <div class="row">
           <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>{{ $countAdmin }}</h3>
+                <h3>{{ $countEntreprisesA }}</h3>
 
-                <p>Administrateur</p>
+                <p>Active</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="{{route('admin')}}" class="small-box-footer">Liste des administrateurs <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="" class="small-box-footer">Liste des entreprises actives <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -44,14 +46,14 @@
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
-                <h3>{{ $countSupervisor }}<sup style="font-size: 20px"></sup></h3>
+                <h3>{{ $countEntreprisesI }}<sup style="font-size: 20px"></sup></h3>
 
-                <p>Superviseurs</p>
+                <p>Inactive</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="{{route('superviseur')}}" class="small-box-footer">Liste des superviseurs <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="" class="small-box-footer">Liste des entreprises inactive <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -59,14 +61,14 @@
             <!-- small box -->
             <div class="small-box bg-yellow">
               <div class="inner">
-                <h3>{{ $countCollector }}</h3>
+                <h3>{{ $countArrondissementA }}</h3>
 
-                <p>Collecteurs</p>
+                <p> Active</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="{{route('collecteur')}}" class="small-box-footer">Liste des collecteurs <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="" class="small-box-footer">Liste des arrondissements actives <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -74,19 +76,86 @@
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
-                <h3>{{ $countSignalement }}</h3>
+                <h3>{{ $countArrondissementI }}</h3>
 
-                <p>Signalement</p>
+                <p>Inactive</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="{{route('signalement')}}" class="small-box-footer">Voir signalement <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="" class="small-box-footer">Liste des arrondissements inactive <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
         </div>
-      
+      @endif
+
+      @if($role == 8 || $role==7)
+
+      <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>{{ $countAdmin }}</h3>
+
+              <p>Admins</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{{ route('admin.detail', ['entreprise' => $entreprise]) }}" class="small-box-footer">Liste des administrateurs <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>{{ $countSuperviseur }}<sup style="font-size: 20px"></sup></h3>
+
+              <p>Superviseurs</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{{ route('admin.detail', ['entreprise' => $entreprise]) }}" class="small-box-footer">Liste des superviseurs <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>{{ $countCollecteur }}</h3>
+
+              <p> Collecteurs</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{{ route('admin.detail', ['entreprise' => $entreprise]) }}" class="small-box-footer">Liste des collecteurs<i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3>{{ $countSignaler }}</h3>
+
+              <p>Déchets gérés</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="{{ route('signalement.detail', ['entreprise' => $entreprise]) }}" class="small-box-footer">Liste des déchets signaler <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+      </div>
+    @endif
+   
         
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
           <!-- Indicators -->

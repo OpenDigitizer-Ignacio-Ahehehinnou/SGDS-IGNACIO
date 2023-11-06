@@ -2,6 +2,7 @@
 
 
 @section('contenu')
+
     <style>
         .rounded-circle-card {
             border-radius: 50%;
@@ -31,7 +32,7 @@
 </style>    {{-- Mes card cercle du haut --}}
     <div class="row">
 
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-aqua rounded-circle-card">
                 <div class="inner">
@@ -45,7 +46,7 @@
         </div>
 
 
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-yellow rounded-circle-card">
                 <div class="inner">
@@ -55,36 +56,36 @@
                 <a href="{{ route('admin') }}" class="small-box-footer">Affecter <i
                         class="fa fa-arrow-circle-right"></i></a> --}}
                         <button onclick="afficherTableau('tableau2')" class="btn btn-sm btn-white" style="border-radius:8px;">
-                            <i class="fa fa-arrow-circle-right"></i> Affecter
+                            <i class="fa fa-arrow-circle-right"></i> Rejeter
                         </button>
             </div>
         </div>
 
 
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-4">
             <!-- small box -->
-            <div class="small-box bg-red rounded-circle-card">
+            <div class="small-box bg-blue rounded-circle-card">
                 <div class="inner">
                     <h3>{{ $signaledCount }}</h3>
                 </div>
 
                 <button onclick="afficherTableau('tableau3')" class="btn btn-sm btn-white" style="border-radius:8px;">
-                    <i class="fa fa-arrow-circle-right"></i> Signaler
+                    <i class="fa fa-arrow-circle-right"></i> Affecter
                 </button>
             </div>
         </div>
 
 
 
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-4">
             <!-- small box -->
-            <div class="small-box bg-blue rounded-circle-card">
+            <div class="small-box bg-red rounded-circle-card">
                 <div class="inner">
-                    <h3>{{ $signalementCount }}</h3>
+                    <h3>{{ $rejeterCount }}</h3>
                 </div>
 
                 <button onclick="afficherTableau('tableau1')" class="btn btn-sm btn-white" style="border-radius:8px;">
-                    <i class="fa fa-arrow-circle-right"></i> Signalements
+                    <i class="fa fa-arrow-circle-right"></i> Signaler
                 </button>
                 
             </div>
@@ -92,11 +93,18 @@
 
     </div>
 
+
+
+
+
+
+
+
     
      {{-- Signalement affecter --}}
      <div class="container-fluid hidden tableau tableau2">
         <div class="my-3 p-3 mt-5 bg-body rounded shadow-sm">
-            <h3 class="border-bottom pb-2 mb-5"><b><i>Liste des signalements  affectés</i></b></h3>
+            <h3 class="border-bottom pb-2 mb-5"><b><i>Liste des signalements  rejeter</i></b></h3>
 
             <div class="mt-2">
                 {{-- <div class="d-flex justify-content-between mb-2">
@@ -119,14 +127,29 @@
                 @endif
 
 
+                <div class="search-bar" style="float: right;">
+                    <input type="text" class="search-input" placeholder="Recherchez un produit" style="width: 300px;border-radius:10px;">
+                    <button class="search-button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div><br><br>
+                
                 <div class="row">
                     <div class="box">
                         <!-- <div class="box-header">
                             <h3 class="box-title">Data Table With Full Features</h3>
                         </div> -->
                         <!-- /.box-header -->
+
+
+                        
                         <div class="box-body">
                                 {{-- Tout les signalements --}}
+
+
+                                
+
+
                             <table id="example" class="table table-bordered table-hover ">
                                 <thead>
                                     <tr>
@@ -146,7 +169,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($signalementsAffected as $signalement)
+                                    @foreach ($rejeter as $signalement)
                                         <tr>
                                             {{-- <td>{{$loop->index +1}}</td> --}}
                                             <td>{{$signalement['uniqueCode'] }}</td>
@@ -218,6 +241,14 @@
                 @endif
 
 
+                <div class="search-bar" style="float: right;">
+                    <input type="text" class="search-input" placeholder="Recherchez un produit" style="width: 300px;border-radius:10px;">
+                    <button class="search-button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div><br><br>
+               
+
                 <div class="row">
                     <div class="box">
                         <!-- <div class="box-header">
@@ -245,7 +276,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($signalements as $signalement)
+                                    @foreach ($signaler as $signalement)
                                         <tr>
                                             {{-- <td>{{$loop->index +1}}</td> --}}
                                             <td>{{$signalement['uniqueCode'] }}</td>
@@ -296,7 +327,7 @@
     {{-- Signalement signaler --}}
     <div class="container-fluid hidden tableau tableau3">
         <div class="my-3 p-3 mt-5 bg-body rounded shadow-sm">
-            <h3 class="border-bottom pb-2 mb-5"><b><i>Liste des signalements en attentes</i></b></h3>
+            <h3 class="border-bottom pb-2 mb-5"><b><i>Liste des signalements en affectés</i></b></h3>
 
             <div class="mt-2">
                 {{-- <div class="d-flex justify-content-between mb-2">
@@ -319,6 +350,13 @@
                 @endif
 
 
+                <div class="search-bar" style="float: right;">
+                    <input type="text" class="search-input" placeholder="Recherchez un produit" style="width: 300px;border-radius:10px;">
+                    <button class="search-button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div><br><br>
+               
                 <div class="row">
                     <div class="box">
                         <!-- <div class="box-header">
@@ -346,7 +384,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($signalementsSignaled as $signalement)
+                                    @foreach ($affecter as $signalement)
                                         <tr>
                                             {{-- <td>{{$loop->index +1}}</td> --}}
                                             <td>{{$signalement['uniqueCode'] }}</td>
@@ -418,6 +456,13 @@
                 @endif
 
 
+                <div class="search-bar" style="float: right;">
+                    <input type="text" class="search-input" placeholder="Recherchez un produit" style="width: 300px;border-radius:10px;">
+                    <button class="search-button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div><br><br>
+               
                 <div class="row">
                     <div class="box">
                         <!-- <div class="box-header">
@@ -445,7 +490,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($signalementsValidated as $signalement)
+                                    @foreach ($valider as $signalement)
                                         <tr>
                                             {{-- <td>{{$loop->index +1}}</td> --}}
                                             <td>{{$signalement['uniqueCode'] }}</td>

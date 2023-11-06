@@ -42,6 +42,7 @@
             <form method="post" action="{{ route('entreprise.update', ['entreprise'=>$entreprise['entrepriseId']])}}">
                 @csrf
                 <input type="hidden" name="_method" value="put">
+                <input type="hidden" name="entrepriseId" id="entrepriseId" value="{{$entreprise['entrepriseId'] }}">
 
                 <div class="row">
 
@@ -52,7 +53,7 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Adresse</label>
-                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="adress" name="adress" value="{{$entreprise['adress'] }}">
+                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="address" name="address" value="{{$entreprise['address'] }}">
                     </div>
 
                 </div>
@@ -66,33 +67,35 @@
                     </div>
 
                     <div class="mb-3 col-md-6">
-                        <label for="siege" class="form-label">Siège</label>
-                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="siege" name="siege"  value="{{$entreprise['siege'] }}">
+                        <label for="siege" class="form-label">Responsable</label>
+                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="manager" name="manager"  value="{{$entreprise['manager'] }}">
                     </div>
                 </div>
                 
                 <div class="row">
 
-                    <div class="mb-3 col-md-6">
+                    <div class="mb-3 col-md-4">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" required="true" style="border-radius: 10px;" id="email" name="email" value="{{$entreprise['email'] }}">
                     </div>
 
-                    <div class="mb-2 col-md-6">
+                    <div class="mb-2 col-md-4">
                         <label for="telephone" class="form-label">Téléphone</label>
-                        <input type="number" class="form-control" required="true" style="border-radius: 10px;" id="telephone" name="telephone" value="{{$entreprise['telephone'] }}">
+                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="telephone" name="telephone" value="{{$entreprise['telephone'] }}">
+                    </div>
+
+                    <div class="mb-2 col-md-4">
+                        <label for="telephone" class="form-label">Code</label>
+                        <input type="text" class="form-control" required="true" style="border-radius: 10px;" id="code" name="code" value="{{$entreprise['code'] }}">
                     </div>
                 </div>
 
                 
                 <div class="row" hidden="hidden">
-                    <div class="mb-3 col-md-4">
-                        <label for="email" class="form-label">creatorId</label>
-                        <input type="text" class="form-control" id="creatorId" name="creatorId" value="{{$entreprise['creatorId'] }}">
-                    </div>
+                    
                     <div class="mb-2 col-md-4">
-                        <label for="telephone" class="form-label">creatorUsername</label>
-                        <input type="text" class="form-control" id="creatorUsername" name="creatorUsername" value="{{$entreprise['creatorUsername'] }}">
+                        <label for="telephone" class="form-label">isParentCompany</label>
+                        <input type="text" class="form-control" id="isParentCompany" name="isParentCompany" value="{{$entreprise['isParentCompany'] }}">
                     </div>
 
                     <div class="mb-2 col-md-4">
@@ -103,15 +106,22 @@
                 
                 <div class="row" hidden="hidden">
 
-                    <div class="mb-2 col-md-6" >
-                        <label for="nom_responsable" class="form-label">createdAt</label>
-                        <input type="text" class="form-control" id="createdAt" name="createdAt" value="{{$entreprise['createdAt'] }}">
+                    <div class="mb-2 col-md-3" >
+                        <label for="nom_responsable" class="form-label">createdBy</label>
+                        <input type="text" class="form-control" id="createdBy" name="createdBy" value="{{$entreprise['createdBy'] }}">
                     </div>
 
-                    <div class="mb-2 col-md-6">
-                        <label for="creatorUsername" class="form-label">creatorUsername</label>
-                        <input type="text" class="form-control" id="creatorUsername" name="creatorUsername" value="{{$entreprise['creatorUsername'] }}">
+                    <div class="mb-2 col-md-3" >
+                        <label for="userIdForLog" class="form-label">userIdForLog</label>
+                        <input type="text" class="form-control" id="userIdForLog" name="userIdForLog" value="{{$entreprise['userIdForLog'] }}">
                     </div>
+
+                    <div class="mb-2 col-md-3" >
+                        <label for="updatedAt" class="form-label">updatedAt</label>
+                        <input type="text" class="form-control" id="updatedAt" name="updatedAt" value="{{$entreprise['updatedAt'] }}">
+                    </div>
+
+                    
 
 
                 </div>

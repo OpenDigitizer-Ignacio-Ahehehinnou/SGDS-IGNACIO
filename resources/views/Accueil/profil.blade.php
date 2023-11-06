@@ -21,11 +21,11 @@
 
                     <h3 class="profile-username text-center">{{ $nom }} {{ $prenom }}</h3>
 
-                    <p class="text-muted text-center">{{ $role }}</p><br>
+                    <p class="text-muted text-center">{{ $roleLabel }}</p>
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Entreprise </b> <a class="pull-right">{{ $entreprise }}</a>
+                            <b>Entreprise </b> <a class="pull-right">{{ $entreprisee }}</a>
                         </li>
                         <li class="list-group-item">
                             <b>Matricule</b> <a class="pull-right">{{ $matricule }}</a>
@@ -37,6 +37,12 @@
                             <b>Adresse</b> <a class="pull-right">{{ $adresse }}</a>
                         </li>
                     </ul>
+
+                    <div class="form-group">
+                        <div class="col-offset-2">
+                            <button type="submit" class="btn btn-success">Sauvegarder</button>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -54,7 +60,7 @@
                         <b>
                             <h3 class="ml-2" style="margin-left:40px;"><b>Mettez à jour votre mot de passe</b></h3>
                         </b>
-                            <br>
+                            <br><br><br>
                         
 
                         <div class="row">

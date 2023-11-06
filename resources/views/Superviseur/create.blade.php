@@ -2,18 +2,19 @@
 
 @section("contenu")
 
+
 <div class="mt-2">
 
     @if(session()->has("success"))
-    <div class="alert alert-danger" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true" style="font-size: 30px;">&times;</span>
-        </button>
-        <h5>{{session()->get('success')}}</h5>
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+            </button>
+            <h5>{{session()->get('success')}}</h5>
 
-
-    </div>
+        </div>
     @endif
+
 
     @if($errors->any())
     <div class="alert alert-danger">
@@ -28,203 +29,246 @@
         </ul>
     </div>
     @endif
-
     <br><br>
     <div class="row">
 
         <div class="col-md-2"></div>
         <div class="col-md-8">
 
-
-    <div class="panel panel-default">
-        <div class="panel-heading">Ajouter un superviseur</div>
-
-
-        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ajouter un superviseur</div>
 
 
-            <form method="post" action="{{ route('superviseur.ajouter')}}">
-                @csrf
-                <!-- <input type="text" class="form-control" id="nom" name="userId" value="22" hidden="hidden"> -->
+                <div class="panel-body">
 
-                <div class="row">
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputEmail1" class="form-label">Nom</label>
-                        <input type="text" class="form-control" required="true" id="nom" name="firstName"
-                            style="border-radius: 10px;" value="{{old('firstName')}}">
-                    </div>
+                    <div id="msg200"></div>
+                    <form method="post" action="{{ route('superviseur.ajouter')}}">
+                        @csrf
+                        {{-- <input type="text" class="form-control" id="nom" name="userId" value="30" hidden="hidden">
+                        --}}
 
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Prénoms</label>
-                        <input type="text" class="form-control" required="true" id="prenom" name="lastName"
-                            style="border-radius: 10px;" value="{{old('lastName')}}">
-                    </div>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputEmail1" class="form-label">Nom</label>
+                                <input type="text" class="form-control" required="true" id="nom" name="firstName" value="{{old('firstName')}}"
+                                    style="border-radius: 10px;" required>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Prénoms</label>
+                                <input type="text" class="form-control" required="true" id="prenom" name="lastName" value="{{old('lastName')}}"
+                                    style="border-radius: 10px;" required>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            {{-- <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Matricule</label>
+                                <input type="text" class="form-control" required="true" id="matricule" name="matricule" value="{{old('matricule')}}"
+                                    style="border-radius: 10px;" required>
+                            </div> --}}
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Téléphone</label>
+                                <input type="text" class="form-control" required="true" id="telephone" name="telephone" value="{{old('telephone')}}"
+                                    style="border-radius: 10px;" required>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Adresse</label>
+                              <input type="text" class="form-control" required="true" id="adresse" name="adress" value="{{old('adress')}}"
+                                    style="border-radius: 10px;" required>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                                {{--  --}}
+                                <div class="mb-3 col-md-4">
+                                    <label for="matricule" class="form-label">Matricule</label>
+                                    <input type="text" class="form-control" id="matricule" name="matricule" value="{{ old('matricule') }}"
+                                        style="border-radius: 10px;" required>
+                                </div>
+                                <div class="form-check col-md-2">
+                                    <label class="form-check-label" for="exampleCheckbox">Générer</label>
+
+                                    <input type="checkbox" class="form-check-input" name="exampleCheckbox" id="exampleCheckbox">
+                                </div>
+
+
+                            <div class="mb-3 col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" required="true" id="email" name="email" value="{{old('email')}}"
+                                    style="border-radius: 10px;" required>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="mb-3 col-md-6">
+                                <label for="username" class="form-label">Nom utilisateur</label>
+                                <input type="text" class="form-control" required="true" id="username" name="username"value="{{old('username')}}"
+                                    style="border-radius: 10px;" required>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Entreprise</label>
+                                <select class="form-control" id="entrepriseId" required="true" name="entrepriseId"
+                                    style="border-radius: 10px;">
+                                    {{-- <option value="1">Entreprise A</option>
+                                    <option value="2">Entreprise B</option> --}}
+                                    {{-- @if($role =="ADMIN")--}}
+                                    @foreach ($entreprises as $entrepris )
+
+                                    {{-- @if($entrepris['name'] == $entreprise) --}}
+                                    <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
+                                    {{-- @endif --}}
+                                    @endforeach
+                                   {{-- @endif
+
+                                    @if($role =="SUPERADMIN")
+                                    @foreach ($entreprises as $entrepris )
+
+                                    <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
+
+                                    @endforeach
+                                    @endif --}}
+                                </select>
+
+                            </div>
+                            <input type="hidden" class="form-control" required="true" id="roleId" name="roleId" value="13">
+
+
+                        </div>
+
+                        {{-- <div class="row">
+
+                            <div class="mb-3 col-md-6">
+                                <label for="isEnabled" class="form-label">Activer</label>
+                                <input type="text" class="form-control" required="true" id="isEnabled" name="isEnabled"value="{{old('isEnabled')}}"
+                                    style="border-radius: 10px;" required value="1">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="roleId" class="form-label">Rôle</label>
+                                <select class="form-control" id="roleId" required="true" name="roleId"
+                                    style="border-radius: 10px;">
+                                    <option value="1">Role A</option>
+                                    <option value="3">Role B</option>
+                                     
+                                </select>
+
+                            </div>
+
+
+                        </div> --}}
+
+
+
+                        <div class="row">
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
+                                <input type="text" class="form-control" required="true" id="password" name="password" value="{{old('password')}}"
+                                    style="border-radius: 10px;" required>
+
+                                    <div id="password-info" class="invalid-text"></div>
+
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">Confimer mot de passe</label>
+                                <input type="text" class="form-control" required="true" id="password_confirm" name="password_confirm" value="{{old('password_confirm')}}"
+                                    style="border-radius: 10px;" required>
+
+                                    <div id="password-info2" class="invalid-text"></div>
+
+                            </div>
+
+
+                        </div>
+
+                        
+
+                        <div class="row" hidden>
+
+
+                            <div class="mb-3 col-md-6">
+                                <label for="activationStatus" class="form-label">ActivationStatus</label>
+                                <input type="text" class="form-control" id="activationStatus" name="activationStatus"
+                                    value="aaa" style="border-radius: 10px;">
+                            </div>
+
+                            {{-- <div class="mb-3 col-md-6">
+                                <label for="roleModel" class="form-label">Role</label>
+                                <input type="text" class="form-control" id="roleId" name="roleId" value="2">
+
+                            </div> --}}
+
+                        </div>
+
+                        <div class="row" hidden>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
+
+                                <input type="text" class="form-control" id="creatorUsername" value="Ignacio"
+                                    name="creatorUsername">
+
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="activationStatus" class="form-label">createdAt</label>
+                                <input type="text" class="form-control" id="creatorId"
+                                    value="2023-08-02T11:37:47.544+00:00" name="createdAt">
+                            </div>
+
+
+                        </div>
+
+                        <div class="row" hidden>
+
+                            <div class="mb-3 col-md-4">
+                                <label for="activationStatus" class="form-label">Creator Id</label>
+                                <input type="text" class="form-control" id="creatorId" value="1" name="creatorId">
+                            </div>
+
+
+                            <div class="mb-3 col-md-4">
+                                <label for="deletedFlag" class="form-label">deletedFlag</label>
+                                <input type="text" class="form-control" value="S" id="deletedFlag" name="deletedFlag">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="activationStatus" class="form-label">photo</label>
+                                <input type="text" class="form-control" id="photoProfil"
+                                    value="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 "
+                                    name="photoProfil">
+                            </div>
+
+
+                        </div>
+
+                        <br>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{route('admin')}}" class="btn btn-danger">Annuler</a>
+                            <button type="submit" class="btn btn-primary" id="envoyerDonnees" disabled>Enregistrer</button>
+                        </div>
 
                 </div>
 
-                <div class="row">
-                    {{-- <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Matricule</label>
-                        <input type="text" class="form-control" required="true" id="email" name="matricule"
-                            style="border-radius: 10px;">
-                    </div> --}}
+                </form>
 
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Téléphone</label>
-                        <input type="text" class="form-control" required="true" id="telephone" name="telephone"
-                            style="border-radius: 10px;" value="{{old('telephone')}}">
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Adresse</label>
-                        <input type="text" class="form-control" required="true" id="adresse" name="adress"
-                            style="border-radius: 10px;" value="{{old('adress')}}">
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                
-                    <div class="mb-3 col-md-6">
-                        <label for="username" class="form-label">Nom utilisateur</label>
-                        <input type="text" class="form-control" required="true" id="username" name="username"
-                            style="border-radius: 10px;" value="{{old('username')}}">
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Entreprise</label>
-                        {{-- <input type="text" class="form-control" id="entrepriseId" name="entrepriseId"
-                            style="border-radius: 10px;"> --}}
-
-                        <select class="form-control" required="true" id="entrepriseId" name="entrepriseId"
-                            style="border-radius: 10px;">
-
-                            @if($role =="ADMIN")
-                            @foreach ($entreprises as $entrepris )
-
-                            @if($entrepris['name'] == $entreprise)
-
-                            <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
-                            @endif
-                            @endforeach
-                            @endif
-
-                            @if($role =="SUPERADMIN")
-                            @foreach ($entreprises as $entrepris )
-
-                            <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
-
-                            @endforeach
-                            @endif
-
-                        </select>
-                    </div>
-
-
-                </div>
-
-                <div class="row">
-
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
-                        <input type="text" class="form-control" required="true" id="password" name="password"
-                            style="border-radius: 10px;" value="{{old('password')}}">
-                            <div id="password-info" class="invalid-text"></div>
-
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Confimer mot de passe</label>
-                        <input type="text" class="form-control" required="true" id="password_confirm" name="password_confirm" value="{{old('password_confirm')}}"
-                            style="border-radius: 10px;" required>
-
-                            <div id="password-info2" class="invalid-text"></div>
-
-                    </div>
-                    
-
-                </div>
-
-                <div class="row" hidden>
-
-                    <div class="mb-3 col-md-6" hidden>
-                        <label for="roleModel" class="form-label">Role</label>
-                        <input type="text" class="form-control" id="roleId" name="roleId" value="3">
-
-                    </div>
-
-                    <div class="mb-3 col-md-6" hidden>
-                        <label for="activationStatus" class="form-label">ActivationStatus</label>
-                        <input type="text" class="form-control" id="activationStatus" name="activationStatus"
-                            value="aaa">
-                    </div>
-
-
-                </div>
-                <div class="row" hidden>
-
-                    <div class="mb-3 col-md-4">
-                        <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
-
-                        <input type="text" class="form-control" id="creatorUsername" value="Ignacio"
-                            name="creatorUsername">
-
-                    </div>
-
-                    <div class="mb-3 col-md-4">
-                        <label for="activationStatus" class="form-label">createdAt</label>
-                        <input type="text" class="form-control" id="creatorId" value="2023-08-02T11:37:47.544+00:00"
-                            name="createdAt">
-                    </div>
-                    <div class="mb-3 col-md-4">
-                        <label for="activationStatus" class="form-label">photo</label>
-                        <input type="text" class="form-control" id="photo"
-                            value="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 "
-                            name="photo">
-                    </div>
-
-
-                </div>
-
-                <div class="row" hidden>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="activationStatus" class="form-label">Creator Id</label>
-                        <input type="text" class="form-control" id="creatorId" value="1" name="creatorId">
-                    </div>
-
-
-                    <div class="mb-3 col-md-6">
-                        <label for="deletedFlag" class="form-label">deletedFlag</label>
-                        <input type="text" class="form-control" value="S" id="deletedFlag" name="deletedFlag">
-                    </div>
-
-                </div>
-
-
-                <br>
-                <div>
-
-                    <button type="submit" class="btn btn-primary" id="envoyerDonnees" disabled>Enregistrer</button>
-
-                </div>
-            </form>
-
+            </div>
         </div>
-    </div>
-
-    <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
 
     </div>
 </div>
-</div>
 
 
 </div>
-
-
-
 <style>
     input {
         width: 200px;
@@ -246,6 +290,20 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+
+<script>
+    // Obtenir la date actuelle
+    var today = new Date();
+
+  // Convertir la date en format lisible par l'homme
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var dateStr = today.toLocaleDateString('fr-FR', options);
+
+  // Afficher la date sur la page
+    document.getElementById("date").textContent = dateStr;
+
+</script>
+
 
 <script>
     const passwordInput = document.getElementById('password');
@@ -302,5 +360,24 @@
     });
 
 </script>
+<script>
+    // Récupérez la référence de la case à cocher et du champ de texte
+var checkBox = document.getElementById("exampleCheckbox");
+var matriculeInput = document.getElementById("matricule");
 
+// Écoutez les changements d'état de la case à cocher
+checkBox.addEventListener("change", function () {
+    if (checkBox.checked) {
+        // Si la case à cocher est cochée, désactivez le champ de texte
+        matriculeInput.disabled = true;
+        // Effacez la valeur du champ de texte
+        matriculeInput.value = "";
+
+    } else {
+        // Si la case à cocher n'est pas cochée, activez le champ de texte
+        matriculeInput.disabled = false;
+    }
+});
+
+</script>
 @endsection

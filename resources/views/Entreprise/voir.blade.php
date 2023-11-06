@@ -8,7 +8,7 @@
     <div class="col-md-8">
 
     <div class="panel panel-default">
-        <div class="panel-heading">Zone liée a l'entreprise</div>
+        <h1 class="panel-heading">Détail de l'entreprise</h1>
     
         
             <div class="panel-body">
@@ -16,17 +16,27 @@
                     <thead>
                         <tr>
                             <th scope="col">Zone</th>
-                            <th scope="col">Villes</th>
+                            <th scope="col">Gérant</th>
+                            <th scope="col">Ifu</th>
+
+
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($zones as $zone)
-                        <tr>
-                            <td>{{$zone['nom']}}</td>
-                            <td>{{$zone['cityModel']['nom']}}</td>
-                        </tr>
-                        @endforeach
+                        {{-- @foreach($entreprises as $entreprise) --}}
+    <tr>
+        <td>
+            @foreach($entreprises['listOfSolidwaistDistrict'] as $district)
+                {{ $district['name'] }},
+            @endforeach 
+        </td>
+        <td>{{$entreprises['manager']}}</td>
+        <td>{{$entreprises['ifu']}}</td>
+    </tr>
+{{-- @endforeach --}}
+
                     </tbody>
+                    
                 </table>
                 
                 

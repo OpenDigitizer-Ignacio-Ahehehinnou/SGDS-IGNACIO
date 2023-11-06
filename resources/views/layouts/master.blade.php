@@ -56,6 +56,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
 
+<style>
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu li {
+  /* background-color: white; */
+  margin: 0;
+  position: relative;
+}
+
+.menu a {
+  display: block;
+  text-decoration: none;
+  color: black;
+  padding: 10px 20px;
+}
+
+.menu a:hover {
+  background-color: black;
+  color: white;
+}
+
+.menu ul ul {
+  display: none;
+  background-color: black;
+  position: absolute;
+  top: 0;
+  left: 100%;
+}
+
+.menu li:hover > ul {
+  display: block;
+}
+
+</style>
 
 
 </head>
@@ -114,7 +151,16 @@ desired effect
               <img src="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 " class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
 
-              <span class="hidden-xs">{{ $role }}</span>
+          @if ($role== 8)  
+              <span class="hidden-xs">ADMIN</span>
+            @elseif($role==12)
+            <span class="hidden-xs">SUPER ADMIN</span>
+            @else
+            <span class="hidden-xs">ADMIN_MANAGER</span>
+
+            @endif
+
+
             </a>
             <ul class="dropdown-menu oui">
               <!-- The user image in the menu -->
@@ -135,7 +181,7 @@ desired effect
                   <a href="{{route('profil')}}" class="btn btn-default btn-flat">Profil</a>
                 <!-- </div>
                 <div class="pull-center"> -->
-                  <a href="{{route('login')}}" class="btn btn-default btn-flat">Déconnexion</a>
+                  <a href="{{route('logout')}}" class="btn btn-default btn-flat">Déconnexion</a>
                 </div>
               </li>
             </ul>
@@ -152,20 +198,26 @@ desired effect
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
 
+
+
+
+
+      
+
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
           <img src="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6" class="img-circle" alt="User Image">
         </div>
-        <div class="pull-left info">
+        <div class="pull-left info"><br>
           <p>{{ $nom }} {{ $prenom }}</p>
           <!-- Status -->
-          <a href="#"><i class="fa fa-circle text-success"></i> En ligne</a>
+          {{-- <a href="#"><i class="fa fa-circle text-success"></i> En ligne</a> --}}
         </div>
       </div>
 
       <!-- search form (Optional) -->
-      {{-- <form action="#" method="get" class="sidebar-form">
+       {{-- <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
           <input type="text" name="q" class="form-control" placeholder="recherche...">
           <span class="input-group-btn">
@@ -173,26 +225,68 @@ desired effect
               </button>
             </span>
         </div>
-      </form> --}}
+      </form>  --}}
       <!-- /.search form -->
 <br><br>
       <!-- Sidebar Menu -->
+      {{-- {{ $entreprise }} --}}
       <ul class="sidebar-menu" data-widget="tree">
 
         <li class="active"><a href="{{route ('accueil') }}"><i class="fa fa-dashboard"></i> <span>Accueil</span></a></li>
         {{-- <li><a href="{{ route('superAdmin')}} "><i class="fa  fa-users"></i> <span>Super admin</span></a></li> --}}
+        @if ($role == 8)
 
-        <li><a href="{{ route('admin')}} "><i class="fa  fa-users"></i> <span>Administrateurs</span></a></li>
-        <li><a href="{{ route('superviseur')}}"><i class="fa  fa-users"></i> <span>Superviseurs</span></a></li>
-        <li><a href="{{ route('collecteur')}}"><i class="fa  fa-users"></i> <span>Collecteurs</span></a></li>
-        <li><a href="{{ route('signalement')}}"><i class="fa fa-link"></i> <span>Signalements</span></a></li>
+        <li><a href="{{ route('admin') }}"><i class="fa  fa-users"></i> <span>Entreprises</span></a></li>
+        
+          {{-- <li><a href="{{ route('admin.detail', ['entreprise' => $entreprise]) }}"><i class="fa  fa-users"></i> <span>Superviseurs</span></a></li>
+          <li><a href="{{ route('admin.detail', ['entreprise' => $entreprise]) }}"><i class="fa  fa-users"></i> <span>Superviseurs</span></a></li>
+        <li><a href="{{ route('admin.detail', ['entreprise' => $entreprise]) }}"><i class="fa  fa-users"></i> <span>Collecteurs</span></a></li> --}}
 
-        @if ($role == "SUPERADMIN")
-          <li><a href="{{ route('entreprise')}}"><i class="fa fa-university"></i> <span>Entreprises</span></a></li>
-          <li><a href="{{ route('ville')}}"><i class="fa fa-university"></i> <span>Villes</span></a></li>
-          <li><a href="{{ route('categorie')}}"><i class="fa fa-university"></i> <span>Catégorie déchet</span></a></li>
+        
+        {{-- <li><a href="{{ route('signalement.detail', ['entreprise' => $entreprise]) }}"><i class="fa fa-link"></i> <span>Signalements</span></a></li> --}}
+        @endif
 
-          <li><a href="{{ route('zone')}}"><i class="fa fa-link"></i> <span>Zones</span></a></li>
+        @if ($role == 7)
+
+          <li><a href="{{ route('admin') }}"><i class="fa  fa-users"></i> <span>Entreprises</span></a></li>
+        
+      
+        @endif
+
+      
+       
+        @if ($role == 12)
+          {{-- <li><a href="{{ route('entreprise')}}"><i class="fa fa-university"></i> <span>Entreprises</span></a></li> --}}
+          <li><a href="{{ route('admin') }}"><i class="fa  fa-users"></i> <span>Entreprises</span></a></li>
+
+          <div class="menu">
+            <ul>
+              <li><a href="#"><i class="fa  fa-users"></i>Paramètre 1</a>
+                <ul>
+                  <li><a href="{{route('departement')}}">Départements</a></li>
+                  <li><a href="{{route('commune')}}">Communes</a></li>
+                  <li><a href="{{route('arrondissement')}}">Arrondissement</a></li>
+                  <li><a href="{{route('quartier')}}">Quartiers</a></li>
+  
+                </ul>
+              </li>
+              <li><a href="#"><i class="fa  fa-users"></i>Paramètre 2</a>
+                <ul>
+                  <li><a href="{{route('categorie')}}">Catégorie déchet</a></li>
+                  <li><a href="{{route('role')}}">Rôle</a></li>
+                </ul>
+              </li>
+  
+              <li><a href="#"><i class="fa  fa-users"></i>Paramètre 3</a>
+                <ul>
+                  <li><a href="{{route('superAdmin')}}">SuperAdmin</a></li>
+                  <li><a href="{{route('role')}}">SuperAdmin_Manager</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          
+  
 
         @endif
 
@@ -223,9 +317,9 @@ desired effect
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- To the right -->
-    {{-- <div class="pull-right hidden-xs">
+     {{-- <div class="pull-right hidden-xs">
       Anything you want
-    </div> --}}
+    </div>  --}}
     <!-- Default to the left -->
     <strong>Copyright &copy; 2023 <a href="#">Company</a>.</strong> OpenDigitizer
   </footer>
@@ -265,6 +359,12 @@ desired effect
 <script src="../../AdminLTE/dist/js/demo.js"></script>
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 
 <!-- page script -->
@@ -374,7 +474,21 @@ desired effect
 
 
     });
+
+    
+
+
+    
     });
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('.menu li').click(function(){
+      $(this).find('.submenu').toggle();
+    });
+  });
+</script>
+
 </body>
 </html>

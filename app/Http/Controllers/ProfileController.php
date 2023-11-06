@@ -72,6 +72,8 @@ class ProfileController extends Controller
 
     public function username2(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+
         // Récupérez la valeur du champ "username" depuis le formulaire
         $username = $request->input('username');
 
@@ -83,16 +85,23 @@ class ProfileController extends Controller
         // Convertissez le tableau en JSON
         $jsonData = json_encode($data);
 
-        // Effectuez une requête HTTP POST vers l'URL distante en envoyant le JSON
+        //Effectuez une requête HTTP POST vers l'URL distante en envoyant le JSON
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->send('POST', 'http://192.168.1.6:8080/api/v1/users-management/generate/verification_code', [
+        ])->send('PUT', "http://".$ip_adress."/odsolidwaist/manages-users/update/generate/code", [
             'body' => $jsonData,
         ]);
+        //$response = HTTP::put("http://".$ip_adress."/odsolidwaist/manages-users/update/generate/code" , $jsonData);
+
             $administrateurs = $response->json();
 
            //dd($administrateurs);
-           $generationStatus = $administrateurs['generationStatus'];
+           if($administrateurs['code']== 201){
+            return redirect()->back()->with('error_msg', 'Veuillez entrer un nom d\'utilisateur correct');
+
+           }
+           $generationStatus = $administrateurs['data']['verificationCode'];
+           //dd($generationStatus);
            $generationCode = $administrateurs['code'];
 
            //dd($generationCode);
@@ -115,6 +124,7 @@ class ProfileController extends Controller
     }
 
     public function code2(Request $request){
+        $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérez la valeur du champ "code" depuis le formulaire
         $code1 = $request->input('code1');
@@ -135,7 +145,7 @@ class ProfileController extends Controller
          // Créez un tableau associatif avec "username" comme clé
          $data = [
             'username' => $username,
-            'code'=>$codeNombre,
+            'verificationCode'=>$codeNombre,
         ];
 
 
@@ -145,13 +155,17 @@ class ProfileController extends Controller
        // Effectuez une requête HTTP POST vers l'URL distante en envoyant le JSON
        $response = Http::withHeaders([
            'Content-Type' => 'application/json',
-       ])->send('POST', 'http://192.168.1.6:8080/api/v1/users-management/verification/generated_code', [
+       ])->send('POST', "http://".$ip_adress."/odsolidwaist/manages-users/codeVerification", [
            'body' => $jsonData,
        ]);
            $administrateurs = $response->json();
+           return redirect()->back()->with('error_msg', 'Code expiré veuillez regénérer un autre.');
 
           //dd($administrateurs);
-          $verificationStatus = $administrateurs['verificationStatus'];
+          if($administrateurs== null){
+
+          }
+          $verificationStatus = $administrateurs['data']['isValideCode'];
          // dd($verificationStatus);
          if ($verificationStatus == true) {
            return redirect()->route('newPass',['username' => $username]);
@@ -171,11 +185,14 @@ class ProfileController extends Controller
 
     public function newPass2(Request $request){
         //dd($request);
+        $ip_adress = env('APP_IP_ADRESS');
+
         $username = $request['username'];
         $passwordNew = $request['new_password'];
 
+            // j'ai changer ce endpoint
         try {
-            $url = 'http://192.168.1.6:8080/api/v1/users-management/update/user/password_recovery/' .$username;
+            $url = "http://".$ip_adress."/odsolidwaist/manages-users/recovery/password" .$username;
 
             $response = Http::put($url, ['password' => $passwordNew]);
 

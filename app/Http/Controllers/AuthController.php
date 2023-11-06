@@ -23,44 +23,42 @@ class AuthController extends Controller
         $ip_adress = env('APP_IP_ADRESS');
 
         $credentials = $request->only(['username', 'password']);
+        //dd($credentials);
 
         $authentification = HTTP::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('http://'.$ip_adress.'/api/v1/users-management/authenticate', $credentials);
-
+        ])->post('http://'.$ip_adress.'/odsolidwaist/manages-users/authenticate', $credentials);
+    
         $administrateurs = $authentification->json();
-        //dd($authentification->status());
+      // dd($administrateurs);
 
         //Controller identifiant
         if ($authentification->status() == 500 ) {
             return redirect()->back()->with('error_msg', 'Identifiant incorrect, veuillez réessayer.');
         }
 
-            $token=$administrateurs['token'];
+            $token=$administrateurs['data']['token'];
 
-
-            $username=$administrateurs['userResponseDto']['username'];
-            $userId=$administrateurs['userResponseDto']['userId'];
-            $entreprise=$administrateurs['userResponseDto']['entrepriseModel']['name'];
+            //dd($token);
+            $username=$administrateurs['data']['userDTO']['username'];
+            $userId=$administrateurs['data']['userDTO']['userId'];
+            $entreprise=$administrateurs['data']['userDTO']['entrepriseId'];
             // $entreprise=1;
-            $role=$administrateurs['userResponseDto']['roleModel']['libelle'];
-            $nom=$administrateurs['userResponseDto']['lastName'];
-            $prenom=$administrateurs['userResponseDto']['firstName'];
-            $matricule=$administrateurs['userResponseDto']['matricule'];
-            $telephone=$administrateurs['userResponseDto']['telephone'];
-            $adresse=$administrateurs['userResponseDto']['adress'];
+            $role=$administrateurs['data']['userDTO']['roleId'];
+            $nom=$administrateurs['data']['userDTO']['lastName'];
+            $prenom=$administrateurs['data']['userDTO']['firstName'];
+            $matricule=$administrateurs['data']['userDTO']['matricule'];
+            $telephone=$administrateurs['data']['userDTO']['telephone'];
+            $adresse=$administrateurs['data']['userDTO']['adress'];
 
-           //dd($token,$prenom,$entreprise);
+
+           // dd($token,$prenom,$entreprise);
             // Stocker la variable dans une session
             session(['variableEnvoyee' => $token, 'nom'=>$nom,'adresse'=>$adresse,'prenom'=>$prenom,'matricule'=>$matricule,'telephone'=>$telephone,'username'=>$username,'userId'=>$userId,'entreprise'=>$entreprise,'role'=>$role]);
 
-        $userResponseDto = $administrateurs['userResponseDto'];
-        $roleModel = $userResponseDto['roleModel'];
-        $role = $roleModel['libelle'];
-
-        if ($role == "ADMIN" ) {
+        if ($role == 8 or $role == 7 ) {
             return redirect()->route('accueil');
-        } elseif($role == "SUPERADMIN"){
+        } elseif($role == 12){
             return redirect()->route('accueil');
 
         }
@@ -68,7 +66,7 @@ class AuthController extends Controller
             return redirect()->back()->with('error_msg', 'Vous ne disposez pas des autorisations nécessaires pour éffectuer cette action.');
         }
 
-        return view('layouts/master',compact('nom','prenom','role'));
+        return view('layouts/master',compact('nom','prenom','role','entreprise'));
 
     }
 }

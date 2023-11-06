@@ -77,11 +77,34 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="exampleInputPassword1" class="form-label">Adresse</label>
-                                <input type="text" class="form-control" required="true" id="adresse" name="adress" value="{{old('adress')}}"
+                              <input type="text" class="form-control" required="true" id="adresse" name="adress" value="{{old('adress')}}"
                                     style="border-radius: 10px;" required>
                             </div>
 
                         </div>
+
+
+                        <div class="row">
+                                {{--  --}}
+                                <div class="mb-3 col-md-4">
+                                    <label for="matricule" class="form-label">Matricule</label>
+                                    <input type="text" class="form-control" id="matricule" name="matricule" value="{{ old('matricule') }}"
+                                        style="border-radius: 10px;" required>
+                                </div>
+                                <div class="form-check col-md-2">
+                                    <label class="form-check-label" for="exampleCheckbox">Générer</label>
+
+                                    <input type="checkbox" class="form-check-input" name="exampleCheckbox" id="exampleCheckbox">
+                                </div>
+
+
+                            <div class="mb-3 col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" required="true" id="email" name="email" value="{{old('email')}}"
+                                    style="border-radius: 10px;" required>
+                            </div>
+                        </div>
+
 
                         <div class="row">
 
@@ -95,14 +118,19 @@
                                 <label for="exampleInputPassword1" class="form-label">Entreprise</label>
                                 <select class="form-control" id="entrepriseId" required="true" name="entrepriseId"
                                     style="border-radius: 10px;">
-                                    @if($role =="ADMIN")
+                                    {{-- <option value="1">Entreprise A</option>
+                                    <option value="2">Entreprise B</option> --}}
+                                    {{-- @if($role =="ADMIN")--}}
                                     @foreach ($entreprises as $entrepris )
 
-                                    @if($entrepris['name'] == $entreprise)
+                                     @if($entrepris['entrepriseId'] == $entreprise && $role == 8) 
                                     <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
-                                    @endif
+                                        @else
+                                        <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
+
+                                    @endif 
                                     @endforeach
-                                    @endif
+                                   {{-- @endif
 
                                     @if($role =="SUPERADMIN")
                                     @foreach ($entreprises as $entrepris )
@@ -110,15 +138,38 @@
                                     <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
 
                                     @endforeach
-                                    @endif
+                                    @endif --}}
+                                </select>
+
+                            </div>
+                            <input type="hidden" class="form-control" required="true" id="roleId" name="roleId" value="8">
+
+
+                        </div>
+
+                        {{-- <div class="row">
+
+                            <div class="mb-3 col-md-6">
+                                <label for="isEnabled" class="form-label">Activer</label>
+                                <input type="text" class="form-control" required="true" id="isEnabled" name="isEnabled"value="{{old('isEnabled')}}"
+                                    style="border-radius: 10px;" required value="1">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="roleId" class="form-label">Rôle</label>
+                                <select class="form-control" id="roleId" required="true" name="roleId"
+                                    style="border-radius: 10px;">
+                                    <option value="1">Role A</option>
+                                    <option value="3">Role B</option>
+                                     
                                 </select>
 
                             </div>
 
 
-                        </div>
+                        </div> --}}
 
-                        
+
+
                         <div class="row">
 
                             <div class="mb-3 col-md-6">
@@ -142,6 +193,8 @@
 
                         </div>
 
+                        
+
                         <div class="row" hidden>
 
 
@@ -151,11 +204,11 @@
                                     value="aaa" style="border-radius: 10px;">
                             </div>
 
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="roleModel" class="form-label">Role</label>
                                 <input type="text" class="form-control" id="roleId" name="roleId" value="2">
 
-                            </div>
+                            </div> --}}
 
                         </div>
 
@@ -192,19 +245,18 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="activationStatus" class="form-label">photo</label>
-                                <input type="text" class="form-control" id="photo"
+                                <input type="text" class="form-control" id="photoProfil"
                                     value="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 "
-                                    name="photo">
+                                    name="photoProfil">
                             </div>
 
 
                         </div>
 
-
                         <br>
                         <div class="d-flex justify-content-end">
+                            <a href="{{route('admin')}}" class="btn btn-danger">Annuler</a>
                             <button type="submit" class="btn btn-primary" id="envoyerDonnees" disabled>Enregistrer</button>
-                            {{-- <a href="{{route('admin')}}" class="btn btn-danger">Annuler</a> --}}
                         </div>
 
                 </div>
@@ -309,6 +361,26 @@
         var onlyNumbers = inputVal.replace(/[^0-9]/g, ''); // Utilisez cette expression régulière pour ne garder que les chiffres
         $(this).val(onlyNumbers);
     });
+
+</script>
+<script>
+    // Récupérez la référence de la case à cocher et du champ de texte
+var checkBox = document.getElementById("exampleCheckbox");
+var matriculeInput = document.getElementById("matricule");
+
+// Écoutez les changements d'état de la case à cocher
+checkBox.addEventListener("change", function () {
+    if (checkBox.checked) {
+        // Si la case à cocher est cochée, désactivez le champ de texte
+        matriculeInput.disabled = true;
+        // Effacez la valeur du champ de texte
+        matriculeInput.value = "";
+
+    } else {
+        // Si la case à cocher n'est pas cochée, activez le champ de texte
+        matriculeInput.disabled = false;
+    }
+});
 
 </script>
 @endsection

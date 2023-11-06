@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Superviseurs;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
 
@@ -70,17 +72,25 @@ class SuperviseurController extends Controller
     {
         $ip_adress = env('APP_IP_ADRESS');
 
+
          // Récupérer la variable de la session
          $variableRecuperee = session('variableEnvoyee');
          $entreprise = session('entreprise');
          $role = session('role');
 
+            //dd($entreprise);
          $response = HTTP::withHeaders([
              'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise');
+         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/active');
 
-          $entreprises = $response->json();
+        // $response = HTTP::get('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/active');
+
+          $entreprisess = $response->json();
+          $entreprises=$entreprisess['data']['content'];
+
          //dd($entreprises);
+         
+
         //ajouter un admin
         return view('Superviseur/create',compact('entreprises','entreprise','role'));
     }
@@ -90,8 +100,7 @@ class SuperviseurController extends Controller
     public function store(Request $request)
     {
         $ip_adress = env('APP_IP_ADRESS');
-
-        //ajouter un admin
+        //dd($request['matricule']);
 
         $request->validate([
             "firstName" => "required",
@@ -100,156 +109,232 @@ class SuperviseurController extends Controller
             "username" => "required",
             "adress" => "required",
             "password" => "required|min:8",
-            "activationStatus" => "required"
+            "email" => "required"
         ]);
 
-// Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
-$createdAt = Carbon::now()->toIso8601String();
-//dd($createdAt);
+         // Obtenez la date actuelle sous forme de chaîne au format ISO 8601 avec une précision de millisecondes.
+        $createdAt = Carbon::now()->toIso8601String();
+        //dd($createdAt);
+        //Générer matricule
+            // Vous pouvez personnaliser le préfixe selon vos besoins
+            $prefix = 'SGDS_Superviseur_';
 
-         // Vous pouvez personnaliser le préfixe selon vos besoins
-         $prefix = 'SGDS_Superviseur_';
+            $nombreAleatoire = rand(0, 1000); // Utilisation de rand()
 
 
-         $nombreAleatoire = rand(0, 1000); // Utilisation de rand()
+            // Formatage du nouveau matricule avec la partie numérique
+            $newMatricule = $prefix . $nombreAleatoire;
+        //Fin matricule
+        //ajouter un admin
+        $donnees = $request->all();
 
-
-         // Formatage du nouveau matricule avec la partie numérique
-         $newMatricule = $prefix . $nombreAleatoire;
-
+        //dd($donnees);
         $test = array();
         //$test['id'] = $id;
-        $test['userId'] = $request['userId'];
-        $test['firstName'] = $request['firstName'];
-        $test['lastName'] = $request['lastName'];
-        $test['matricule'] = $newMatricule;
-        $test['telephone'] = $request['telephone'];
-        $test['adress'] = $request['adress'];
-        $test['photoProfil'] = $request['photo'];
+        $test['userId'] = 105;
+        $test['firstName'] = $donnees['firstName'];
+        $test['lastName'] = $donnees['lastName'];
+        if($request['matricule']  === null){
+            $test['matricule'] = $newMatricule;
+        }else{
+            $test['matricule'] = $donnees['matricule'];
 
-        $test['username'] = $request['username'];
-        $test['password'] = $request['password'];
-        $test['password_confirm'] = $request['password_confirm'];
+        }
+        $test['telephone'] = $donnees['telephone'];
+        $test['photoProfil'] = $donnees['photoProfil'];
 
-        $test['activationStatus'] = $request['activationStatus'];
-        $test['entrepriseId'] = $request['entrepriseId'];
-        $test['creatorUsername'] = $request['creatorUsername'];
-        $test['creatorId'] = $request['creatorId'];
+        $test['adress'] = $donnees['adress'];
+        $test['username'] = $donnees['username'];
+        $test['password'] = $donnees['password'];
+        $test['password_confirm'] = $donnees['password_confirm'];
+
+        $test['email'] = $donnees['email'];
+        $test['entrepriseId'] = $donnees['entrepriseId'];
+        $test['roleId'] = $donnees['roleId'];
+        $test['isEnabled'] = true;
+        $test['isAccountNonExpired'] = true;
+        $test['isAccountNonLocked'] = true;
+        $test['isCredentialsNonExpired'] = true;
+        $test['creatorUsername'] = $donnees['creatorUsername'];
+        $test['creatorId'] = $donnees['creatorId'];
         $test['createdAt'] = $createdAt;
-        $test['roleId'] = $request['roleId'];
-        $test['deletedFlag'] = $request['deletedFlag'];
-
-        if ($request['password_confirm'] != $request['password']) {
-            return redirect()->back()->withInput($test)->with('success', 'Les mots de passe ne correspondent pas.');
+        $test['roleId'] = $donnees['roleId'];
+        $test['deletedFlag'] = $donnees['deletedFlag'];
+        //dd($test);
+        if ($donnees['password_confirm'] != $donnees['password']) {
+            return redirect()->back()->withInput($donnees)->with('success', 'Les mots de passe ne correspondent pas.');
         }
 
+             $variableRecuperee = session('variableEnvoyee');
 
-        $variableRecuperee = session('variableEnvoyee');
+             $response1 = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/userUniqueVerification/forCreation', [
+                'email' => $test['email'],
+                'username' => $test['username'],
+                'matricule' => $test['matricule']
+            ]);
+            $email= $response1->json();
+           // dd($email);
 
-        //dd($entreprise);
-         $response = HTTP::withHeaders([
-             'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->get('http://'.$ip_adress.'/api/v1/users-management/show/user');
+            $emails=$email['data'];
+            //dd($emails);
+            if($emails['isUsernameExist'] == true){
 
-         $administrateurs = $response->json();
+                return redirect()->back()->withInput($donnees)->with('success', 'Le nom d\'utilisateur existe déjà.');
 
+            }
+            if($emails['isEmailExist'] == true){
 
-         $usernames = []; // Initialisez un tableau vide pour stocker les usernames
+                return redirect()->back()->withInput($donnees)->with('success', 'Le mail existe déjà.');
 
-         foreach ($administrateurs as $administrateur) {
-             $username = $administrateur["username"];
-             $usernames[] = $username; // Ajoutez chaque username au tableau $usernames
-         }
+            }
+            if($emails['isMatriculeExist'] == true){
 
-         $telephones = []; // Initialisez un tableau vide pour stocker les usernames
+                return redirect()->back()->withInput($donnees)->with('success', 'Le matricule existe déjà.');
 
-         foreach ($administrateurs as $administrateur) {
-             $telephone = $administrateur["telephone"];
-             $telephones[] = $telephone; // Ajoutez chaque username au tableau $usernames
-         }
+            }
 
+            //  //dd($entreprise);
+            $response = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->POST('http://'.$ip_adress.'/odsolidwaist/manages-users/create', $test);
+        
 
-     if (in_array($request['username'], $usernames)) {
-         // Le username est présent dans la liste
-         return redirect()->back()->withInput($test)->with("success", "Le nom d'utilisateur est déjà utilisé")->with(compact("administrateurs"));
-     }else if (in_array($request['telephone'], $telephones)){
-         return redirect()->back()->withInput($test)->with("success", "Le numéro de téléphone est déjà utilisé")->with(compact("administrateurs"));
-} else {
-             // Le username n'est pas présent dans la liste
-         $response = HTTP::withHeaders([
-             'Authorization' => 'Bearer ' . $variableRecuperee,
-         ])->post('http://'.$ip_adress.'/api/v1/users-management/create/user',$test);
+            // $variableRecuperee = session('variableEnvoyee');
+            // $response = HTTP::POST('http://'.$ip_adress.'/odsolidwaist/manages-users/create', $test);
+        
+            $administrateurss = $response->json();
+            $administrateurs = $administrateurss['data'];
 
-         $superviseurs = $response->json();
+        
+        //return  back()->with("success", "Administrateur ajouté avec succè!")->with(compact("administrateurs"));
+        return redirect()->route('admin')->with("success", "Superviseur ajouté avec succès")->with(compact("administrateurs"));
+       
 
-         return redirect()->route('superviseur')->with("success", "Superviseur ajouté avec succès")->with(compact("superviseurs"));
      }
 
-
-     }
-
-    public function delete( Request $request)
+    public function delete(Request $request)
     {
         $ip_adress = env('APP_IP_ADRESS');
 
         $donnees = $request->documentId;
+        //dd($donnees);
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = 'http://'.$ip_adress.'/api/v1/users-management/delete/user/' .$donnees;
+        $url = "http://".$ip_adress."/odsolidwaist/manages-users/delete/user/" .$donnees;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->delete($url);
+        ])->put($url);
+
 
         return back()->with("successDelete", "Le superviseur a été supprimé avec succès");
-
+ 
     }
-
-    public function update(Request $request,$id)
+ 
+    public function update(Request $request, $id)
     {
         $ip_adress = env('APP_IP_ADRESS');
 
-        //ajouter un admin
-        //ajouter un admin
+        //dd($request);
         $request->validate([
             "firstName" => "required",
             "lastName" => "required",
+            "matricule" => "required",
             "telephone" => "required|numeric",
-            "roleId" => "required",
+            "username" => "required",
             "adress" => "required",
         ]);
 
         $test = array();
-        //$test['id'] = $id;
         $test['userId'] = $request['userId'];
         $test['firstName'] = $request['firstName'];
         $test['lastName'] = $request['lastName'];
         $test['matricule'] = $request['matricule'];
         $test['telephone'] = $request['telephone'];
+        $test['photoProfil'] = $request['photoProfil'];
         $test['adress'] = $request['adress'];
         $test['username'] = $request['username'];
-        $test['password'] = $request['password'];
-        $test['activationStatus'] = $request['activationStatus'];
+        $test['email'] = $request['email'];
         $test['entrepriseId'] = $request['entrepriseId'];
-        $test['creatorUsername'] = $request['creatorUsername'];
-        $test['creatorId'] = $request['creatorId'];
-        $test['createdAt'] = $request['createdAt'];
         $test['roleId'] = $request['roleId'];
+        $test['isEnabled'] = true;
+        $test['isAccountNonExpired'] = true;
+        $test['isAccountNonLocked'] = true;
+        $test['isCredentialsNonExpired'] = true;
+        $test['updatedAt'] = $request['updatedAt'];
+        $test['userIdForLog'] = $request['userIdForLog'];
+        $test['createdAt'] = $request['createdAt'];
         $test['deletedFlag'] = $request['deletedFlag'];
+        $test['updatedBy'] = $request['updatedBy'];
+        $test['verificationCodeExpiredAt'] = $request['verificationCodeExpiredAt'];
+        $test['verificationCode'] = $request['verificationCode'];
+        $test['deletedAt'] = $request['deletedAt'];
+        $test['createdBy'] = $request['createdBy'];
+        $test['deletedBy'] = $request['deletedBy'];
 
         //dd($test);
 
         $dataToUpdate = $test;
 
-        // Récupérer la variable de la session
-        $variableRecuperee = session('variableEnvoyee');
 
-        // Créez une instance du client GuzzleHttp
+         $variableRecuperee = session('variableEnvoyee');
+
+
+
+         $response1 = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/usernameVerification/forUpdate', [
+            'userId' => $test['userId'],
+            'username' => $test['username'],
+            // 'matricule' => $test['matricule']
+        ]);
+        //les trois ensemble avec userId
+        $response2 = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/usernameVerification/forUpdate', [
+            'userId' => $test['userId'],
+            'username' => $test['username'],
+            'matricule' => $test['matricule'],
+            'email' => $test['email']
+
+        ]);
+        $username= $response1->json();
+        $userNames=$username['data'];
+        //dd($emails);
+        if($userNames['isUsernameExist'] == true){
+
+            return redirect()->back()->with('success', 'Le nom d\'utilisateur existe déjà.');
+
+        }
+
+        $lesTrois= $response2->json();
+         $les3=$lesTrois['data'];
+         if($les3['isUsernameExist'] == true){
+
+             return redirect()->back()->with('success', 'Le nom d\'utilisateur existe déjà.');
+
+         }
+         if($les3['isEmailExist'] == true){
+
+             return redirect()->back()->with('success', 'Le mail existe déjà.');
+
+         }
+         if($les3['isMatriculeExist'] == true){
+
+             return redirect()->back()->with('success', 'Le matricule existe déjà.');
+
+         }
+
+
+
+
+        // // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-
-        $response = $client->put("http://192.168.1.6:8080/api/v1/users-management/update/user/{$id}", [
+        $response = $client->put("http://" . $ip_adress . "/odsolidwaist/manages-users/update", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',
@@ -257,24 +342,84 @@ $createdAt = Carbon::now()->toIso8601String();
             ],
             'json' => $dataToUpdate,
         ]);
+        $variableRecuperee = session('variableEnvoyee');
 
-        return redirect()->route('superviseur')->with("success", "Superviseur mis à jour avec succès");
+        //$response = HTTP::put("http://" . $ip_adress . "/odsolidwaist/manages-users/update", $test);
+    
+
+        return redirect()->route('admin')->with("success", "Superviseur mis à jour avec succès");
+
 
     }
+  
     public function edit($id)
     {
+        //dd($id);
         $ip_adress = env('APP_IP_ADRESS');
 
-        // Récupérer la variable de la session
+        //ajouter un admin
+
+           // Récupérer la variable de la session
+           $variableRecuperee = session('variableEnvoyee');
+           $response = HTTP::withHeaders([
+               'Authorization' => 'Bearer ' . $variableRecuperee,
+           ])->get("http://".$ip_adress."/odsolidwaist/manages-users/find/" . $id);
+         //$response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-users/find/" . $id);
+            //Liste des entreprises active
+            $response2 = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/active');
+        
+        // $response2 = HTTP::get('http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/active');
+        
+        $superviseurss = $response->json();
+        $entreprisess = $response2->json();
+        $entreprises = $entreprisess['data']['content'];
+
+        $superviseur=$superviseurss['data'];
+        //dd($administrateur);
+        //l'id de l'entreprise de l'admin
+        $entrepriseId=$superviseur['entrepriseId'];
+            //je veux recuperer l'entreprise de la liste grace a son id
+        $targetEntreprise = null;
+        foreach ($entreprises as $entreprise) {
+            if ($entreprise['entrepriseId'] === $entrepriseId) {
+                $targetEntreprise = $entreprise;
+                break;
+            }
+
+        }
+        //dd($targetEntreprise);
+
+
+        return view('Superviseur/edit', compact("superviseur","targetEntreprise"));
+    }
+
+    public function desactiver(Request $request)
+    {
+
+        try{
+            //dd($request);
+            $ip_adress = env('APP_IP_ADRESS');
+
+
+            $id = $request['userId'];
+        //dd($id);
+        
+        //Récupérer la variable de la session
+        // $variableRecuperee = session('variableEnvoyee');
+        // $response = HTTP::withHeaders([
+        //     'Authorization' => 'Bearer ' . $variableRecuperee,
+        // ])->put('http://'.$ip_adress.'/odsolidwaist/manages-users/disable/' . $id);
+    
         $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://'.$ip_adress.'/api/v1/users-management/show/user/{userId}' . $id);
-
-
-        $superviseur = $response->json();
-
-        return view('Superviseur/edit',compact("superviseur"));
+        $response = HTTP::put("http://".$ip_adress."/odsolidwaist/manages-users/disable/" . $id);
+        //dd($response);
+        return new Response(200);
+        } catch (Exception$e) {
+                    //dd(0);
+                    //return new Response(500);
+                }
     }
 
 

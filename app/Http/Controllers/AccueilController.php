@@ -8,126 +8,135 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Response;
 use Exception;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session as FacadesSession;
+
+
 class AccueilController extends Controller
 {
     //
     public function index()
     {
-        $ip_adress = env('APP_IP_ADRESS');
+        //dd("oui");
+        //dd($countEntreprises1);
+        $role = session('role');
+        $entreprise = session('entreprise');
+        //dd($entreprise);
+
+        
+        if ($role == 12) {
+            $ip_adress = env('APP_IP_ADRESS');
 
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
-        $role = session('role');
-        $entreprisez = session('entreprise');
+        $entreprise = session('entreprise');
         //dd($role,$entreprisez);
 
         $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://'.$ip_adress.'/api/v1/user-management/show/user');
-        //'http://'.$ip_adress.'/
-        $administrateurs = $response->json();
+                 'Authorization' => 'Bearer ' . $variableRecuperee,
+             ])->get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/active");
+            
+             $response1 = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/deleted");
+       
+            $response2 = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get('http://'.$ip_adress.'/odsolidwaist/manages-district/find/district/non_deleted-activate');
+       
+            $response3 = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get('http://'.$ip_adress.'/odsolidwaist/manages-district/find/district/non_deleted-disable');
+       
+        //$response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/active");
+        //$response1 = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/deleted");
 
-        $respons = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://'.$ip_adress.'/api/v1/entreprise-management/show/entreprise');
-
-        $entreprises = $respons->json();
-
-        $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->get('http://'.$ip_adress.'/api/v1/reporting-management/show/reporting');
-
-        $signalements = $response->json();
-
-        //dd($entreprises);
-
-        if ($role === "SUPERADMIN") {
-            // dd(50);
-            $libelles = [];
+       // $response2 = HTTP::get('http://'.$ip_adress.'/odsolidwaist/manages-district/find/district/non_deleted-activate');
+        //$response3 = HTTP::get('http://'.$ip_adress.'/odsolidwaist/manages-district/find/district/non_deleted-disable');
 
 
-            foreach ($administrateurs as $administrateur) {
-                if (isset($administrateur['roleModel']['libelle'])) {
-                    $libelles[] = $administrateur['roleModel']['libelle'];
-                    // dd($libelles);
-                }
-            }
 
-            $countCollector = 0; // Initialisez le compteur à zéro
-            $countSupervisor = 0;
-            $countAdmin = 0;
-            $countSignalement = count($signalements);
+        $entreprisess = $response->json();
+        $entreprisez=$entreprisess['data']['content'];
+        $countEntreprisesA=count($entreprisez);
 
-            foreach ($libelles as $libelle) {
-                if ($libelle === "COLLECTOR") {
-                    $countCollector++;
-                }
-            }
+        $entreprisess1 = $response1->json();
+        $entreprise1=$entreprisess1['data']['content'];
+        $countEntreprisesI=count($entreprise1);
 
-            foreach ($libelles as $libelle) {
-                if ($libelle === "SUPERVISOR") {
-                    $countSupervisor++;
-                }
-            }
+        $arrondissementss = $response2->json();
+        $arrondissement=$arrondissementss['data']['content'];
+        $countArrondissementA=count($arrondissement);
 
-            foreach ($libelles as $libelle) {
-                if ($libelle === "ADMIN") {
-                    $countAdmin++;
-                }
-            }
+        $arrondissementss1 = $response3->json();
+        $arrondissement1=$arrondissementss1['data']['content'];
+        $countArrondissementI=count($arrondissement1);
+        return view('Accueil/index', compact('countEntreprisesA', 'countEntreprisesI', 'countArrondissementA', 'countArrondissementI','role','entreprise'));
 
-            //dd($countAdmin);
-            return view('Accueil/index', compact('countAdmin', 'countSignalement', 'countCollector', 'countSupervisor'));
+        }
+        if ($role == 8 or $role == 7) {
+
+            
+            $ip_adress = env('APP_IP_ADRESS');
+
+            // Récupérer la variable de la session
+            $variableRecuperee = session('variableEnvoyee');
+            $entreprise = session('entreprise');
+            //dd($role,$entreprisez);
+            $response = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get("http://".$ip_adress."/odsolidwaist/manages-users/users/active-enabled-role-and-enterprise?isEnabled=true&roleId=8&enterpriseId={$entreprise}");
+        
+            $response1 = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get("http://".$ip_adress."/odsolidwaist/manages-users/users/active-enabled-role-and-enterprise?isEnabled=true&roleId=13&enterpriseId={$entreprise}");
+    
+            $response2 = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get("http://".$ip_adress."/odsolidwaist/manages-users/users/active-enabled-role-and-enterprise?isEnabled=true&roleId=14&enterpriseId={$entreprise}");
+            $response3 = HTTP::withHeaders([
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+            ])->get("http://".$ip_adress."/odsolidwaist/manages-reporting/reports/active-and-enterprise-and-status?enterpriseId=" . $entreprise . "&status=signaled");
+    
+            //$response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-users/users/active-enabled-role-and-enterprise?isEnabled=true&roleId=8&enterpriseId={$entreprise}");
+            //$response1 = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-users/users/active-enabled-role-and-enterprise?isEnabled=true&roleId=13&enterpriseId={$entreprise}");
+    
+           // $response2 = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-users/users/active-enabled-role-and-enterprise?isEnabled=true&roleId=14&enterpriseId={$entreprise}");
+            //$response3 = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-reporting/reports/active-and-enterprise-and-status?enterpriseId=" . $entreprise . "&status=signaled");
+    
+    
+    
+            $adminss = $response->json();
+            $admin=$adminss['data']['content'];
+            $countAdmin=count($admin);
+    
+            $superviseurss = $response1->json();
+            $superviseur=$superviseurss['data']['content'];
+            $countSuperviseur=count($superviseur);
+    
+            $collecteurss = $response2->json();
+            $collecteur=$collecteurss['data']['content'];
+            $countCollecteur=count($collecteur);
+    
+             $signalerss = $response3->json();
+             $signaler=$signalerss['data']['content'];
+             $countSignaler=count($signaler);
+            return view('Accueil/index', compact('countAdmin', 'countSuperviseur', 'countCollecteur','countSignaler','role','entreprise'));
+    
+
+
         }
 
-        if ($role === "ADMIN") {
-
-            $libelles = [];
-            $entreprises = [];
-
-            foreach ($administrateurs as $administrateur) {
-                if (isset($administrateur['roleModel']['libelle'])) {
-                    $libelles[] = $administrateur['roleModel']['libelle'];
-                }
-
-                if (isset($administrateur['entrepriseModel']['name'])) {
-                    $entreprises[] = $administrateur['entrepriseModel']['name'];
-                }
-            }
-               // dd($libelles,$entreprises);
-            $countCollector = 0;
-            $countSupervisor = 0;
-            $countAdmin = 0;
-            $countSignalement = count($signalements);
-
-            for ($i = 0; $i < count($libelles) && $i < count($entreprises); $i++) {
-                $libelle = $libelles[$i];
-                $entrepris = $entreprises[$i];
-
-                if ($libelle === "SUPERVISOR" && $entrepris === $entreprisez) {
-                    $countSupervisor++;
-                }
-
-
-                if ($libelle === "ADMIN" && $entrepris === $entreprisez) {
-                    $countAdmin++;
-                }
-
-                if ($libelle === "COLLECTOR" && $entrepris === $entreprisez) {
-                    $countCollector++;
-                }
-            }
-
-            //dd($countAdmin,$countCollector,$countSupervisor);
-
-            return view('Accueil/index', compact('countAdmin', 'countSignalement', 'countCollector', 'countSupervisor'));
-        }
-        return view('Accueil/index', compact('countAdmin', 'countSignalement', 'countCollector', 'countSupervisor'));
+        
+        return view('Accueil/index', compact('countEntreprisesA', 'countEntreprisesI', 'countArrondissementA', 'countArrondissementI'));
     }
 
 
     public function profil(Request $request)
     {
+        $ip_adress = env('APP_IP_ADRESS');
+        $variableRecuperee = session('variableEnvoyee');
+
         $role = session('role');
         $nom = session('nom');
         $prenom = session('prenom');
@@ -136,7 +145,45 @@ class AccueilController extends Controller
         $telephone = session('telephone');
         $adresse = session('adresse');
 
-        return view('Accueil/profil', compact('nom', 'prenom', 'adresse', 'role', 'entreprise', 'matricule', 'telephone'));
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get("http://".$ip_adress."/odsolidwaist/manages-role/find/role/active");
+
+        $response1 = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/active");
+
+        // $response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-role/find/role/active");
+        // $response1 = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/active");
+
+        $roless = $response->json(); 
+        $roles=$roless['data']['content'];
+
+        $entreprisess = $response1->json(); 
+        $entrepris=$entreprisess['data']['content'];
+
+
+        $entreprisee = null;
+
+        foreach ($entrepris as $r) {
+            if ($r['entrepriseId'] == $entreprise) {
+                $entreprisee = $r['name'];
+                break;
+            }
+        }
+
+        $roleLabel = null;
+
+        foreach ($roles as $r) {
+            if ($r['roleId'] == $role) {
+                $roleLabel = $r['label'];
+                break;
+            }
+        }
+       // dd($roleLabel);
+        //$role=$roleLabel;
+
+        return view('Accueil/profil', compact('nom', 'prenom', 'adresse', 'roleLabel', 'entreprisee','entreprise', 'matricule', 'telephone'));
     }
 
 
@@ -161,29 +208,32 @@ class AccueilController extends Controller
         $variableRecuperee = session('variableEnvoyee');
         $username = session('username');
         $userId = session('userId');
-        // Créez un tableau de données à envoyer dans le corps de la requête POST
+        // Créez un tableau de données à envoyer dans le corps de la requête 
+        //dd($userId);
         $dataToSend = [
             'password' => $password,
             'username' => $username,
         ];
 
-        $response = HTTP::withHeaders([
-            'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://'.$ip_adress.'/api/v1/users-management/decode', $dataToSend);
+        // $response = HTTP::withHeaders([
+        //     'Authorization' => 'Bearer ' . $variableRecuperee,
+        // ])->post('http://'.$ip_adress.'/odsolidwaist/manages-users/decode/password', $dataToSend);
+        $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-users/decode/password', $dataToSend);
 
         $administrateurs = $response->json();
-        // dd($administrateurs);
+        //dd($administrateurs);
 
 
-        if ($administrateurs['passwordIsVerified'] == true) {
+        if ($administrateurs['data']['passwordIsVerified'] == true) {
 
             try {
-                $url = 'http://'.$ip_adress.'/api/v1/users-management/update/user/password/' . $userId;
+                $url = 'http://'.$ip_adress.'/odsolidwaist/manages-users/update/password';
 
-                $response = HTTP::withHeaders([
-                    'Authorization' => 'Bearer ' . $variableRecuperee,
-                ])->put($url, ['password' => $passwordNew]);
-
+                // $response = HTTP::withHeaders([
+                //     'Authorization' => 'Bearer ' . $variableRecuperee,
+                // ])->put($url, ['password' => $passwordNew]);
+                $response = HTTP::put($url, ['password' => $passwordNew,'userId'=>$userId]);
+                
                 $admin = $response->json();
                 // dd($admin);
                 return new Response(200);
@@ -244,11 +294,12 @@ class AccueilController extends Controller
 
 
         try {
-            $url = 'http://'.$ip_adress.'/api/v1/users-management/update/user/password/' . $id;
+            $url = 'http://'.$ip_adress.'/odsolidwaist/manages-users/update/password';
 
-            $response = HTTP::withHeaders([
-                'Authorization' => 'Bearer ' . $variableRecuperee,
-            ])->put($url, ['password' => $passwordNew]);
+            // $response = HTTP::withHeaders([
+            //     'Authorization' => 'Bearer ' . $variableRecuperee,
+            // ])->put($url, ['password' => $passwordNew]);
+                $response = HTTP::put($url, ['password' => $passwordNew,'userId'=>$id]);
 
             $admin = $response->json();
             // dd($admin);
@@ -261,5 +312,13 @@ class AccueilController extends Controller
         }
 
         return view('Accueil/profil');
+    }
+
+    public function logout(){
+
+        FacadesSession::flush();
+        Auth::logout();
+
+        return redirect()->route('login');
     }
 }

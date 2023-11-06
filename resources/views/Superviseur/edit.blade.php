@@ -45,158 +45,224 @@
                 @csrf
                 <input type="hidden" name="_method" value="put">
 
+                <input type="hidden" class="form-control" id="userId"
+                name="userId" value="{{ $superviseur['userId'] }}">
+               
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputEmail1" class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="nom" required="true" style="border-radius: 10px;" name="firstName" value="{{$superviseur['firstName'] }}">
+                        <input type="text" class="form-control" required="true" id="nom"
+                            name="firstName" value="{{ $superviseur['firstName'] }}"
+                            style="border-radius: 10px;">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Prénoms</label>
-                        <input type="text" class="form-control" required="true" id="prenom" style="border-radius: 10px;" name="lastName" value="{{$superviseur['lastName'] }}">
+                        <input type="text" class="form-control" required="true" id="prenom"
+                            name="lastName" value="{{ $superviseur['lastName'] }}"
+                            style="border-radius: 10px;">
                     </div>
 
                 </div>
-                
+
                 <div class="row">
-                    <div class="mb-3 col-md-6" hidden>
-                        <label for="exampleInputPassword1" class="form-label">Matricule</label>
-                        <input type="text" class="form-control" required="true" id="email" style="border-radius: 10px;" name="matricule" value="{{$superviseur['matricule'] }}">
+
+                    <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">Adresse</label>
+                        <input type="text" class="form-control" required="true" id="adresse" name="adress"
+                            value="{{ $superviseur['adress'] }}" style="border-radius: 10px;">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Téléphone</label>
-                        <input type="text" class="form-control" required="true" id="telephone" style="border-radius: 10px;" name="telephone"  value="{{$superviseur['telephone'] }}">
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Adresse</label>
-                        <input type="text" class="form-control" required="true" id="adresse" style="border-radius: 10px;" name="adress" value="{{$superviseur['adress'] }}">
+                        <input type="text" class="form-control" id="telephone" required="true"
+                            name="telephone" value="{{ $superviseur['telephone'] }}"
+                            style="border-radius: 10px;">
                     </div>
 
                 </div>
-                
+
                 <div class="row">
-
-                    
+                    <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">Matricule</label>
+                        <input type="text" class="form-control" required="true" id="matricule"
+                            name="matricule" value="{{ $superviseur['matricule'] }}"
+                            style="border-radius: 10px;" readonly>
+                    </div>
 
                     <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">Email</label>
+                        <input type="text" class="form-control" required="true" id="email" name="email"
+                            value="{{ $superviseur['email'] }}" style="border-radius: 10px;">
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-5">
                         <label for="username" class="form-label">Nom utilisateur</label>
-                        <input type="text" class="form-control" required="true" id="username" style="border-radius: 10px;" name="username" value="{{$superviseur['username'] }}">
+                        <input type="text" class="form-control" required="true" id="username"
+                            name="username" value="{{ $superviseur['username'] }}"
+                            style="border-radius: 10px;" readonly>
                     </div>
 
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Entreprise</label>
-                       
-                        {{-- <input type="text" class="form-control" required="true" id="entrepriseId" name="entrepriseId" value="{{$administrateur['username'] }}" style="border-radius: 10px;"> --}}
-
-                        <select class="form-control" id="entrepriseId" required="true" name="entrepriseId"
-                            style="border-radius: 10px;" disabled>
-                           
-                            <option value="{{$superviseur['entrepriseModel']['entrepriseId']}}">{{$superviseur['entrepriseModel']['name']}}</option>
-                            
-                            
-                        </select>
-
+                    <div class="col-md-1" style="margin-top: 25px;">
+                        <button type="button" class="btn btn-warning" id="editUsernameButton">
+                            <i class="fa fa-pencil"></i>
+                        </button>
                     </div>
-                </div>
-
-                <div class="row" hidden>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="text" class="form-control" id="password" name="password" value="{{$superviseur['password'] }}" hidden="hidden">
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="activationStatus" class="form-label">ActivationStatus</label>
-                        <input type="text" class="form-control" id="activationStatus" name="activationStatus" value="{{$superviseur['activationStatus'] }}">
-                    </div>
-
                     
+                    {{-- <div class="mb-3 col-md-6" >
+                        <label for="exampleInputPassword1" class="form-label">Entreprise</label>
+                        <input type="text" class="form-control" id="entrepriseId" name="entrepriseId"
+                        value="{{ $targetEntreprise['entrepriseId']}}" style="border-radius: 10px;">
+
+                    </div> --}}
                 </div>
+
+
+
 
                 <div class="row" hidden>
 
                     <div class="mb-3 col-md-6">
-                        <label for="exampleInputPassword1" class="form-label">Entreprise</label>
-                        <input type="text" class="form-control" id="entrepriseId" name="entrepriseId" value="{{$superviseur['entrepriseModel']['entrepriseId'] }}">
+                        <label for="test" class="form-label">Entreprise</label>
+                        <input type="text" class="form-control" id="entrepriseId" name="entrepriseId"
+                            value="{{ $targetEntreprise['entrepriseId']}}" style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="updatedBy" class="form-label">updatedBy</label>
+                        <input type="text" class="form-control" id="updatedBy" name="updatedBy"
+                            value="aaa" style="border-radius: 10px;">
                     </div>
 
-                    <div class="mb-3 col-md-6">
+                     <div class="mb-3 col-md-6">
                         <label for="roleModel" class="form-label">Role</label>
-                        <input type="text" class="form-control" id="roleId" name="roleId" value="{{$superviseur['roleModel']['roleId'] }}">
+                        <input type="text" class="form-control" id="roleId" name="roleId" value="13">
 
                     </div>
 
-                   
-
-                    
                 </div>
 
                 <div class="row" hidden>
 
-                    <div class="mb-3 col-md-6"hidden="hidden">
-                        <label for="exampleInputPassword1" class="form-label">creatorUsername</label>
-                        <input type="text" class="form-control" id="creatorUsername" name="creatorUsername" value="{{$superviseur['creatorUsername']}}">
-                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">updatedAt</label>
 
-                    <div class="mb-3 col-md-6" hidden="hidden">
+                        <input type="text" class="form-control" id="updatedAt" value="2023-11-03T12:38:48.846Z"
+                            name="updatedAt">
+
+                    </div>
+                    
+                    <div class="mb-3 col-md-6">
                         <label for="activationStatus" class="form-label">createdAt</label>
-                        <input type="text" class="form-control" id="creatorId" name="createdAt" value="{{$superviseur['createdAt'] }}">
+                        <input type="text" class="form-control" id="creatorId"
+                            value="2023-08-02T11:37:47.544+00:00" name="createdAt">
                     </div>
 
-                    
+                    <div class="mb-3 col-md-6">
+                        <label for="deletedAt" class="form-label">deletedAt</label>
+                        <input type="text" class="form-control" id="deletedAt"
+                            value="2023-11-03T12:38:48.846Z" name="deletedAt">
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="createdBy" class="form-label">createdBy</label>
+                        <input type="text" class="form-control" id="createdBy"
+                            value="abc" name="createdBy">
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="deletedBy" class="form-label">deletedBy</label>
+                        <input type="text" class="form-control" id="deletedBy"
+                            value="abc" name="deletedBy">
+                    </div>
+
+
+
+
                 </div>
-                
+
                 <div class="row" hidden>
 
-                <div class="mb-3 col-md-6"hidden="hidden" >
-                        <label for="activationStatus" class="form-label">Creator Id</label>
-                        <input type="text" class="form-control" id="creatorId" name="creatorId" value="{{$superviseur['creatorId'] }}" >
+                    <div class="mb-3 col-md-4">
+                        <label for="userIdForLog" class="form-label">userIdForLog</label>
+                        <input type="text" class="form-control" id="userIdForLog" value="1" name="userIdForLog">
                     </div>
-                    
 
-                    <div class="mb-3 col-md-6"hidden="hidden">
+
+                    <div class="mb-3 col-md-4">
                         <label for="deletedFlag" class="form-label">deletedFlag</label>
-                        <input type="text" class="form-control" id="deletedFlag" name="deletedFlag" value="{{$superviseur['deletedFlag'] }}">
+                        <input type="text" class="form-control" value="s" id="deletedFlag" name="deletedFlag">
                     </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="activationStatus" class="form-label">photo</label>
+                        <input type="text" class="form-control" id="photoProfil"
+                            value="https://firebasestorage.googleapis.com/v0/b/odgds-fac56.appspot.com/o/supervisor_profile_test%2F1693389761675_IMG-20230830-WA0008.jpg?alt=media&token=6792a939-2ebc-432a-bd48-f0f0b56a37b6 "
+                            name="photoProfil">
+                    </div>
+
+                    <div class="mb-3 col-md-4">
+                        <label for="activationStatus" class="form-label">verificationCodeExpiredAt</label>
+                        <input type="text" class="form-control" id="verificationCodeExpiredAt"
+                            value="2023-11-03T12:38:48.846Z"
+                            name="verificationCodeExpiredAt">
+                    </div>
+
+                    <div class="mb-3 col-md-4">
+                        <label for="verificationCode" class="form-label">verificationCode</label>
+                        <input type="text" class="form-control" id="verificationCode"
+                            value="ssdfe"
+                            name="verificationCode">
+                    </div>
+
+                    
+                </div>
+                <br>
+                <div>
+
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
 
                 </div>
-            
-                <br>
 
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
 
             </form>     
         </div></div></div>
     <div class="col-md-2"></div>
     </div></div>
     
-    
-<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 
-<script>
-    //Controle pour refuser la saisie des chiffres dans intitulé nom et prenom
-    $('#nom').on('input', function(e) {
-        var inputVal = $(this).val();
-        var onlyLetters = inputVal.replace(/[0-9]/g, '');
-        $(this).val(onlyLetters);
-    });
+    <script>
+        //Controle pour refuser la saisie des chiffres dans intitulé nom et prenom
+        $('#nom').on('input', function(e) {
+            var inputVal = $(this).val();
+            var onlyLetters = inputVal.replace(/[0-9]/g, '');
+            $(this).val(onlyLetters);
+        });
 
-    $('#prenom').on('input', function(e) {
-        var inputVal = $(this).val();
-        var onlyLetters = inputVal.replace(/[0-9]/g, '');
-        $(this).val(onlyLetters);
-    });
-    $('#telephone').on('input', function(e) {
-        var inputVal = $(this).val();
-        var onlyNumbers = inputVal.replace(/[^0-9]/g, ''); // Utilisez cette expression régulière pour ne garder que les chiffres
-        $(this).val(onlyNumbers);
-    });
-</script>
+        $('#prenom').on('input', function(e) {
+            var inputVal = $(this).val();
+            var onlyLetters = inputVal.replace(/[0-9]/g, '');
+            $(this).val(onlyLetters);
+        });
+        $('#telephone').on('input', function(e) {
+            var inputVal = $(this).val();
+            var onlyNumbers = inputVal.replace(/[^0-9]/g,
+                ''); // Utilisez cette expression régulière pour ne garder que les chiffres
+            $(this).val(onlyNumbers);
+        });
 
-        
-{{-- </div> --}}
+        //Activer le champ username pour mmodifier
+        // Récupérez la référence de l'icône de modification et du champ de texte
+        var editButton = document.getElementById("editUsernameButton");
+        var usernameInput = document.getElementById("username");
+
+        // Écoutez les clics sur le bouton d'édition
+        editButton.addEventListener("click", function() {
+            // Supprimez l'attribut "readonly" du champ de texte
+            usernameInput.removeAttribute("readonly");
+        });
+    </script>
 
 @endsection

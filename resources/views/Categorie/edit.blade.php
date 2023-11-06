@@ -37,11 +37,17 @@
 
                     <div class="panel-body">
 
-
                         <form method="post" action="{{ route('categorie.update', ['categorie'=>$categorie['categoryId']] )}}">
                             @csrf
                             <input type="hidden" name="_method" value="put">
-
+                            <input type="hidden" name="categoryId" id="categoryId" value="{{$categorie['categoryId'] }}">
+                            <div class="row">
+                                <div class="mb-3 col-md-12">
+                                    <label for="code" class="form-label">Code</label>
+                                    <input type="text" class="form-control" required="true" id="code" name="code"
+                                        style="border-radius: 10px;" value="{{$categorie['code'] }}">
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="mb-3 col-md-12">
                                     <label for="exampleInputEmail1" class="form-label">Déchet</label>
