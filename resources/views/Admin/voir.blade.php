@@ -103,7 +103,7 @@
                 <div id="msg200"></div>
 
                 
-                @if($role== 7)
+                @if($role== 7 or $role==12)
                 <div class="d-flex justify-content-between mb-2">
 
                     <a href="{{ route('admin.create') }}" type="button" class=" btn btn-primary">Ajouter un admin</a>
@@ -124,7 +124,10 @@
                                 <th scope="col">Matricule</th>
                                 <th scope="col">Adresse</th>
                                 <th scope="col">Email</th>
+                                @if($role== 7 or $role==12)
+
                                 <th>Actions</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -136,6 +139,8 @@
                                 <td>{{ $item['po3'] }}</td>
                                 <td>{{ $item['po4'] }}</td>
                                 <td>{{ $item['po5'] }}</td>
+                                @if($role== 7 or $role==12)
+
                                 <td>
                                     <button type="button" class="btn btn-success" title="Désactiver" onclick="updateStatus({{ $item['po0'] }})">
                                         <i class="fa fa-times"></i>
@@ -149,7 +154,7 @@
                                         >
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
-
+                                
                             
                             <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -177,6 +182,7 @@
 
 
                                 </td>
+                            @endif
                             </tr>
                         @endforeach
 
@@ -444,15 +450,16 @@
             //alert("Ouverture du formulaire d'inscription")
 
             var id = $(this).attr('data-key');
+           // alert(id);
             var isBoss = confirm("Voulez vous supprimer cette entreprise ?");
             if(isBoss==true){
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-                var url = "{{ route("admin.supprimer")}}";
+                var url = "{{ route('admin.supprimer')}}";
 
                 var data = {
-                    id, 
-                    _token: csrfToken
+                    _token: csrfToken,
+                    id
 
                 };
 

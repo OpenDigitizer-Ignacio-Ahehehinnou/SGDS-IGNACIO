@@ -159,7 +159,8 @@ class ProfileController extends Controller
            'body' => $jsonData,
        ]);
            $administrateurs = $response->json();
-           return redirect()->back()->with('error_msg', 'Code expiré veuillez regénérer un autre.');
+
+          // return redirect()->back()->with('error_msg', 'Code expiré veuillez regénérer un autre.');
 
           //dd($administrateurs);
           if($administrateurs== null){
@@ -171,8 +172,8 @@ class ProfileController extends Controller
            return redirect()->route('newPass',['username' => $username]);
        }
 
-           else {
-               return redirect()->back()->with('error_msg', 'Le code saisi n\'est pas correct, veuillez réessayer.');
+            else {
+                return redirect()->back()->with('error_msg', 'Le code saisi n\'est pas correct, veuillez réessayer.');
            }
 
     }

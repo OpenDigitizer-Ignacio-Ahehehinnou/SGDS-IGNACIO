@@ -258,12 +258,13 @@ class AdministrateurController extends Controller
     {
         $ip_adress = env('APP_IP_ADRESS');
 
-        $donnees = $request->documentId;
-        //dd($request);
+       $id = $request->id;
+        //dd($id);
+        //$id=50;
 
         $variableRecuperee = session('variableEnvoyee');
 
-        $url = "http://".$ip_adress."/odsolidwaist/manages-users/delete/user/" .$donnees;
+        $url = "http://".$ip_adress."/odsolidwaist/manages-users/delete/user/" .$id;
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
@@ -317,24 +318,25 @@ class AdministrateurController extends Controller
 
         //dd($test);
 
-         $dataToUpdate = $test;
+        $dataToUpdate = $test;
 
 
-         $variableRecuperee = session('variableEnvoyee');
+        $variableRecuperee = session('variableEnvoyee');
 
 
 
-         $response1 = Http::withHeaders([
+        $response1 = Http::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/usernameVerification/forUpdate', [
             'userId' => $test['userId'],
-            'username' => $test['username'],
+            'username' => $test['username']
             // 'matricule' => $test['matricule']
         ]);
+        //dd($response1->json());
         //les trois ensemble avec userId
         $response2 = Http::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/usernameVerification/forUpdate', [
+        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/userUniqueVerification/forUpdate', [
             'userId' => $test['userId'],
             'username' => $test['username'],
             'matricule' => $test['matricule'],
@@ -351,29 +353,30 @@ class AdministrateurController extends Controller
         }
 
         $lesTrois= $response2->json();
-         $les3=$lesTrois['data'];
-         if($les3['isUsernameExist'] == true){
+        //dd($lesTrois);
+        $les3=$lesTrois['data'];
+        if($les3['isUsernameExist'] == true){
 
-             return redirect()->back()->with('success', 'Le nom d\'utilisateur existe déjà.');
+            return redirect()->back()->with('success', 'Le nom d\'utilisateur existe déjà.');
 
-         }
-         if($les3['isEmailExist'] == true){
+        }
+        if($les3['isEmailExist'] == true){
 
-             return redirect()->back()->with('success', 'Le mail existe déjà.');
+            return redirect()->back()->with('success', 'Le mail existe déjà.');
 
-         }
-         if($les3['isMatriculeExist'] == true){
+        }
+        if($les3['isMatriculeExist'] == true){
 
-             return redirect()->back()->with('success', 'Le matricule existe déjà.');
+            return redirect()->back()->with('success', 'Le matricule existe déjà.');
 
-         }
+        }
 
 
 
         // // Créez une instance du client GuzzleHttp
         $client = new Client();
 
-         $response = $client->put("http://" . $ip_adress . "/odsolidwaist/manages-users/update", [
+        $response = $client->put("http://" . $ip_adress . "/odsolidwaist/manages-users/update", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',

@@ -294,7 +294,7 @@ class SuperviseurController extends Controller
         //les trois ensemble avec userId
         $response2 = Http::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
-        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/usernameVerification/forUpdate', [
+        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/userUniqueVerification/forUpdate', [
             'userId' => $test['userId'],
             'username' => $test['username'],
             'matricule' => $test['matricule'],
