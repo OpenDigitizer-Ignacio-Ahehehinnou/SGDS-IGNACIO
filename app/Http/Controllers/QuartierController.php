@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use Illuminate\Http\Response;
 
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class QuartierController extends Controller
 {
     //
@@ -26,9 +29,21 @@ class QuartierController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-neighborhood/find/neighborhood/non_deleted-activate');
 
         $quartierss = $response->json();
-        $quartiers=$quartierss['data']['content'];
+        $quartiers1=$quartierss['data']['content'];
         //$id=$communes['departementId'];
        //dd($quartierss);
+
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $quartiers = new LengthAwarePaginator(
+           array_slice($quartiers1, ($currentPage - 1) * $perPage, $perPage),
+           count($quartiers1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
+
         return view('Quartier.index', compact("quartiers"));
     }
 
@@ -45,9 +60,20 @@ class QuartierController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-neighborhood/find/neighborhood/non_deleted-disable');
 
         $quartierss = $response->json();
-        $quartiers=$quartierss['data']['content'];
+        $quartiers1=$quartierss['data']['content'];
         //$id=$communes['departementId'];
        // dd($arrondissements);
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $quartiers = new LengthAwarePaginator(
+           array_slice($quartiers1, ($currentPage - 1) * $perPage, $perPage),
+           count($quartiers1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
+
         return view('Quartier.QuartierDesactiver', compact("quartiers"));
     }
 
@@ -95,15 +121,12 @@ class QuartierController extends Controller
 
         
         // Récupérer la variable de la session
-        // $variableRecuperee = session('variableEnvoyee');
-        // $response = HTTP::withHeaders([
-        //     'Authorization' => 'Bearer ' . $variableRecuperee,
-        // ])->post('http://'.$ip_adress.'/odsolidwaist/manages-category/create/category', $test);
-
-        // Récupérer la variable de session
         $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-neighborhood/create/neighborhood', $test);
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://'.$ip_adress.'/odsolidwaist/manages-neighborhood/create/neighborhood', $test);
     
+        
         $quartierss = $response->json();
 
         //dd($quartierss);
@@ -175,7 +198,7 @@ class QuartierController extends Controller
         $ip_adress = env('APP_IP_ADRESS');
 
         $donnees = $request->documentId;
-        //dd($donnees);
+       // dd($donnees);
 
         $variableRecuperee = session('variableEnvoyee');
 
@@ -224,7 +247,7 @@ class QuartierController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
         
-        $response = $client->put("http://192.168.8.101:8080/odsolidwaist/manages-neighborhood/update/neighborhood", [
+        $response = $client->put("http://" . $ip_adress . "/odsolidwaist/manages-neighborhood/update/neighborhood", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',

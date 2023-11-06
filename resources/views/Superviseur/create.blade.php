@@ -118,24 +118,24 @@
                                 <label for="exampleInputPassword1" class="form-label">Entreprise</label>
                                 <select class="form-control" id="entrepriseId" required="true" name="entrepriseId"
                                     style="border-radius: 10px;">
-                                    {{-- <option value="1">Entreprise A</option>
-                                    <option value="2">Entreprise B</option> --}}
-                                    {{-- @if($role =="ADMIN")--}}
-                                    @foreach ($entreprises as $entrepris )
+                                    @foreach ($entreprises as $entrepris)
+                                        @if($entrepris['entrepriseId'] == $entreprise && $role == 8) 
+                                            <option value="{{$entrepris['entrepriseId']}}" selected>{{$entrepris['name']}}</option>
+                                        
+                                        @endif 
 
-                                    {{-- @if($entrepris['name'] == $entreprise) --}}
-                                    <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
-                                    {{-- @endif --}}
+                                        @if($entrepris['entrepriseId'] == $entreprise && $role == 7) 
+                                            <option value="{{$entrepris['entrepriseId']}}" selected>{{$entrepris['name']}}</option>
+                                        
+                                        @endif 
+
+
+                                        @if( $role == 12) 
+                                        <option value="{{$entrepris['entrepriseId']}}" selected>{{$entrepris['name']}}</option>
+                                    
+                                    @endif 
                                     @endforeach
-                                   {{-- @endif
 
-                                    @if($role =="SUPERADMIN")
-                                    @foreach ($entreprises as $entrepris )
-
-                                    <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
-
-                                    @endforeach
-                                    @endif --}}
                                 </select>
 
                             </div>

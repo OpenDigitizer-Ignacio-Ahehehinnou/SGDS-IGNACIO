@@ -112,15 +112,24 @@
                                 <label for="exampleInputPassword1" class="form-label">Entreprise</label>
                                 <select class="form-control" id="entrepriseId" required="true" name="entrepriseId"
                                     style="border-radius: 10px;">
-                                    @foreach ($entreprises as $entrepris )
+                                    @foreach ($entreprises as $entrepris)
+                                        @if($entrepris['entrepriseId'] == $entreprise && $role == 8) 
+                                            <option value="{{$entrepris['entrepriseId']}}" selected>{{$entrepris['name']}}</option>
+                                        
+                                        @endif 
 
-                                    @if($entrepris['entrepriseId'] == $entreprise && $role == 8) 
-                                   <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
-                                       @else
-                                       <option value="{{$entrepris['entrepriseId']}}">{{$entrepris['name']}}</option>
+                                        @if($entrepris['entrepriseId'] == $entreprise && $role == 7) 
+                                            <option value="{{$entrepris['entrepriseId']}}" selected>{{$entrepris['name']}}</option>
+                                        
+                                        @endif 
 
-                                   @endif 
-                                   @endforeach
+
+                                        @if( $role == 12) 
+                                        <option value="{{$entrepris['entrepriseId']}}" selected>{{$entrepris['name']}}</option>
+                                    
+                                    @endif 
+                                    @endforeach
+
                                   
                                 </select>
 

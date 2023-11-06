@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use Illuminate\Http\Response;
 
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+
 class ArrondissementController extends Controller
 {
     //
@@ -25,9 +29,20 @@ class ArrondissementController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-district/find/district/non_deleted-activate');
 
         $arrondissementss = $response->json();
-        $arrondissements=$arrondissementss['data']['content'];
+        $arrondissements1=$arrondissementss['data']['content'];
         //$id=$communes['departementId'];
        // dd($arrondissements);
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $arrondissements = new LengthAwarePaginator(
+           array_slice($arrondissements1, ($currentPage - 1) * $perPage, $perPage),
+           count($arrondissements1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
+
         return view('Arrondissement.index', compact("arrondissements"));
     }
 
@@ -44,9 +59,21 @@ class ArrondissementController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-district/find/district/non_deleted-disable');
 
         $arrondissementss = $response->json();
-        $arrondissements=$arrondissementss['data']['content'];
+        $arrondissements1=$arrondissementss['data']['content'];
         //$id=$communes['departementId'];
        // dd($arrondissements);
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $arrondissements = new LengthAwarePaginator(
+           array_slice($arrondissements1, ($currentPage - 1) * $perPage, $perPage),
+           count($arrondissements1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
+
+
         return view('Arrondissement.ArrondissementDesactiver', compact("arrondissements"));
     }
 
@@ -104,14 +131,11 @@ class ArrondissementController extends Controller
 
         
         // Récupérer la variable de la session
-        // $variableRecuperee = session('variableEnvoyee');
-        // $response = HTTP::withHeaders([
-        //     'Authorization' => 'Bearer ' . $variableRecuperee,
-        // ])->post('http://'.$ip_adress.'/odsolidwaist/manages-category/create/category', $test);
-
-        // Récupérer la variable de session
         $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-district/create/district', $test);
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://'.$ip_adress.'/odsolidwaist/manages-district/create/district', $test);
+    
     
         $arrondissementss = $response->json();
 
@@ -163,7 +187,7 @@ class ArrondissementController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
         
-        $response = $client->put("http://192.168.8.101:8080/odsolidwaist/manages-district/update/district", [
+        $response = $client->put("http://" . $ip_adress. "/odsolidwaist/manages-district/update/district", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',

@@ -218,9 +218,9 @@ class SuperviseurController extends Controller
     {
         $ip_adress = env('APP_IP_ADRESS');
 
-        $donnees = $request->documentId;
+        $donnees = $request->id;
         //dd($donnees);
-
+        try{
         $variableRecuperee = session('variableEnvoyee');
 
         $url = "http://".$ip_adress."/odsolidwaist/manages-users/delete/user/" .$donnees;
@@ -228,10 +228,11 @@ class SuperviseurController extends Controller
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->put($url);
-
-
-        return back()->with("successDelete", "Le superviseur a été supprimé avec succès");
- 
+        return new Response(200);
+    } catch (Exception $e) {
+                //dd(0);
+                //return new Response(500);
+            } 
     }
  
     public function update(Request $request, $id)

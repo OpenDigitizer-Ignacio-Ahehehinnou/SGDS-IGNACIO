@@ -86,11 +86,11 @@
                                     
                                     <a href="{{route('departement.edit', ['departement'=>$departement['departmentId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                                     
-                                    <button type="button" class="btn btn-danger"
+                                    {{-- <button type="button" class="btn btn-danger"
                                     data-key="{{ $departement['departmentId'] }}" data-toggle="modal"
                                     data-target="#confirmationModal">
                                     <i class="bi bi-trash3-fill"></i>
-                                </button>
+                                </button> --}}
                             </td>
 
                             </tr>
@@ -100,6 +100,10 @@
                                 
                                 </tbody>
                             </table>
+
+                            <div class="d-flex justify-content-center">
+                                {{ $departements->links('vendor.pagination.bootstrap-4') }}
+                            </div>
                         </div>
                         <!-- /.box-body -->
                     </div>
@@ -111,7 +115,7 @@
     </div>
 
 
-    
+{{--     
 <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -132,7 +136,7 @@
         </div>
     </div>
 
-</div>
+</div> --}}
 
 
    

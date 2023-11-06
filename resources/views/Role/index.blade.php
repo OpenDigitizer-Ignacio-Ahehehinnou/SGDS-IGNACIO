@@ -88,18 +88,19 @@
                                             <a href="{{route('role.edit', ['roleId'=>$role['roleId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
 
 
-                                                <button type="button" class="btn btn-danger"
-                                                    data-key="{{ $role['roleId'] }}" data-toggle="modal"
-                                                    data-target="#confirmationModal">
-                                                    <i class="bi bi-trash3-fill"></i>
-                                                </button>
-                                                
+                                            <button type="button" class="btn btn-danger supprimerEntreprise2" data-key="{{ $role['roleId'] }}" data-toggle="modal" data-target="#confirmationModal2">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                     
                                                     </td>
                                         </td>
                                     </tr>
                                         @endforeach
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center">
+                                {{ $roles->links('vendor.pagination.bootstrap-4') }}
+                            </div>
                         </div>
                         <!-- /.box-body -->
                     </div>
@@ -110,49 +111,80 @@
     </div>
 
 
-    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+     {{-- modal pour supprimer un superviseur  --}}
+     <div class="modal fade" id="confirmationModal2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <form method="POST" action="{{ route('role.supprimer') }}">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirmation de suppression</h5>
-                    </div>
-                    <div class="modal-body m-3">
-                        <p class="mb-0">Voulez vous vraiment supprimer ce rôle ?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="documentId" id="documentId" value="">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-
-                        <button type="submit" class="btn btn-danger">Oui</button>
-                    </div>
-                </form>
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation de suppression</h5>
+                </div>
+                <div class="modal-body m-3">
+                    <p class="mb-0">Voulez-vous vraiment supprimer ce rôle?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                    <button type="button" class="btn btn-danger confirm-delete2">Oui</button>
+                </div>
             </div>
         </div>
-
     </div>
+   
 
     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
-
+{{--  Supprimer un superviseur --}}
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    $(document).ready(function (e) {
+        $('.confirm-delete2').on('click', function(e) {
+            e.preventDefault();
+            var id = $('.supprimerEntreprise2').attr('data-key');
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            var url = "{{ route('role.supprimer') }}";
+            var data = {
+                _token: csrfToken,
+                id: id
+            };
 
-       $('#confirmationModal').on('show.bs.modal', function(e) {
-           var button = $(e.relatedTarget);
-           var deleteId = button.data('key');
-           var modal = $(this);
-           modal.find('#documentId').val(deleteId);
-       })
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                                                //$('#confirmationModal2').modal('hide');
 
+                    if (parseInt(response) == 200 || parseInt(response) == 500) {
+                        if (parseInt(response) == 500) {
+                            $("#msg200").html(`<div class='alert alert-danger text-center' role='alert'>
+                                <strong>Une erreur s'est produite</strong> veuillez réessayer.
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        } else {
 
-   });
-   
+                            $('#msg200').html(`<div class='alert alert-success text-center' role='alert'>
+                                <strong>Rôle supprimé avec succès</strong>
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        }
+                    }
+
+                    var url = "{{ route('role') }}";
+                    if (response == 200) {
+                        setTimeout(function () {
+                            window.location = url;
+                        }, 1000);
+                    } else {
+                        $("#msg200").html(response);
+                    }
+                }
+            });
+        });
+    });
 </script>
 
-
-e
 
 
 @endsection

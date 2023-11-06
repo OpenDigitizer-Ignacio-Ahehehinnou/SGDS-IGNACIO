@@ -14,7 +14,7 @@
                     <!-- la pagination sans oublier code bootstrap dans provider(AppServiceProvider) -->
 
                     <a href="{{ route ('arrondissement.create')}}" type="button" class=" btn btn-primary">Ajouter un arrondissement</a></div>
-                    <a href="{{ route ('arrondissement2')}}" type="button" class=" btn btn-primary">Arrondissement desactivée</a></div>
+                    {{-- <a href="{{ route ('arrondissement2')}}" type="button" class=" btn btn-primary">Arrondissement desactivée</a></div> --}}
 
                 </div>
                 <br>
@@ -95,18 +95,22 @@
                                             <a href="{{route('arrondissement.edit', ['arrondissement'=>$arrondissement['districtId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
 
 
-                                                <button type="button" class="btn btn-danger"
+                                                {{-- <button type="button" class="btn btn-danger"
                                                     data-key="{{ $arrondissement['districtId'] }}" data-toggle="modal"
                                                     data-target="#confirmationModal">
                                                     <i class="bi bi-trash3-fill"></i>
                                                 </button>
-                                                
+                                                 --}}
                                                     </td>
                                         </td>
                                     </tr>
                                         @endforeach
                                 </tbody>
                             </table>
+
+                            <div class="d-flex justify-content-center">
+                                {{ $arrondissements->links('vendor.pagination.bootstrap-4') }}
+                            </div>
                         </div>
                         <!-- /.box-body -->
                     </div>

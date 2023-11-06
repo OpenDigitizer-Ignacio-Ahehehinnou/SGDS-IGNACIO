@@ -33,12 +33,12 @@
               <div class="inner">
                 <h3>{{ $countEntreprisesA }}</h3>
 
-                <p>Active</p>
+                <p>Entreprises</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="" class="small-box-footer">Liste des entreprises actives <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="{{route('admin')}}" class="small-box-footer">Liste des entreprises<i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -46,14 +46,14 @@
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
-                <h3>{{ $countEntreprisesI }}<sup style="font-size: 20px"></sup></h3>
+                <h3>{{ $countQuartier }}<sup style="font-size: 20px"></sup></h3>
 
-                <p>Inactive</p>
+                <p>Quartiers</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="" class="small-box-footer">Liste des entreprises inactive <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="{{route('quartier')}}" class="small-box-footer">Liste des quartiers <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -68,7 +68,7 @@
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="" class="small-box-footer">Liste des arrondissements actives <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="{{route('arrondissement')}}" class="small-box-footer">Liste des arrondissements actives <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -83,7 +83,7 @@
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="" class="small-box-footer">Liste des arrondissements inactive <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="{{route('arrondissement2')}}" class="small-box-footer">Liste des arrondissements inactive <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

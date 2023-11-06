@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use Illuminate\Http\Response;
 
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class CommuneController extends Controller
 {
     //
@@ -25,9 +28,21 @@ class CommuneController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-municipality/find/municipality/non_deleted-activate');
 
         $communess = $response->json(); 
-        $communes=$communess['data']['content'];
+        $communes1=$communess['data']['content'];
         //$id=$communes['departementId'];
        //dd($communes);
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $communes = new LengthAwarePaginator(
+           array_slice($communes1, ($currentPage - 1) * $perPage, $perPage),
+           count($communes1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
+
+
         return view('Commune.index', compact("communes"));
     }
 
@@ -43,9 +58,20 @@ class CommuneController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-municipality/find/municipality/non_deleted-disable');
 
         $communess = $response->json(); 
-        $communes=$communess['data']['content'];
+        $communes1=$communess['data']['content'];
         //$id=$communes['departementId'];
        //dd($communes);
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $communes = new LengthAwarePaginator(
+           array_slice($communes1, ($currentPage - 1) * $perPage, $perPage),
+           count($communes1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
+
         return view('Commune.communeDesactiver', compact("communes"));
     }
 
@@ -94,15 +120,13 @@ class CommuneController extends Controller
 
         
         // Récupérer la variable de la session
-        // $variableRecuperee = session('variableEnvoyee');
-        // $response = HTTP::withHeaders([
-        //     'Authorization' => 'Bearer ' . $variableRecuperee,
-        // ])->post('http://'.$ip_adress.'/odsolidwaist/manages-category/create/category', $test);
-
-        // Récupérer la variable de session
         $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-municipality/create/municipality', $test);
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://'.$ip_adress.'/odsolidwaist/manages-municipality/create/municipality', $test);
     
+        // Récupérer la variable de session
+
         $communess = $response->json();
 
         //dd($communess);
@@ -155,7 +179,7 @@ class CommuneController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
         
-        $response = $client->put("http://192.168.8.101:8080/odsolidwaist/manages-municipality/update/municipality", [
+        $response = $client->put("http://".$ip_adress. "/odsolidwaist/manages-municipality/update/municipality", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',

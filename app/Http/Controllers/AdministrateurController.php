@@ -13,7 +13,8 @@ use Illuminate\Http\Client\Response;
 use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 use function Pest\Laravel\json;
 
@@ -39,18 +40,23 @@ class AdministrateurController extends Controller
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->get("http://" . $ip_adress . "/odsolidwaist/manages-entreprise/find/entreprise/active");
         
-    //     $variableRecuperee = session('variableEnvoyee');
-       // $response = HTTP::get("http://'.$ip_adress.'/odsolidwaist/manages-entreprise/find/entreprise/active");
-         //$response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-entreprise/find/entreprise/active");
-
+    
         $entreprisess = $response->json();
        // dd($entreprisess);
         if($entreprisess == null){
             return redirect()->route('login');
         }
-        $entreprises = $entreprisess['data']['content'];
-
-
+        $entreprises1 = $entreprisess['data']['content'];
+        // Paginer les données avec 10 éléments par page
+        $currentPage = Paginator::resolveCurrentPage() ?: 1;
+        $perPage = 10;
+        $entreprises = new LengthAwarePaginator(
+            array_slice($entreprises1, ($currentPage - 1) * $perPage, $perPage),
+            count($entreprises1),
+            $perPage,
+            $currentPage,
+            ['path' => Paginator::resolveCurrentPath()]
+        );
         //dd($usernames);
         return view('Admin/index', compact("entreprises","entrepriseId","role"));
     }
@@ -125,7 +131,7 @@ class AdministrateurController extends Controller
          // dd($entreprisess);
           $entreprises=$entreprisess['data']['content'];
 
-         //dd($entreprises);
+         //édd($entreprise,$entreprises);
          
 
         //ajouter un admin
@@ -261,7 +267,7 @@ class AdministrateurController extends Controller
        $id = $request->id;
         //dd($id);
         //$id=50;
-
+        try{
         $variableRecuperee = session('variableEnvoyee');
 
         $url = "http://".$ip_adress."/odsolidwaist/manages-users/delete/user/" .$id;
@@ -269,9 +275,12 @@ class AdministrateurController extends Controller
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->put($url);
-            dd($response->json());
-
-        return back()->with("successDelete", "L'administrateur a été supprimé avec succès");
+        return new Response(200);
+        } catch (Exception $e) {
+                    //dd(0);
+                    //return new Response(500);
+        }
+            // return back()->with("successDelete", "L'administrateur a été supprimé avec succès");
 
     }
 
@@ -279,7 +288,8 @@ class AdministrateurController extends Controller
     {
         $ip_adress = env('APP_IP_ADRESS');
 
-        //dd($request);
+           // dump(10);
+
         $request->validate([
             "firstName" => "required",
             "lastName" => "required",
@@ -288,7 +298,7 @@ class AdministrateurController extends Controller
             "username" => "required",
             "adress" => "required",
         ]);
-
+           // dd($request);
         $test = array();
         $test['userId'] = $request['userId'];
         $test['firstName'] = $request['firstName'];
@@ -466,4 +476,125 @@ class AdministrateurController extends Controller
                 }
     }
 
+    public function updateProfil(Request $request, $id)
+    {
+        $ip_adress = env('APP_IP_ADRESS');
+
+            //dump(10);
+
+        $request->validate([
+            "firstName" => "required",
+            "lastName" => "required",
+            "matricule" => "required",
+            "telephone" => "required|numeric",
+            "username" => "required",
+            "adress" => "required",
+        ]);
+           // dd($request);
+        $test = array();
+        $test['userId'] = $request['userId'];
+        $test['firstName'] = $request['firstName'];
+        $test['lastName'] = $request['lastName'];
+        $test['matricule'] = $request['matricule'];
+        $test['telephone'] = $request['telephone'];
+        $test['photoProfil'] = $request['photoProfil'];
+        $test['adress'] = $request['adress'];
+        $test['username'] = $request['username'];
+        $test['email'] = $request['email'];
+        $test['entrepriseId'] = $request['entrepriseId'];
+        $test['roleId'] = $request['roleId'];
+        $test['isEnabled'] = true;
+        $test['isAccountNonExpired'] = true;
+        $test['isAccountNonLocked'] = true;
+        $test['isCredentialsNonExpired'] = true;
+        $test['updatedAt'] = $request['updatedAt'];
+        $test['userIdForLog'] = $request['userIdForLog'];
+        $test['createdAt'] = $request['createdAt'];
+        $test['deletedFlag'] = $request['deletedFlag'];
+        $test['updatedBy'] = $request['updatedBy'];
+        $test['verificationCodeExpiredAt'] = $request['verificationCodeExpiredAt'];
+        $test['verificationCode'] = $request['verificationCode'];
+        $test['deletedAt'] = $request['deletedAt'];
+        $test['createdBy'] = $request['createdBy'];
+        $test['deletedBy'] = $request['deletedBy'];
+
+        dd($test);
+
+        $dataToUpdate = $test;
+
+
+        $variableRecuperee = session('variableEnvoyee');
+
+
+
+        $response1 = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/usernameVerification/forUpdate', [
+            'userId' => $test['userId'],
+            'username' => $test['username']
+            // 'matricule' => $test['matricule']
+        ]);
+        //dd($response1->json());
+        //les trois ensemble avec userId
+        $response2 = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://' . $ip_adress . '/odsolidwaist/manages-users/userUniqueVerification/forUpdate', [
+            'userId' => $test['userId'],
+            'username' => $test['username'],
+            'matricule' => $test['matricule'],
+            'email' => $test['email']
+
+        ]);
+        $username= $response1->json();
+        $userNames=$username['data'];
+        //dd($emails);
+        if($userNames['isUsernameExist'] == true){
+
+            return redirect()->back()->with('success', 'Le nom d\'utilisateur existe déjà.');
+
+        }
+
+        $lesTrois= $response2->json();
+        //dd($lesTrois);
+        $les3=$lesTrois['data'];
+        if($les3['isUsernameExist'] == true){
+
+            return redirect()->back()->with('success', 'Le nom d\'utilisateur existe déjà.');
+
+        }
+        if($les3['isEmailExist'] == true){
+
+            return redirect()->back()->with('success', 'Le mail existe déjà.');
+
+        }
+        if($les3['isMatriculeExist'] == true){
+
+            return redirect()->back()->with('success', 'Le matricule existe déjà.');
+
+        }
+
+
+
+        // // Créez une instance du client GuzzleHttp
+        $client = new Client();
+
+        $response = $client->put("http://" . $ip_adress . "/odsolidwaist/manages-users/update", [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $variableRecuperee,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $dataToUpdate,
+        ]);
+        // $variableRecuperee = session('variableEnvoyee');
+
+        // $response = HTTP::put("http://" . $ip_adress . "/odsolidwaist/manages-users/update", $test);
+    
+            //dd($response);
+        return redirect()->route('admin')->with("success", "Administrateur mis à jour avec succès");
+
+
+    }
+   
+    
 }

@@ -92,12 +92,12 @@
                                             </button>
                                             <a href="{{route('quartier.edit', ['quartier'=>$quartier['neighborhoodId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
 
-
+{{-- 
                                                 <button type="button" class="btn btn-danger"
                                                     data-key="{{ $quartier['neighborhoodId'] }}" data-toggle="modal"
                                                     data-target="#confirmationModal">
                                                     <i class="bi bi-trash3-fill"></i>
-                                                </button>
+                                                </button> --}}
                                                 
                                                     </td>
                                         </td>
@@ -105,6 +105,10 @@
                                         @endforeach
                                 </tbody>
                             </table>
+
+                            <div class="d-flex justify-content-center">
+                                {{ $quartiers->links('vendor.pagination.bootstrap-4') }}
+                            </div>
                         </div>
                         <!-- /.box-body -->
                     </div>

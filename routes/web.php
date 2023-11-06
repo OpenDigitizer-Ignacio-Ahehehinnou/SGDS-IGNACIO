@@ -88,6 +88,8 @@ Route::get('/admin/create', [AdministrateurController::class, 'create'])->name('
 Route::post('/admin/create', [AdministrateurController::class, 'store'])->name('admin.ajouter');
 Route::post('/admin', [AdministrateurController::class, 'delete'])->name('admin.supprimer');
 Route::put('/admin/{administrateur}', [AdministrateurController::class, 'update'])->name('admin.update');
+Route::put('/admin/{administrateur}', [AdministrateurController::class, 'updateProfil'])->name('admin.updateProfil');
+
 Route::get('/admin/{administrateur}', [AdministrateurController::class, 'edit'])->name('admin.edit');
 Route::get('/admin', [AdministrateurController::class, 'index'])->name('admin');
 Route::get('/show/{entreprise}', [AdministrateurController::class, 'detail'])->name('admin.detail');
@@ -105,7 +107,7 @@ Route::post('/superAdmin/create', [superAdminController::class, 'store'])->name(
 Route::post('/superAdmin', [superAdminController::class, 'delete'])->name('superAdmin.supprimer');
 Route::put('/superAdmin/{superAdmin}', [superAdminController::class, 'update'])->name('superAdmin.update');
 Route::get('/superAdmin/{superAdmin}', [superAdminController::class, 'edit'])->name('superAdmin.edit');
-Route::get('/superAdmin', [superAdminController::class, 'index'])->name('superAdmin');
+// Route::get('/superAdmin', [superAdminController::class, 'index'])->name('superAdmin');
 Route::get('/Detail', [superAdminController::class, 'detail'])->name('superAdmin.detail');
 
 //SUPERVISEUR

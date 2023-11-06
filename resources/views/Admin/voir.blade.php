@@ -45,39 +45,40 @@
 
     @foreach ($superviseurs as $superviseur)
     @php
-    $bos[] = [
-        'bo0' => $superviseur['userId'],
-        'bo' => $superviseur['firstName'],
-        'bo1' => $superviseur['lastName'],
-        'bo2' => $superviseur['telephone'],
-        'bo3' => $superviseur['matricule'],
-        'bo4' => $superviseur['adress'],
-        'bo5' => $superviseur['email'],
-    ];
-@endphp
+        $bos[] = [
+            'bo0' => $superviseur['userId'],
+            'bo' => $superviseur['firstName'],
+            'bo1' => $superviseur['lastName'],
+            'bo2' => $superviseur['telephone'],
+            'bo3' => $superviseur['matricule'],
+            'bo4' => $superviseur['adress'],
+            'bo5' => $superviseur['email'],
+        ];
+    @endphp
     @endforeach
 
 
 
     @foreach ($collecteurs as $collecteur)
     @php
-    $tos[] = [
-        'to0' => $collecteur['userId'],
-        'to' => $collecteur['firstName'],
-        'to1' => $collecteur['lastName'],
-        'to2' => $collecteur['telephone'],
-        'to3' => $collecteur['matricule'],
-        'to4' => $collecteur['adress'],
-        'to5' => $collecteur['email'],
-    ];
-@endphp
+        $tos[] = [
+            'to0' => $collecteur['userId'],
+            'to' => $collecteur['firstName'],
+            'to1' => $collecteur['lastName'],
+            'to2' => $collecteur['telephone'],
+            'to3' => $collecteur['matricule'],
+            'to4' => $collecteur['adress'],
+            'to5' => $collecteur['email'],
+        ];
+    @endphp
     @endforeach
 
 
 
     <div class="d-flex flex-row">
         <ul class="nav nav-tabs">
-            <li class="nav-item">
+
+            <li class="nav-item active" >
                 <a class="nav-link active" aria-current="page" href="#categorieActive" data-toggle="tab">Liste des admins</a>
             </li>
             <li class="nav-item">
@@ -86,19 +87,21 @@
             <li class="nav-item">
                 <a class="nav-link" href="#toutesCategories" data-toggle="tab">Liste des collecteurs</a>
             </li>
+
         </ul>
     </div>
 
     <div class="tab-content mt-2">
 
-        <div id="categorieActive" class="tab-pane fade show active">
+        <div id="categorieActive" class="tab-pane fade in active">
 
 
             <div class="card" style="margin:20px;">
 
+                <div id="msg2"></div>
 
 
-                <h1 class="card-header">Liste des administrateurs</h1><br>
+                <h1 class="card-header ">Liste des administrateurs</h1><br>
 
                 <div id="msg200"></div>
 
@@ -149,38 +152,18 @@
                                     <a href="{{ route('admin.edit', ['administrateur' => $item['po0']]) }}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
 
 
-                                    <button type="button" class="btn btn-danger supprimerEntreprise"
-                                        data-key="{{ $item['po0'] }}" data-toggle="modal"
-                                        >
-                                        <i class="bi bi-trash3-fill"></i>
-                                    </button>
+                                    {{-- <button type="button" class="btn btn-danger supprimerEntreprise"
+                                            data-key="{{ $item['po0'] }}" data-toggle="modal">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button> --}}
+
+
+                                        <button type="button" class="btn btn-danger supprimerEntreprise" data-key="{{ $item['po0'] }}" data-toggle="modal" data-target="#confirmationModal">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
                                 
                             
-                            <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <form method="POST" >
-                                            @csrf
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Confirmation de suppression</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                            
-                                            <div class="modal-body m-3">
-                                                <p class="mb-0">Voulez-vous vraiment supprimer cet élément ?</p>
-                                            </div>
-                                            
-                                            <div class="modal-footer">
-                                                <input type="hidden" name="documentId" id="documentId" value="">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                                                <button type="submit" class="btn btn-danger">Oui</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-
+                           
                                 </td>
                             @endif
                             </tr>
@@ -205,6 +188,7 @@
 
             <div class="card" style="margin:20px;">
 
+                <div id="msg2"></div>
 
 
                 <h1 class="card-header">Liste des superviseurs</h1><br>
@@ -248,12 +232,10 @@
                                     <a href="{{ route('superviseur.edit', ['superviseur' => $item['bo0']]) }}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
 
 
-                                        <button type="button" class="btn btn-danger"
-                                            data-key="{{ $item['bo0'] }}" data-toggle="modal"
-                                            data-target="#confirmationModal2">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-
+                                    <button type="button" class="btn btn-danger supprimerEntreprise2" data-key="{{ $item['bo0'] }}" data-toggle="modal" data-target="#confirmationModal2">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                            
 
 
                                 </td>
@@ -280,7 +262,7 @@
 
             <div class="card" style="margin:20px;">
 
-
+                <div id="msg2"></div>
 
                 <h1 class="card-header">Liste des collecteurs</h1><br>
 
@@ -323,12 +305,10 @@
                                     <a href="{{ route('collecteur.edit', ['collecteur' => $item['to0']]) }}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
 
 
-                                        <button type="button" class="btn btn-danger"
-                                            data-key="{{ $item['to0'] }}" data-toggle="modal"
-                                            data-target="#confirmationModal3">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-
+                                    <button type="button" class="btn btn-danger supprimerEntreprise3" data-key="{{ $item['to0'] }}" data-toggle="modal" data-target="#confirmationModal3">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                            
 
                                 </td>
                             </tr>
@@ -348,80 +328,60 @@
 
     </div>
 
-     {{-- <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
-
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <form method="POST" action="{{ route('admin.supprimer') }}">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirmation de suppression</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <div class="modal-body m-3">
-                        <p class="mb-0">Voulez vous vraiment supprimer cet admin ?</p>
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <input type="hidden" name="documentId" id="documentId" value="">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                        <button type="submit" class="btn btn-danger">Oui</button>
-                    </div>
-                </form>
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation de suppression</h5>
+                </div>
+                <div class="modal-body m-3">
+                    <p class="mb-0">Voulez-vous vraiment supprimer cet administrateur?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                    <button type="button" class="btn btn-danger confirm-delete">Oui</button>
+                </div>
             </div>
         </div>
-    
     </div>
-      --}}
+     
      {{-- modal pour supprimer un superviseur  --}}
      <div class="modal fade" id="confirmationModal2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <form method="POST" action="{{ route('superviseur.supprimer') }}">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirmation de suppression</h5>
-                    </div>
-                    <div class="modal-body m-3">
-                        <p class="mb-0">Voulez vous vraiment supprimer ce superviseur ?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="documentId" id="documentId" value="">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-
-                        <button type="submit" class="btn btn-danger">Oui</button>
-                    </div>
-                </form>
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation de suppression</h5>
+                </div>
+                <div class="modal-body m-3">
+                    <p class="mb-0">Voulez-vous vraiment supprimer ce superviseur?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                    <button type="button" class="btn btn-danger confirm-delete2">Oui</button>
+                </div>
             </div>
         </div>
-
     </div>
+   
 
     {{-- modal pour supprimer un collecteur  --}}
     <div class="modal fade" id="confirmationModal3" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <form method="POST" action="{{ route('superviseur.supprimer') }}">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirmation de suppression</h5>
-                    </div>
-                    <div class="modal-body m-3">
-                        <p class="mb-0">Voulez vous vraiment supprimer ce collecteur ?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="documentId" id="documentId" value="">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-
-                        <button type="submit" class="btn btn-danger">Oui</button>
-                    </div>
-                </form>
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation de suppression</h5>
+                </div>
+                <div class="modal-body m-3">
+                    <p class="mb-0">Voulez-vous vraiment supprimer cet collecteur?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                    <button type="button" class="btn btn-danger confirm-delete3">Oui</button>
+                </div>
             </div>
         </div>
-
     </div>
-
+   
 
 
 
@@ -430,82 +390,56 @@
 
     
 {{--  Supprimer un admin --}}
-{{-- <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        $('#confirmationModal').on('show.bs.modal', function(e) {
-            var button = $(e.relatedTarget);
-            var deleteId = button.data('key');
-            var modal = $(this);
-            modal.find('#documentId').val(deleteId);
-        });
-    });
-</script> --}}
 <script>
-    
     $(document).ready(function (e) {
-        
-        $('.supprimerEntreprise').on('click', function(e) {
-            e.preventDefault()
-        
-            //alert("Ouverture du formulaire d'inscription")
+        $('.confirm-delete').on('click', function(e) {
+            e.preventDefault();
+            var id = $('.supprimerEntreprise').attr('data-key');
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            var url = "{{ route('admin.supprimer') }}";
+            var data = {
+                _token: csrfToken,
+                id: id
+            };
+            //$('#confirmationModal2').modal('hide');
 
-            var id = $(this).attr('data-key');
-           // alert(id);
-            var isBoss = confirm("Voulez vous supprimer cette entreprise ?");
-            if(isBoss==true){
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                var url = "{{ route('admin.supprimer')}}";
-
-                var data = {
-                    _token: csrfToken,
-                    id
-
-                };
-
-                
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: data,
-                    success: function (response)
-                    { 
-                            if(parseInt(response)==200 || parseInt(response)==500){
-                
-                                parseInt(response)==500?($("#msg2").html(`<div class='alert alert-danger text-center' role='alert'>
-                                    <strong>Une erreur s'est produite</strong> veuillez réessayez.
-                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                                        <span aria-hidden='true'>&times;</span>
-                                    </button>
-                                    </div>`)
-                                ):($('#msg2').html(`<div class='alert alert-success text-center' role='alert'>
-                                    <strong>Entreprise supprimé avec succès  </strong> "
-                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                                        <span aria-hidden='true'>&times;</span>
-                                    </button>
-                                    </div>`)
-                                ); 
-                            }
-                            
-                            var url="{{route('admin')}}" 
-                            if(response==200){
-                                setTimeout(function(){
-                                    window.location=url
-                                },3000) 
-                            }  else{
-                                $("#msg2").html(response);
-        
-                                } 
-
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                    if (parseInt(response) == 200 || parseInt(response) == 500) {
+                        if (parseInt(response) == 500) {
+                            $("#msg2").html(`<div class='alert alert-danger text-center' role='alert'>
+                                <strong>Une erreur s'est produite</strong> veuillez réessayer.
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        } else {
+                            $('#msg2').html(`<div class='alert alert-success text-center' role='alert'>
+                                <strong>Admin supprimé avec succès</strong>
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        }
                     }
-                
-                });
-            }else{
-                $("#msg2").innerHtml("");
-            }
+
+                    var url = "{{ route('admin') }}";
+                    if (response == 200) {
+                        setTimeout(function () {
+                            window.location = url;
+                        }, 1000);
+                    } else {
+                        $("#msg2").html(response);
+                    }
+                }
+            });
         });
     });
 </script>
+
 {{-- <script>
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -571,19 +505,54 @@
     
 {{--  Supprimer un superviseur --}}
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    $(document).ready(function (e) {
+        $('.confirm-delete2').on('click', function(e) {
+            e.preventDefault();
+            var id = $('.supprimerEntreprise2').attr('data-key');
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            var url = "{{ route('superviseur.supprimer') }}";
+            var data = {
+                _token: csrfToken,
+                id: id
+            };
+            //$('#confirmationModal2').modal('hide');
 
-       $('#confirmationModal2').on('show.bs.modal', function(e) {
-           var button = $(e.relatedTarget);
-           var deleteId = button.data('key');
-           var modal = $(this);
-           modal.find('#documentId').val(deleteId);
-       })
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                    if (parseInt(response) == 200 || parseInt(response) == 500) {
+                        if (parseInt(response) == 500) {
+                            $("#msg2").html(`<div class='alert alert-danger text-center' role='alert'>
+                                <strong>Une erreur s'est produite</strong> veuillez réessayer.
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        } else {
+                            $('#msg2').html(`<div class='alert alert-success text-center' role='alert'>
+                                <strong>Superviseur supprimé avec succès</strong>
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        }
+                    }
 
-
-   });
+                    var url = "{{ route('admin') }}";
+                    if (response == 200) {
+                        setTimeout(function () {
+                            window.location = url;
+                        }, 1000);
+                    } else {
+                        $("#msg2").html(response);
+                    }
+                }
+            });
+        });
+    });
 </script>
-
 
   {{-- Le script pour  desactiver un superviseur  --}}
   <script>
@@ -636,15 +605,53 @@
 
 {{--  Supprimer un collecteur --}}
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    $(document).ready(function (e) {
+        $('.confirm-delete3').on('click', function(e) {
+            e.preventDefault();
+            var id = $('.supprimerEntreprise3').attr('data-key');
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            var url = "{{ route('collecteur.supprimer') }}";
+            var data = {
+                _token: csrfToken,
+                id: id
+            };
 
-        $('#confirmationModal3').on('show.bs.modal', function(e) {
-            var button = $(e.relatedTarget);
-            var deleteId = button.data('key');
-            var modal = $(this);
-            modal.find('#documentId').val(deleteId);
-        })
+            //$('#confirmationModal3').modal('hide');
 
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                    if (parseInt(response) == 200 || parseInt(response) == 500) {
+                        if (parseInt(response) == 500) {
+                            $("#msg2").html(`<div class='alert alert-danger text-center' role='alert'>
+                                <strong>Une erreur s'est produite</strong> veuillez réessayer.
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        } else {
+                            $('#msg2').html(`<div class='alert alert-success text-center' role='alert'>
+                                <strong>Collecteur supprimé avec succès</strong>
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>`);
+                        }
+                    }
+
+                    var url = "{{ route('admin') }}";
+                    if (response == 200) {
+                        setTimeout(function () {
+                            window.location = url;
+                        }, 1000);
+                    } else {
+                        $("#msg2").html(response);
+                    }
+                }
+            });
+        });
     });
 </script>
 

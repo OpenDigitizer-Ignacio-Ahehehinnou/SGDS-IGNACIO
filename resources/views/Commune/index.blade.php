@@ -68,7 +68,7 @@
                                             <th scope="col">Code</th>
                                             <th scope="col">Commune</th>
                                             <th scope="col">Département</th>
-                                            <th>Actions</th>
+                                            {{-- <th>Actions</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,7 +77,7 @@
                                                 <td>{{$commune['code']}}</td>
                                                 <td>{{$commune['name']}}</td>
                                                 <td>{{$commune['solidwaistDepartment']['name']}}</td> 
-                                                <td>{{$commune['isEnabled']}}</td>
+                                                {{-- <td>{{$commune['isEnabled']}}</td> --}}
 
                                                 <td>
                                                     <button type="button" class="btn btn-success" title="Désactiver" onclick="updateStatus({{ $commune['municipalityId'] }})">
@@ -86,9 +86,9 @@
                                                     
                                                     <a href="{{route('commune.edit', ['commune'=>$commune['municipalityId'] ] )}}" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                                                 
-                                                    <button type="button" class="btn btn-danger" data-key="{{ $commune['municipalityId'] }}" data-toggle="modal" data-target="#confirmationModal">
+                                                    {{-- <button type="button" class="btn btn-danger" data-key="{{ $commune['municipalityId'] }}" data-toggle="modal" data-target="#confirmationModal">
                                                         <i class="bi bi-trash3-fill"></i>
-                                                    </button>
+                                                    </button> --}}
 
                                                     
 
@@ -97,6 +97,10 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+
+                                <div class="d-flex justify-content-center">
+                                    {{ $communes->links('vendor.pagination.bootstrap-4') }}
+                                </div>
                             </div>
                             <!-- /.box-body -->
                         </div>

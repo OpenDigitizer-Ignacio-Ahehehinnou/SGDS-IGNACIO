@@ -94,6 +94,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <div class="d-flex justify-content-center">
+                                    {{ $communes->links('vendor.pagination.bootstrap-4') }}
+                                </div>
                             </div>
                             <!-- /.box-body -->
                         </div>
@@ -246,7 +249,7 @@
         // Récupérer le jeton CSRF depuis la balise meta
         
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        alert(communeId)
+        //alert(communeId)
         $.ajax({
             type: 'PUT',
             url: "{{route('commune.activer')}}",

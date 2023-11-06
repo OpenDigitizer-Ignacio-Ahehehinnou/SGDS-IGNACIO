@@ -50,11 +50,12 @@ class AuthController extends Controller
             $matricule=$administrateurs['data']['userDTO']['matricule'];
             $telephone=$administrateurs['data']['userDTO']['telephone'];
             $adresse=$administrateurs['data']['userDTO']['adress'];
+            $email=$administrateurs['data']['userDTO']['email'];
 
 
            // dd($token,$prenom,$entreprise);
             // Stocker la variable dans une session
-            session(['variableEnvoyee' => $token, 'nom'=>$nom,'adresse'=>$adresse,'prenom'=>$prenom,'matricule'=>$matricule,'telephone'=>$telephone,'username'=>$username,'userId'=>$userId,'entreprise'=>$entreprise,'role'=>$role]);
+            session(['variableEnvoyee' => $token, 'nom'=>$nom,'adresse'=>$adresse,'prenom'=>$prenom,'matricule'=>$matricule,'telephone'=>$telephone,'username'=>$username,'userId'=>$userId,'entreprise'=>$entreprise,'role'=>$role,'email'=>$email]);
 
         if ($role == 8 or $role == 7 ) {
             return redirect()->route('accueil');

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
-
+use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RoleController extends Controller
 {
@@ -18,14 +21,26 @@ class RoleController extends Controller
         // Récupérer la variable de la session
         $variableRecuperee = session('variableEnvoyee');
         //liste des categories active
-        // $response = HTTP::withHeaders([
-        //     'Authorization' => 'Bearer ' . $variableRecuperee,
-        // ])->get('http://'.$ip_adress.'/odsolidwaist/manages-role/find/role/active');
-        $response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-role/find/role/active");
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->get("http://".$ip_adress."/odsolidwaist/manages-role/find/role/active");
+
+       // $response = HTTP::get("http://".$ip_adress."/odsolidwaist/manages-role/find/role/active");
 
         $roless = $response->json(); 
-        $roles=$roless['data']['content'];
+        $roles1=$roless['data']['content'];
        //dd($roles);
+
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $roles = new LengthAwarePaginator(
+           array_slice($roles1, ($currentPage - 1) * $perPage, $perPage),
+           count($roles1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
         return view('Role.index', compact("roles"));
     }
 
@@ -57,14 +72,11 @@ class RoleController extends Controller
 
         
         // Récupérer la variable de la session
-        // $variableRecuperee = session('variableEnvoyee');
-        // $response = HTTP::withHeaders([
-        //     'Authorization' => 'Bearer ' . $variableRecuperee,
-        // ])->post('http://'.$ip_adress.'/odsolidwaist/manages-category/create/category', $test);
-
-        // Récupérer la variable de session
         $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-role/create/role', $test);
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post('http://'.$ip_adress.'/odsolidwaist/manages-role/create/role', $test);
+    
     
         $roless = $response->json();
 
@@ -73,13 +85,13 @@ class RoleController extends Controller
         if($roless['code']=== 200){
         $roles=$roless['data'];
 
-        dd($roles);
+       // dd($roles);
         
         return redirect()->route('rolee')->with("success", "Rôle ajoutée avec succès")->with(compact("roles"));
         }else{
             //dd(10);
             $roles=$roless;
-            dd($roles);
+           // dd($roles);
             return redirect()->route('role')->with("success", "Echec lors de l'\ajout du rôle");
 
         }
@@ -90,17 +102,21 @@ class RoleController extends Controller
     {
         $ip_adress = env('APP_IP_ADRESS');
 
-        $donnees = $request->documentId;
+        $donnees = $request->id;
             //dd($donnees);
-
+        try{
         $variableRecuperee = session('variableEnvoyee');
 
         $response = HTTP::withHeaders([
             'Authorization' => 'Bearer ' . $variableRecuperee,
         ])->put('http://'.$ip_adress.'/odsolidwaist/manages-role/delete/role/' . $donnees);
     
-        return back()->with("successDelete", "Rôle a été supprimé avec succès");
-
+        return new Response(200);
+    } catch (Exception $e) {
+                //dd(0);
+                //return new Response(500);
+    }
+   
     }
 
 
@@ -125,24 +141,29 @@ class RoleController extends Controller
         $test['createdBy'] = $request['createdBy'];
         $test['createdAt'] = $request['createdAt'];
 
-        $dataToUpdate = $test;
-       // dd($test);
 
-        $variableRecuperee = session('variableEnvoyee');
 
         // Créez une instance du client GuzzleHttp
         $client = new Client();
         
-        // $response = $client->put("http://192.168.8.101:8080/odsolidwaist/manages-role/update/role", [
-        //     'headers' => [
-        //         'Authorization' => 'Bearer ' . $variableRecuperee,
-        //         'Accept' => 'application/json',
-        //         'Content-Type' => 'application/json',
-        //     ],
-        //     'json' => $dataToUpdate,
-        // ]);
-        $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::put('http://'.$ip_adress.'/http://192.168.8.101:8080/odsolidwaist/manages-role/update/role', $test);
+
+        $dataToUpdate = $test;
+        // dd($test);
+
+            $variableRecuperee = session('variableEnvoyee');
+
+          // Créez une instance du client GuzzleHttp
+            $client = new Client();
+            
+            $response = $client->put("http://" . $ip_adress. "/odsolidwaist/manages-role/update/role", [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $variableRecuperee,
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $dataToUpdate,
+            ]);
+            
     
         //dd($response);
 

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class DepartementController extends Controller
 {
@@ -25,9 +27,18 @@ class DepartementController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-department/find/department/non_deleted-activate');
 
         $departementss = $response->json();
-        $departements=$departementss['data']['content'];
+        $departements1=$departementss['data']['content'];
 
         //dd($departements);
+        $currentPage = Paginator::resolveCurrentPage() ?: 1;
+        $perPage = 10;
+        $departements = new LengthAwarePaginator(
+            array_slice($departements1, ($currentPage - 1) * $perPage, $perPage),
+            count($departements1),
+            $perPage,
+            $currentPage,
+            ['path' => Paginator::resolveCurrentPath()]
+        );
 
         return view('Departement.index', compact("departements"));
     }
@@ -44,9 +55,19 @@ class DepartementController extends Controller
         ])->get('http://'.$ip_adress.'/odsolidwaist/manages-department/find/department/non_deleted-disable');
 
         $departementss = $response->json(); 
-        $departements=$departementss['data']['content'];
+        $departements1=$departementss['data']['content'];
         //$id=$communes['departementId'];
        //dd($communes);
+       $currentPage = Paginator::resolveCurrentPage() ?: 1;
+       $perPage = 10;
+       $departements = new LengthAwarePaginator(
+           array_slice($departements1, ($currentPage - 1) * $perPage, $perPage),
+           count($departements1),
+           $perPage,
+           $currentPage,
+           ['path' => Paginator::resolveCurrentPath()]
+       );
+
         return view('Departement.departementDesactiver', compact("departements"));
     }
 
@@ -80,14 +101,14 @@ class DepartementController extends Controller
 
 
         // Récupérer la variable de la session
-        // $variableRecuperee = session('variableEnvoyee');
-        // $response = HTTP::withHeaders([
-        //     'Authorization' => 'Bearer ' . $variableRecuperee,
-        // ])->post('http://'.$ip_adress.'/odsolidwaist/manages-category/create/category', $test);
-
-        // Récupérer la variable de session
         $variableRecuperee = session('variableEnvoyee');
-        $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-department/create/department', $test);
+        $response = HTTP::withHeaders([
+            'Authorization' => 'Bearer ' . $variableRecuperee,
+        ])->post("http://".$ip_adress."/odsolidwaist/manages-department/create/department", $test);
+    
+        // Récupérer la variable de session
+        // $variableRecuperee = session('variableEnvoyee');
+        // $response = HTTP::post('http://'.$ip_adress.'/odsolidwaist/manages-department/create/department', $test);
     
         $departementss = $response->json();
 
@@ -139,7 +160,7 @@ class DepartementController extends Controller
         // Créez une instance du client GuzzleHttp
         $client = new Client();
         
-        $response = $client->put("http://192.168.8.110:8080/odsolidwaist/manages-department/update/department", [
+        $response = $client->put("http://" .$ip_adress."/odsolidwaist/manages-department/update/department", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $variableRecuperee,
                 'Accept' => 'application/json',

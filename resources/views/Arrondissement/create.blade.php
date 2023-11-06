@@ -83,12 +83,12 @@
                         </div>
 
 
-                        <div class="row mt-3">
+                        {{-- <div class="row mt-3">
                             <div class=" col-md-12">
                                 <label for="isEnabled" class="form-label">Active</label>
                                 <input type="text" class="form-control" required="true" id="isEnabled" style="border-radius: 10px;" name="isEnabled">
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="row" hidden>
 

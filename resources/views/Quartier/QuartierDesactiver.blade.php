@@ -104,6 +104,9 @@
                                         @endforeach
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center">
+                                {{ $quartiers->links('vendor.pagination.bootstrap-4') }}
+                            </div>
                         </div>
                         <!-- /.box-body -->
                     </div>
